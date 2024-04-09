@@ -1,0 +1,49 @@
+[module]
+arch = { version = "=1.0.81" }
+vscode = { version = "=1.0.81" }
+
+[arch]
+ark = { version = "24.02.1-1" }
+base = { version = "3-2" }
+base-devel = { version = "1-1" }
+cargo-wizard = { version = "0.2.2-1" }
+cargo-wizard-debug = { version = "0.2.2-1" }
+discord = { version = "0.0.48-1" }
+dolphin = { version = "24.02.1-1" }
+efibootmgr = { version = "18-3" }
+egl-wayland = { version = "2:1.1.13-1" }
+firefox = { version = "124.0.2-1" }
+go = { version = "2:1.22.2-1" }
+htop = { version = "3.3.0-1" }
+intel-ucode = { version = "20240312-1" }
+joshuto = { version = "0.9.8-1" }
+joshuto-debug = { version = "0.9.8-1" }
+neovim = { version = "0.9.5-5" }
+network-manager-applet = { version = "1.36.0-1" }
+plasma-meta = { version = "6.0-2" }
+ripgrep = { version = "14.1.0-1" }
+sof-firmware = { version = "2024.03-1" }
+unzip = { version = "6.0-20" }
+vscodium = { version = "1.88.0.24096-1" }
+vscodium-debug = { version = "1.88.0.24096-1" }
+wezterm = { version = "20240203.110809.5046fc22-1" }
+wget = { version = "1.24.5-1" }
+wireless_tools = { version = "30.pre9-3" }
+xf86-video-amdgpu = { version = "23.0.0-2" }
+xf86-video-ati = { version = "1:22.0.0-2" }
+xf86-video-nouveau = { version = "1.0.17-3" }
+xf86-video-vmware = { version = "13.4.0-3" }
+xorg-xinit = { version = "1.4.2-1" }
+yay = { version = "12.3.5-1" }
+yay-debug = { version = "12.3.5-1" }
+zram-generator = { version = "1.1.2-1" }
+
+[vscode]
+"svelte.svelte-vscode" = { version = "=08.3.3" }
+"violetiapalucci.one-midnight" = { version = "1.0.0" }
+"usernamehw.errorlens" = { version = "3.16.0" }
+"tamasfe.even-better-toml" = { version = "0.19.1" }
+"redhat.java" = { version = "1.29.0" }
+"pkief.material-icon-theme" = { version = "4.34.0" }
+"rust-lang.rust-analyzer" = { version = "0.3.1916" }
+"vscodevim.vim" = { version = "1.27.2" }

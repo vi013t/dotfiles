@@ -1,0 +1,53 @@
+{
+    "window.commandCenter": false,
+    "explorer.confirmDelete": false,
+    "dotnet.codeLens.enableReferencesCodeLens": false,
+    "material-icon-theme.folders.color": "#42a5f5",
+    "redhat.telemetry.enabled": false,
+    "breadcrumbs.enabled": false,
+    "color-highlight.markRuler": false,
+    "explorer.confirmDragAndDrop": false,
+    "window.zoomLevel": 1,
+    "window.titleBarStyle": "custom",
+    "files.eol": "\n",
+    "files.exclude": {
+        "**/*.meta": true,
+        "**/.git": false
+    },
+    "workbench.editor.openPositioning": "right",
+    "workbench.tree.indent": 12,
+    // "workbench.colorTheme": "One Midnight",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.startupEditor": "welcomePage",
+    "workbench.layoutControl.enabled": false,
+    "workbench.colorCustomizations": {
+        "editorOverviewRuler.addedForeground": "#00000000",
+        "editorOverviewRuler.modifiedForeground": "#00000000",
+        "editorOverviewRuler.deletedForeground": "#00000000",
+        "editorGutter.addedBackground": "#00000000",
+        "editorGutter.modifiedBackground": "#00000000",
+        "editorGutter.deletedBackground": "#00000000"
+    },
+    "editor.fontLigatures": true,
+    "editor.lineNumbers": "relative",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": false,
+    "editor.detectIndentation": true,
+    "editor.minimap.enabled": false,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "always"
+    },
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java"
+    },
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "rust-analyzer.inlayHints.parameterHints.enable": false,
+    "rust-analyzer.check.command": "clippy",
+    "security.workspace.trust.untrustedFiles": "open",
+    "git.openRepositoryInParentFolders": "never",
+    "workbench.colorTheme": "One Midnight",
+    "terminal.integrated.fontFamily": "'Fira Code', 'Symbols Nerd Font'"
+}

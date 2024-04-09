@@ -1,0 +1,17 @@
+*
+
+!.gitignore
+!install.sh
+!VSCodium
+!VSCodium/User
+!VSCodium/User/settings.json
+!nvim
+!nvim/*
+!darling
+!darling/*
+!onedrive
+!onedrive/*
+!wezterm
+!wezterm/*
+!scripts
+!scripts/*
