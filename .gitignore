@@ -5,6 +5,7 @@
 !VSCodium
 !VSCodium/User
 !VSCodium/User/settings.json
+!VSCodium/User/README.md
 !nvim
 !nvim/*
 !darling
