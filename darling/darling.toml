@@ -9,13 +9,21 @@ discord = { version = "0.0.48-1" }
 firefox = { version = "124.0.2-1" }
 go = { version = "2:1.22.2-1" }
 neovim = { version = "0.9.5-5" }
-nodejs = { version = "21.7.2-1" }
-npm = { version = "10.5.1-1" }
 ripgrep = { version = "14.1.0-1" }
 unzip = { version = "6.0-20" }
 vscodium = { version = "1.88.0.24096-1" }
 wezterm = { version = "20240203.110809.5046fc22-1" }
 wget = { version = "1.24.5-1" }
+npm = { version = "10.5.1-1" }
+nodejs = { version = "21.7.2-1" }
+lua = { version = "latest" }
+zig = { version = "0.11.0-2" }
+base = { version = "3-2" }
+clang = { version = "17.0.6-1" }
+git = { version = "2.44.0-1" }
+gimp = { version = "latest" }
+intellij-idea-community-edition = { version = "latest" }
+jdk-openjdk = { version = "latest" }
 
 [vscode]
 "svelte.svelte-vscode" = { version = "108.3.3" }
