@@ -4,8 +4,9 @@ local config = {}
 
 -- Text & Fonts
 config.font = wezterm.font("Fira Code")
-config.font_size = 14
+config.font_size = 12
 config.allow_square_glyphs_to_overflow_width = "Never"
+config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 
 -- Colors
 config.colors = {

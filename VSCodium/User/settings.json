@@ -1,53 +1,60 @@
 {
-    "window.commandCenter": false,
-    "explorer.confirmDelete": false,
-    "dotnet.codeLens.enableReferencesCodeLens": false,
-    "material-icon-theme.folders.color": "#42a5f5",
-    "redhat.telemetry.enabled": false,
-    "breadcrumbs.enabled": false,
-    "color-highlight.markRuler": false,
-    "explorer.confirmDragAndDrop": false,
-    "window.zoomLevel": 1,
-    "window.titleBarStyle": "custom",
-    "files.eol": "\n",
-    "files.exclude": {
-        "**/*.meta": true,
-        "**/.git": false
-    },
-    "workbench.editor.openPositioning": "right",
-    "workbench.tree.indent": 12,
-    // "workbench.colorTheme": "One Midnight",
-    "workbench.iconTheme": "material-icon-theme",
-    "workbench.startupEditor": "welcomePage",
-    "workbench.layoutControl.enabled": false,
-    "workbench.colorCustomizations": {
-        "editorOverviewRuler.addedForeground": "#00000000",
-        "editorOverviewRuler.modifiedForeground": "#00000000",
-        "editorOverviewRuler.deletedForeground": "#00000000",
-        "editorGutter.addedBackground": "#00000000",
-        "editorGutter.modifiedBackground": "#00000000",
-        "editorGutter.deletedBackground": "#00000000"
-    },
-    "editor.fontLigatures": true,
-    "editor.lineNumbers": "relative",
-    "editor.formatOnSave": true,
-    "editor.tabSize": 4,
-    "editor.insertSpaces": false,
-    "editor.detectIndentation": true,
-    "editor.minimap.enabled": false,
-    "editor.codeActionsOnSave": {
-        "source.organizeImports": "always"
-    },
-    "[java]": {
-        "editor.defaultFormatter": "redhat.java"
-    },
-    "[rust]": {
-        "editor.defaultFormatter": "rust-lang.rust-analyzer"
-    },
-    "rust-analyzer.inlayHints.parameterHints.enable": false,
-    "rust-analyzer.check.command": "clippy",
-    "security.workspace.trust.untrustedFiles": "open",
-    "git.openRepositoryInParentFolders": "never",
-    "workbench.colorTheme": "One Midnight",
-    "terminal.integrated.fontFamily": "'Fira Code', 'Symbols Nerd Font'"
+	// Workbench 
+	"workbench.editor.openPositioning": "right",
+	"workbench.tree.indent": 12,
+	"workbench.iconTheme": "material-icon-theme",
+	"workbench.startupEditor": "welcomePage",
+	"workbench.layoutControl.enabled": false,
+	"workbench.colorTheme": "One Midnight",
+	"workbench.colorCustomizations": {
+		"editorOverviewRuler.addedForeground": "#00000000",
+		"editorOverviewRuler.modifiedForeground": "#00000000",
+		"editorOverviewRuler.deletedForeground": "#00000000",
+		"editorGutter.addedBackground": "#00000000",
+		"editorGutter.modifiedBackground": "#00000000",
+		"editorGutter.deletedBackground": "#00000000"
+	},
+	// Editor
+	"editor.fontLigatures": true,
+	"editor.lineNumbers": "relative",
+	"editor.formatOnSave": true,
+	"editor.tabSize": 4,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.minimap.enabled": false,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "always"
+	},
+	// Languages
+	"[java]": {
+		"editor.defaultFormatter": "redhat.java"
+	},
+	"[rust]": {
+		"editor.defaultFormatter": "rust-lang.rust-analyzer"
+	},
+	// Misc
+	"security.workspace.trust.untrustedFiles": "open",
+	"git.openRepositoryInParentFolders": "never",
+	"terminal.integrated.fontFamily": "'Fira Code', 'Symbols Nerd Font'",
+	"window.commandCenter": false,
+	"explorer.confirmDelete": false,
+	"breadcrumbs.enabled": false,
+	"explorer.confirmDragAndDrop": false,
+	"window.zoomLevel": 1,
+	"window.titleBarStyle": "custom",
+	"files.eol": "\n",
+	"files.exclude": {
+		"**/*.meta": true,
+		"**/.git": false
+	},
+	// Extension Configuration
+	"dotnet.codeLens.enableReferencesCodeLens": false,
+	"color-highlight.markRuler": false,
+	"license.author": "Violet Iapalucci",
+	"license.default": "MIT",
+	"material-icon-theme.folders.color": "#42a5f5",
+	"redhat.telemetry.enabled": false,
+	"rust-analyzer.inlayHints.parameterHints.enable": false,
+	"rust-analyzer.check.command": "clippy",
+	"svelte.enable-ts-plugin": true,
 }

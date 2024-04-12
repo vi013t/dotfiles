@@ -1,6 +1,8 @@
 [module]
-arch = { version = "=1.0.81" }
-vscode = { version = "=1.0.81" }
+arch = { version = "v0.1.8" }
+vscode = { version = "v0.1.2" }
+cargo = { version = "v0.1.2" }
+npm = { version = "v0.1.1" }
 
 [arch]
 base-devel = { version = "1-1" }
@@ -22,8 +24,14 @@ base = { version = "3-2" }
 clang = { version = "17.0.6-1" }
 git = { version = "2.44.0-1" }
 gimp = { version = "latest" }
-intellij-idea-community-edition = { version = "latest" }
-jdk-openjdk = { version = "latest" }
+intellij-idea-community-edition = { version = "4:2024.1-2" }
+jdk-openjdk = { version = "22.u36-1" }
+texlive-latex = { version = "2024.0-3" }
+texlive-latexrecommended = { version = "2024.0-3" }
+neofetch = { version = "7.1.0-2" }
+imagemagick = { version = "7.1.1.30-2" }
+pandoc-cli = { version = "0.1.1.1-92" }
+flameshot = { version = "12.1.0-3" }
 
 [vscode]
 "svelte.svelte-vscode" = { version = "108.3.3" }
@@ -34,3 +42,15 @@ jdk-openjdk = { version = "latest" }
 "pkief.material-icon-theme" = { version = "4.34.0" }
 "rust-lang.rust-analyzer" = { version = "0.3.1916" }
 "vscodevim.vim" = { version = "1.27.2" }
+"dalysoftware.unicodepalette" = { version = "1.0.4" }
+"ultram4rine.vscode-choosealicense" = { version = "0.9.4" }
+"gruntfuggly.todo-tree" = { version = "0.0.215" }
+"aaron-bond.better-comments" = { version = "3.0.2" }
+
+[cargo]
+cargo-update = { version = "v13.4.0" }
+darling-installer = { version = "v0.1.2" }
+
+[npm]
+generator-code = { version = "1.8.5" }
+yo = { version = "5.0.0" }
