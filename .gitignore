@@ -11,7 +11,8 @@
 !darling
 !darling/*
 !onedrive
-!onedrive/*
+!onedrive/config
+!onedrive/README.md
 !wezterm
 !wezterm/*
 !scripts
