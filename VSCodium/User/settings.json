@@ -12,7 +12,7 @@
 		"editorOverviewRuler.deletedForeground": "#00000000",
 		"editorGutter.addedBackground": "#00000000",
 		"editorGutter.modifiedBackground": "#00000000",
-		"editorGutter.deletedBackground": "#00000000"
+		"editorGutter.deletedBackground": "#00000000",
 	},
 	// Editor
 	"editor.fontLigatures": true,
@@ -22,6 +22,7 @@
 	"editor.insertSpaces": false,
 	"editor.detectIndentation": false,
 	"editor.minimap.enabled": false,
+	"editor.cursorSurroundingLines": 8,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": "always"
 	},
@@ -57,4 +58,86 @@
 	"rust-analyzer.inlayHints.parameterHints.enable": false,
 	"rust-analyzer.check.command": "clippy",
 	"svelte.enable-ts-plugin": true,
+	// Vim
+	"vim.leader": " ",
+	"vim.enableNeovim": true,
+	"vim.normalModeKeyBindingsNonRecursive": [
+		// Explorer Focus
+		{
+			"before": [
+				"<leader>",
+				"e",
+				"f"
+			],
+			"commands": [
+				"workbench.files.action.focusFilesExplorer"
+			]
+		},
+		// LSP Next diagnostic
+		{
+			"before": [
+				"<leader>",
+				"l",
+				"n"
+			],
+			"commands": [
+				"editor.action.marker.nextInFiles",
+			]
+		},
+		// LSP Previous diagnostic
+		{
+			"before": [
+				"<leader>",
+				"l",
+				"N"
+			],
+			"commands": [
+				"editor.action.marker.prevInFiles",
+			]
+		},
+		// LSP Hover
+		{
+			"before": [
+				"<leader>",
+				"l",
+				"h"
+			],
+			"commands": [
+				"editor.action.showDefinitionPreviewHover"
+			]
+		},
+		// LSP Rename
+		{
+			"before": [
+				"<leader>",
+				"l",
+				"r"
+			],
+			"commands": [
+				"editor.action.rename"
+			]
+		},
+		// LSP Definition
+		{
+			"before": [
+				"<leader>",
+				"l",
+				"d",
+			],
+			"commands": [
+				"editor.action.goToDeclaration"
+			]
+		},
+		// LSP Type definition
+		{
+			"before": [
+				"<leader>",
+				"l",
+				"t"
+			],
+			"commands": [
+				"editor.action.goToTypeDefinition"
+			]
+		}
+	],
 }

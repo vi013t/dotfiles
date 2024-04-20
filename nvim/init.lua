@@ -25,11 +25,6 @@ vim.opt.showcmd = false       -- Don't show keypressed
 vim.opt.termguicolors = true  -- Use true color in the terminal
 vim.opt.scrolloff = 8
 
--- Image.nvim - requires magick luarocks
-package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
-package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
--- package.path = package.path .. ";" .. "/usr/lib/luarocks/rocks-5.4/luasocket/3.1.0-1"
-
 -- Enable word wrapping for text files such as markdown or text
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = { "markdown", "text" },
@@ -82,6 +77,14 @@ vim.opt.rtp:prepend(lazypath)
 -- Start the plugin setup
 require("lazy").setup(
 	{
+
+		{
+			"vhyrro/luarocks.nvim",
+			priority = 1001, -- this plugin needs to run before anything else
+			opts = {
+				rocks = { "magick" },
+			},
+		},
 
 		-- file tree explorer
 		{

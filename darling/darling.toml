@@ -32,6 +32,11 @@ neofetch = { version = "7.1.0-2" }
 imagemagick = { version = "7.1.1.30-2" }
 pandoc-cli = { version = "0.1.1.1-92" }
 flameshot = { version = "12.1.0-3" }
+libreoffice-fresh = { version = "24.2.2-2" }
+zip = { version = "3.0-11" }
+pacman-contrib = { version = "1.10.5-1" }
+luarocks = { version = "3.11.0-1" }
+spectacle = { version = "24.02.2-1" }
 
 [vscode]
 "svelte.svelte-vscode" = { version = "108.3.3" }
@@ -46,6 +51,7 @@ flameshot = { version = "12.1.0-3" }
 "ultram4rine.vscode-choosealicense" = { version = "0.9.4" }
 "gruntfuggly.todo-tree" = { version = "0.0.215" }
 "aaron-bond.better-comments" = { version = "3.0.2" }
+"yoavbls.pretty-ts-errors" = { version = "0.5.3" }
 
 [cargo]
 cargo-update = { version = "v13.4.0" }
