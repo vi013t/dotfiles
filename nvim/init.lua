@@ -41,6 +41,7 @@ local filetypes = {
 	["*.pest"] = "pest",
 	["*.lotus"] = "lotus",
 	["*.lang2"] = "lang2",
+	["*rc"] = "dosini"
 }
 
 for pattern, filetype in pairs(filetypes) do
