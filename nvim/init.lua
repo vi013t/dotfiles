@@ -1,4 +1,4 @@
--- =======================================================================================================================================================================================================
+-- ============k==========================================================================================================================================================================================
 -- init.lua ---------- init.lua ---------- init.lua ---------- init.lua ---------- init.lua ---------- init.lua ---------- init.lua ---------- init.lua ---------- init.lua ---------- init.lua ----------
 -- =======================================================================================================================================================================================================
 
@@ -31,17 +31,17 @@ vim.api.nvim_create_autocmd("FileType", {
 	callback = function()
 		vim.opt_local.wrap = true
 		vim.opt_local.linebreak = true
+		vim.cmd("TSDisable highlight")
 	end,
 })
 
 local filetypes = {
-	["*.bash*"] = "bash",
 	["*.ll"] = "llvm",
 	["*.rasi"] = "rasi",
 	["*.pest"] = "pest",
 	["*.lotus"] = "lotus",
 	["*.lang2"] = "lang2",
-	["*rc"] = "dosini"
+	["*rc"] = "dosini",
 }
 
 for pattern, filetype in pairs(filetypes) do
@@ -52,6 +52,13 @@ for pattern, filetype in pairs(filetypes) do
 		end,
 	})
 end
+
+vim.api.nvim_create_autocmd("BufRead", {
+	pattern = "*.bash*",
+	callback = function()
+		vim.bo.filetype = "bash"
+	end,
+})
 
 vim.g.zig_fmt_autosave = false -- Disable Zig autoformatting which for some reason converts my enums into massive one-liners
 
@@ -1114,6 +1121,15 @@ require("lazy").setup(
 			"lambdalisue/suda.vim",
 			keys = {
 				{ "<leader>w", "<cmd>SudaWrite<cr>" }
+			}
+		},
+		{
+			"smoka7/hop.nvim",
+			config = function()
+				require("hop").setup({})
+			end,
+			keys = {
+				{ "s", "<cmd>HopWord<cr>" }
 			}
 		}
 	},

@@ -38,6 +38,8 @@ pacman-contrib = { version = "1.10.5-1" }
 luarocks = { version = "3.11.0-1" }
 spectacle = { version = "24.02.2-1" }
 zoxide = { version = "0.9.4-2" }
+python-pipx = { version = "1.5.0-1" }
+tree-sitter-cli = { version = "0.22.5-1" }
 
 [vscode]
 "svelte.svelte-vscode" = { version = "108.3.3" }
