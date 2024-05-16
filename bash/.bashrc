@@ -255,7 +255,6 @@ alias i="sudo pacman -S" # Install a package
 alias img="wezterm imgcat" # View images with Kitty
 alias ls='ls --color=auto' # Add colors to ls
 alias grep='grep --color=auto' # Add colors to grep
-alias tux="ssh $tux"
 alias neofetch="neofetch --iterm2 ~/Pictures/catgirl.png --size 800"
 alias update="sudo pacman -Syu && yay -Syu"
 alias rs=". ~/.bashrc"
@@ -265,8 +264,6 @@ alias code="codium . -r"
 alias x11?="loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}' | cut -d'=' -f2"
 alias wayland?="loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}' | cut -d'=' -f2"
 alias de?="echo $DESKTOP_SESSION"
-
-export tux="ndi26@tux.cs.drexel.edu"
 
 # Compile .ll (LLVM) files to native executable
 function llvmc() {
