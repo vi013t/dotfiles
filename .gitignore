@@ -1,4 +1,8 @@
+# Ignore everything
 *
+!.gitignore
+!.git
+!.git/*
 
 # Scripts
 !.scripts
@@ -6,7 +10,6 @@
 
 # Config
 !.config
-!.gitignore
 !.config/VSCodium
 !.config/VSCodium/User
 !.config/VSCodium/User/settings.json
