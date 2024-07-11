@@ -3,6 +3,7 @@
 !.gitignore
 !.git
 !.git/*
+!README.md
 
 # Scripts
 !.scripts
