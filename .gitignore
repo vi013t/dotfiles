@@ -1,0 +1,30 @@
+*
+
+# Scripts
+!.scripts
+!.scripts/*
+
+# Config
+!.config
+.config/*
+!.gitignore
+!.config/install.sh
+!.config/VSCodium
+!.config/VSCodium/User
+!.config/VSCodium/User/settings.json
+!.config/VSCodium/User/README.md
+!.config/nvim
+!.config/nvim/*
+!.config/darling
+!.config/darling/*
+!.config/onedrive
+!.config/onedrive/config
+!.config/onedrive/README.md
+!.config/wezterm
+!.config/wezterm/*
+!.config/joshuto
+!.config/joshuto/*
+!.config/README.md
+
+# Shell RCs
+!.bashrc
