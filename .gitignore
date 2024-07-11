@@ -6,9 +6,7 @@
 
 # Config
 !.config
-.config/*
 !.gitignore
-!.config/install.sh
 !.config/VSCodium
 !.config/VSCodium/User
 !.config/VSCodium/User/settings.json
