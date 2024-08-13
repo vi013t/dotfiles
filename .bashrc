@@ -54,9 +54,6 @@ function cfg() {
 	fi
 
 	case "$1" in
-		"awesome")
-			nvim ~/.config/awesome/rc.lua
-			;;
 		"darling")
 			nvim ~/.config/darling/darling.toml
 			;;
@@ -72,9 +69,6 @@ function cfg() {
 		"bash")
 			nvim ~/.bashrc
 			;;
-		"picom")
-			nvim ~/.config/picom/picom.conf
-			;;
 		"stylua")
 			nvim ~/.config/stylua/stylua.toml
 			;;
@@ -89,7 +83,7 @@ function cfg() {
 
 _cfg() {
 	local cur=${COMP_WORDS[COMP_CWORD]}
-	COMPREPLY=( $(compgen -W "awesome bash lotus nvim bash picom stylua wezterm" -- $cur) )
+	COMPREPLY=( $(compgen -W "bash lotus nvim bash stylua wezterm" -- $cur) )
 }
 complete -F _cfg cfg
 
@@ -98,7 +92,7 @@ cd .
 
 # Aliases
 alias i="sudo pacman -S" # Install a package
-alias img="wezterm imgcat" # View images with Kitty
+alias img="wezterm imgcat" # View images with Wezterm
 alias ls='ls --color=auto' # Add colors to ls
 alias grep='grep --color=auto' # Add colors to grep
 alias neofetch="neofetch --iterm2 ~/Pictures/catgirl.png --size 800"
@@ -106,11 +100,12 @@ alias rs=". ~/.bashrc"
 alias code="codium . -r"
 
 function update() {
-	sudo pacman -Syu # Update official packages
-	yay -Syu # Update AUR packages 
+	sudo pacman -Syu --noconfirm # Update official packages
+	yes | yay -Syu # Update AUR packages 
 	paccache -rk1 # Remove older package versions
-	sudo paccache -ruk0 # Remove older package versions
+	sudo paccache -ruk0 # Remove uninstalled packages
 	sudo pacman -Qdtq | sudo pacman -Rns - # Remove orphans
+	rm ~/go -rf # Remove go folder
 }
 
 # Session Information
@@ -151,10 +146,8 @@ function clean() {
 # Set tab size
 tabs -4
 
-
 . "$HOME/.cargo/env"
 
 # Luaver
 [ -s ~/.luaver/luaver ] && . ~/.luaver/luaver
 [ -s ~/.luaver/completions/luaver.bash ] && . ~/.luaver/completions/luaver.bash
-

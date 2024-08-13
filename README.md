@@ -1,6 +1,6 @@
 # dotfiles
 
-Violet Iapalucci's dotfiles, including configuration for:
+Violet's dotfiles, including configuration for:
 
 - Darling
 - Joshuto
@@ -11,10 +11,11 @@ Violet Iapalucci's dotfiles, including configuration for:
 
 ## Installation
 
-To use these dotfiles, clone it and move its contents into `~/.config`:
+To use these dotfiles, clone it and move its contents into `~`:
 
 ```bash
 git clone https://github.com/vi013t/dotfiles.git
 cd dotfiles
-mv * ~/.config
+mv * ~/
+darling all load-installed
 ```

@@ -1,21 +1,27 @@
+-- Wezterm API
 local wezterm = require("wezterm")
 
+-- Main configuration
 local config = {}
 
 -- Text & Fonts
-config.font = wezterm.font("Fira Code")
-config.font_size = 14
+config.font = wezterm.font("Consolas")
+config.font_size = 13
 config.allow_square_glyphs_to_overflow_width = "Never"
 
 -- Colors
 config.colors = {
-	background = "#060115",
+	background = "#1E1E2E",
 	foreground = "white",
 	cursor_bg = "dodgerblue",
 	cursor_fg = "black",
 	tab_bar = {
+		active_tab = {
+			bg_color = "#1E1E2E",
+			fg_color = "#FFFFFF",
+		},
 		inactive_tab = {
-			bg_color = "#1E1839",
+			bg_color = "#181825",
 			fg_color = "#808080",
 		},
 		new_tab = {
@@ -29,13 +35,13 @@ config.colors = {
 	},
 }
 
-config.window_background_gradient = {
-	orientation = "Vertical",
-	colors = {
-		"#000000",
-		"#170F39",
-	},
-}
+-- config.window_background_gradient = {
+-- 	orientation = "Vertical",
+-- 	colors = {
+-- 		"#000000",
+-- 		"#170F39",
+-- 	},
+-- }
 
 -- Tabs
 local function tab_title(tab_info)
@@ -46,6 +52,7 @@ local function tab_title(tab_info)
 	return tab_info.active_pane.title
 end
 
+-- Tab names
 wezterm.on("format-tab-title", function(tab)
 	local title = tab_title(tab)
 	if tab.is_active then
@@ -56,16 +63,17 @@ wezterm.on("format-tab-title", function(tab)
 	return title
 end)
 
+-- Tab bar background
 config.window_frame = {
-	active_titlebar_bg = "#3D3071",
-	inactive_titlebar_bg = "#3D3071",
+	active_titlebar_bg = "#11111B",
+	inactive_titlebar_bg = "#11111B",
 }
 
 -- Cursor
 config.default_cursor_style = "BlinkingBar"
 config.cursor_blink_ease_in = "Constant"
 config.cursor_blink_ease_out = "Constant"
-config.cursor_blink_rate = 500
+config.cursor_blink_rate = 400
 
 -- Keys
 config.keys = {

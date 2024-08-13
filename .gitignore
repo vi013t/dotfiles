@@ -18,6 +18,11 @@
 !.config/VSCodium/User/README.md
 !.config/nvim
 !.config/nvim/*
+!.config/nvim/lua
+!.config/nvim/lua/plugins
+!.config/nvim/lua/plugins/*
+!.config/nvim/lua/plugins/forge
+!.config/nvim/lua/plugins/forge/*
 !.config/darling
 !.config/darling/*
 !.config/onedrive

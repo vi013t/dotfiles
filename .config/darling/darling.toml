@@ -52,6 +52,8 @@ racket = { version = "8.13-1" }
 texlive-fontsrecommended = { version = "2024.2-2" }
 ueberzugpp = { version = "2.9.6-2" }
 zoom = { version = "6.1.1-1" }
+ghc = { version = "9.2.8-1" }
+cabal-install = { version = "3.6.2.0-21" }
 
 [vscode]
 "svelte.svelte-vscode" = { version = "108.3.3" }
