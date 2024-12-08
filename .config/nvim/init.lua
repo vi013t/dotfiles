@@ -12,18 +12,14 @@ Violet Iapalucci's init.lua configuration for Neovim.
 -- Options ---------- Options ---------- Options ---------- Options ---------- Options ---------- Options ---------- Options ---------- Options ---------- Options ---------- Options ---------- Options -
 -- =======================================================================================================================================================================================================
 
-vim.opt.cursorline = true     -- Highlight line that cursor is on
-vim.opt.hlsearch = false      -- Don't highlight searches
-vim.opt.incsearch = true      -- Incrementally highlight searches
-vim.opt.number = true         -- Show line numbers
-vim.opt.relativenumber = true -- Make line numbers relative to cursor position
-vim.opt.wrap = false          -- Disable word wrapping
-vim.opt.tabstop = 4           -- Set tab size to 4
-vim.opt.expandtab = false     -- Dont replace tabs with spaces
-vim.opt.shiftwidth = 4        -- Use tabstop for automatic tabs
-vim.opt.showcmd = false       -- Don't show keypressed
-vim.opt.termguicolors = true  -- Use true color in the terminal
-vim.opt.scrolloff = 8         -- Set scroll offset to 8 lines
+vim.opt.cursorline = true    -- Highlight line that cursor is on
+vim.opt.number = true        -- Show line numbers
+vim.opt.wrap = false         -- Disable word wrapping
+vim.opt.tabstop = 4          -- Set tab size to 4
+vim.opt.shiftwidth = 4       -- Use tabstop for automatic tabs
+vim.opt.showcmd = false      -- Don't show keypressed
+vim.opt.termguicolors = true -- Use true color in the terminal
+vim.opt.scrolloff = 8        -- Set scroll offset to 8 lines
 
 vim.api.nvim_create_autocmd('FileType', {
 	pattern = 'racket',
@@ -52,6 +48,7 @@ local filetypes = {
 	["*.lotus"] = "lotus",
 	["*.lang2"] = "lang2",
 	["*rc"] = "dosini",
+	["LICENSE"] = "markdown"
 }
 
 for pattern, filetype in pairs(filetypes) do
@@ -121,26 +118,21 @@ require("lazy").setup("plugins",
 -- ==================================================================================================================================================================================
 
 -- General
-vim.keymap.set("n", "<leader>z", ":Lazy<CR>", {})          -- Open Lazy.nvim package manager
-vim.keymap.set("n", "<leader>eu", ":wincmd p<CR>", {})     -- Unfocus file explorer
-vim.keymap.set("n", "<leader>nc", ":NoiceDismiss<CR>", {}) -- Dismiss notifications
-vim.keymap.set("n", "<C-v>", "i<C-v><Esc>", {})            -- Paste from clipboard in normal mode
-vim.keymap.set("v", "<space>y", '"+y', {})                 -- Copy to system clipboard
-vim.keymap.set("n", "<space>p", '"+p', {})                 -- Paste to system clipboard
-vim.keymap.set("n", "j", "gj", {})                         -- Move down by display line
-vim.keymap.set("n", "k", "gk", {})                         -- Move up by display line
-vim.keymap.set("n", "d_", "dt_", {})                       -- Delete to next underscore
+vim.keymap.set("n", "<leader>z", ":Lazy<CR>", {}) -- Open Lazy.nvim package manager
+
+-- Copy & Pasting
+vim.keymap.set("n", "<C-v>", "i<C-v><Esc>", {}) -- Paste from clipboard in normal mode
+vim.keymap.set("v", "<space>y", '"+y', {})      -- Copy to system clipboard
+vim.keymap.set("v", "<C-c>", '"+y', {})         -- Copy to system clipboard
+vim.keymap.set("n", "<space>p", '"+p', {})      -- Paste to system clipboard
+vim.keymap.set("v", "<C-v>", '"+y', {})         -- Copy to system clipboard
+
+-- Visual Movement
+vim.keymap.set("n", "j", "gj", {}) -- Move down by display line
+vim.keymap.set("n", "k", "gk", {}) -- Move up by display line
 
 -- Window Movement
 vim.keymap.set("n", "<C-j>", "<C-w>j", {}) -- Move to window below
 vim.keymap.set("n", "<C-k>", "<C-w>k", {}) -- Move to window above
 vim.keymap.set("n", "<C-h>", "<C-w>h", {}) -- Move to window left
 vim.keymap.set("n", "<C-l>", "<C-w>l", {}) -- Move to window right
-
--- Lsp Mappings
-vim.keymap.set("n", "<leader>fr", ":Forge<CR>", {})                -- Open Forge.nvim
-vim.keymap.set("n", "<leader>lh", vim.lsp.buf.hover, {})           -- Show hover information
-vim.keymap.set("n", "<leader>ld", vim.lsp.buf.definition, {})      -- Jump to definition
-vim.keymap.set("n", "<leader>lt", vim.lsp.buf.type_definition, {}) -- Jump to definition
-vim.keymap.set("n", "<leader>ln", vim.diagnostic.goto_next, {})    -- Go to next LSP diagnostic
-vim.keymap.set("n", "<leader>lp", vim.diagnostic.goto_prev, {})    -- Go to previous LSP diagnostic

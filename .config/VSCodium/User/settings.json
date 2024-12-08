@@ -5,7 +5,7 @@
 	"workbench.iconTheme": "material-icon-theme",
 	"workbench.startupEditor": "welcomePage",
 	"workbench.layoutControl.enabled": false,
-	"workbench.colorTheme": "One Midnight",
+	"workbench.colorTheme": "Catppuccin Mocha",
 	"workbench.colorCustomizations": {
 		"editorOverviewRuler.addedForeground": "#00000000",
 		"editorOverviewRuler.modifiedForeground": "#00000000",
@@ -19,12 +19,13 @@
 	"editor.lineNumbers": "relative",
 	"editor.formatOnSave": true,
 	"editor.tabSize": 4,
-	"editor.fontSize": 12,
+	"editor.fontSize": 14,
 	"editor.insertSpaces": false,
 	"editor.detectIndentation": false,
 	"editor.minimap.enabled": false,
 	"editor.cursorSurroundingLines": 8,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.fontFamily": "Consolas",
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": "always"
 	},
@@ -36,14 +37,16 @@
 		"editor.defaultFormatter": "redhat.java"
 	},
 	"[rust]": {
-		"editor.defaultFormatter": "rust-lang.rust-analyzer"
+		"editor.defaultFormatter": "rust-lang.rust-analyzer",
+		"editor.inlayHints.enabled": "off"
 	},
 
 	// Misc
 	"security.workspace.trust.untrustedFiles": "open",
 	"git.openRepositoryInParentFolders": "never",
-	"terminal.integrated.fontFamily": "'Fira Code', 'Symbols Nerd Font'",
+	"terminal.integrated.fontFamily": "'Consolas', 'Symbols Nerd Font'",
 	"terminal.integrated.fontSize": 12,
+	"terminal.integrated.scrollback": 99999,
 	"window.commandCenter": false,
 	"explorer.confirmDelete": false,
 	"breadcrumbs.enabled": false,

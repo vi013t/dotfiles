@@ -1,30 +1,128 @@
 return {
 
+	-- Helpdoc in floating windows
+	{
+		"Tyler-Barham/floating-help.nvim",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+		},
+		opts = {},
+		keys = {
+			{ "<leader>h", ":FloatingHelp " },
+		}
+	},
+
+	-- Better help views
+	{
+		"OXY2DEV/helpview.nvim",
+		opts = {},
+		ft = "help",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+		}
+	},
+
+	-- Tabline
+	{
+		"akinsho/bufferline.nvim",
+		config = function()
+			local bufferline = require("bufferline")
+
+			-- Get the name of the project
+			local directory = vim.fn.expand("%:h")
+			if not directory or directory == "" then directory = vim.fn.getcwd() end
+			local found_root, root = pcall(function() return vim.fn.system("splik '" .. directory .. "' --find-root") end)
+			local project_name = root
+			if not found_root then
+				_, project_name = vim.fn.getcwd()
+			end
+			project_name = assert(project_name):gsub("%s+$", ""):match("[\\/]([^\\/]+)$")
+
+			-- Get the icon from the project language
+			local success, project_language = pcall(function()
+				return vim.json.decode(vim.fn.system("splik '" .. directory .. "' --output json")).languages[1].name
+					:lower()
+			end)
+			local overrides = {
+				["C#"] = "cs"
+			}
+			local icon = nil
+			local filetype = overrides[project_language] or project_language:lower()
+			if success then
+				icon = require("nvim-web-devicons").get_icon_by_filetype(filetype)
+			end
+			if icon == nil then
+				icon = ""
+			end
+
+			local _, color = require("nvim-web-devicons").get_icon_color_by_filetype(filetype)
+
+			-- Create highlight groups
+			local normal_float_bg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("NormalFloat")), "bg#")
+
+			vim.api.nvim_set_hl(0, "BufferlineNeotreeOffset", { fg = color, bold = true, bg = normal_float_bg })
+
+			local fg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("@type")), "fg#")
+			vim.api.nvim_set_hl(0, "BufferlineDragonflyOffset", { bg = normal_float_bg, fg = fg })
+
+			-- Set up bufferline
+			bufferline.setup({
+				options = {
+					style_preset = bufferline.style_preset.no_italic,
+					offsets = {
+						{
+							filetype = "neo-tree",
+							text = icon .. " " .. project_name,
+							highlight = "BufferlineNeotreeOffset"
+						},
+						{
+							filetype = "dragonfly",
+							text = "󰠭 Dragonfly",
+							highlight = "BufferlineDragonflyOffset"
+						}
+					}
+				},
+			})
+		end
+	},
+
 	-- Highlight colors in the editor such as #4a08a9, rgb(0, 255, 255), and hsl(150, 100, 50)
 	{
 		"brenoprata10/nvim-highlight-colors",
 		opts = {},
+		event = "BufEnter"
 	},
 
 	-- Theme switcher
 	{
 		"zaldih/themery.nvim",
-		dependencies = {
-			"catppuccin/nvim",
-			"one-midnight-theme/one-midnight.nvim",
-			"folke/tokyonight.nvim"
-		},
 		config = function()
 			require("themery").setup({
 				themes = {
 					"one-midnight",
-					"catppuccin-mocha",
-					"tokyonight"
-				}
+					{
+						name = "catppuccin-mocha",
+						colorscheme = "catppuccin-mocha",
+						after = [[
+							local fg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("@function.macro")), "fg#")
+							vim.cmd('hi CursorLineNr gui=bold')
+							vim.api.nvim_set_hl(0, "@function.builtin", { fg = fg })
+							vim.api.nvim_set_hl(0, "NeoTreeGitUntracked", { fg = "#88FF88" })
+						]]
+					},
+					-- "tokyonight",
+					"duskfox"
+				},
 			})
 			vim.keymap.set("n", "<leader>t", ":Themery<cr>", {})
 		end
 	},
+
+	-- Colorschemes (loaded by Themery when necessary)
+	{ "catppuccin/nvim",                      lazy = true },
+	{ "one-midnight-theme/one-midnight.nvim", lazy = true },
+	{ "folke/tokyonight.nvim",                lazy = true },
+	{ "EdenEast/nightfox.nvim",               lazy = true },
 
 	-- Highlight comments with  TODO: in them such as this, as well as FIXME and others, also creates a list of them
 	{
@@ -33,46 +131,20 @@ return {
 			"nvim-lua/plenary.nvim",
 		},
 		opts = {},
-	},
-
-	-- Better UI for find and replace
-	{
-		"VonHeikemen/searchbox.nvim",
-		dependencies = {
-			{ "MunifTanjim/nui.nvim" },
-		},
-		keys = {
-			{ "/", "<cmd>SearchBoxIncSearch<cr>", desc = "Search" },
-		},
-		opts = {
-			popup = {
-				position = {
-					row = "0%",
-					col = "100%",
-				},
-				win_options = {
-					winhighlight = "Normal:Normal,FloatBorder:Normal",
-				},
-			},
-		},
+		event = "BufEnter"
 	},
 
 	-- Indentation lines
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		config = function()
-			-- local highlight = { "RainbowRed" }
-			local hooks = require("ibl.hooks")
-			hooks.register(hooks.type.HIGHLIGHT_SETUP, function() -- HACK: set RainbowRed to the indent line color
-				vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#1E1E2E" })
-			end)
 			require("ibl").setup({
 				indent = {
-					-- highlight = highlight,
 					char = "│",
 				},
 			})
 		end,
+		event = "BufEnter",
 	},
 
 	-- Command line improvements and message tooltips
@@ -85,8 +157,7 @@ return {
 		config = function()
 			---@diagnostic disable-next-line
 			require("notify").setup({
-				top_down = false,    -- Send notifications to the bottom of the screen instead of the top
-				background_colour = "#00000000", -- Background color
+				top_down = false, -- Send notifications to the bottom of the screen instead of the top
 			})
 
 			require("noice").setup({
@@ -107,6 +178,8 @@ return {
 					lsp_doc_border = true,
 				},
 			})
+
+			vim.keymap.set("n", "<leader>nc", ':NoiceDismiss<cr>', {}) -- Copy to system clipboard
 		end,
 	},
 
@@ -126,12 +199,7 @@ return {
 			"nvim-lua/plenary.nvim",
 			"nvim-tree/nvim-web-devicons",
 			"MunifTanjim/nui.nvim",
-			{
-				"3rd/image.nvim",
-				opts = {
-					backend = "ueberzug",
-				},
-			},
+			"3rd/image.nvim",
 			{
 				"folke/edgy.nvim",
 				opts = {
@@ -139,12 +207,21 @@ return {
 						winbar = false,
 					},
 					bottom = {
-						"toggleterm",
-						size = 15,
+						{
+							ft = "toggleterm",
+							size = { height = 15 }
+						}
 					},
 					left = {
-						"neo-tree",
-						size = 35,
+						{
+							ft = "neo-tree",
+							size = { width = 35 }
+						},
+						{
+							title = "Call Stack",
+							ft = "Calltree",
+							size = { width = 35 }
+						},
 					},
 					animate = {
 						enabled = false,
@@ -156,7 +233,7 @@ return {
 			require("nvim-web-devicons").setup({
 				override = {
 					-- Color overrides
-					cs = { icon = "", color = "#8800EE", name = "Cs" },
+					cs = { icon = "󰌛", color = "#8800EE", name = "Cs" },
 					txt = { icon = "󰬴", color = "#999999", name = "Text" },
 
 					-- Icons for files missing them
@@ -171,6 +248,7 @@ return {
 					o = { icon = "󰘔", color = "#888888", name = "Object" },
 					pest = { icon = "󰱯", color = "#2800C6", name = "Pest" },
 					toggleterm = { icon = "", color = "#888888", name = "Terminal" },
+					cabin = { icon = "", color = "#775544", name = "Cabin" },
 
 					-- Icon overrides
 					tex = { icon = "𝒙", color = "#999999", name = "LaTeX" },
@@ -219,48 +297,25 @@ return {
 			})
 
 			vim.api.nvim_set_hl(0, "NeoTreeGitUntracked", { fg = "#88FF88" })
+			vim.keymap.set("n", "<leader>eu", ":wincmd p<CR>", {})
 		end,
 		keys = {
 			{
 				"<leader>ef",
 				function()
-					-- Files that indicate the root directory
-					local root_files = {
-						".git",
-						"Cargo.toml",
-						"Makefile",
-						"package.json",
-						".luarc.json",
-						"pyproject.toml",
-						"build.zig",
-						"LICENSE",
-						"index.html",
-						"src",
-					}
-
-					-- Check if the directory is the root directory
-					local function is_root_dir(dir_name)
-						for _, name in ipairs(root_files) do
-							if vim.fn.filereadable(dir_name .. "/" .. name) == 1 or vim.fn.isdirectory(dir_name .. "/" .. name) == 1 then
-								return true
-							end
-						end
-						return false
+					if vim.fn.exists(":DragonflyProject") == 2 then
+						require("dragonfly.project_ui").close()
 					end
-
-					-- Locate the project root directory
-					local current_directory = vim.fn.expand("%:p:h")
-					local root_directory = current_directory
-					while not is_root_dir(root_directory) do
-						root_directory = vim.fn.fnamemodify(root_directory, ":h")
-						if root_directory == "/" then
-							root_directory = current_directory
-							break
-						end
+					if not vim.g.project_cwd then
+						local directory = vim.fn.expand("%:h")
+						if directory == nil or directory:match("^%s*$") then directory = vim.fn.getcwd() end
+						local root = vim.system({ "splik", "--find-root" }, { text = true, cwd = directory })
+							:wait()
+							.stdout
+							:gsub(" ", "\\ ")
+						vim.g.project_cwd = root
 					end
-
-					-- Open Neotree in the project root directory
-					vim.cmd("Neotree dir=" .. root_directory:gsub(" ", "\\ "))
+					vim.cmd("Neotree dir=" .. vim.g.project_cwd)
 				end,
 				desc = "Neotree",
 			},
@@ -346,7 +401,7 @@ return {
 								if path:sub(1, cwd:len()):gsub("\\", "/") == cwd:gsub("\\", "/") then
 									path = path:sub(cwd:len() + 2, path:len())
 								end
-								if path == "/home/neph/.config/nvim/init.lua" then
+								if path == "/home/violet/.config/nvim/init.lua" then
 									path = " Neovim Config"
 								end
 
@@ -365,9 +420,20 @@ return {
 							symbols = {
 								warn = " ",
 								error = " ",
-								hint = " ",
+								hint = "󰌵 ",
 								info = " ",
 							},
+							fmt = function(diagnostics)
+								if diagnostics:match("^%s*$") then
+									local lsps = ""
+									for _, lsp in ipairs(vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })) do
+										lsps = lsps .. " " .. lsp.name .. " "
+									end
+									return lsps
+								end
+
+								return diagnostics
+							end
 						},
 					},
 
@@ -390,4 +456,72 @@ return {
 		end,
 	},
 
+	-- Visual Whitespace
+	{
+		"mcauley-penney/visual-whitespace.nvim",
+		event = "ModeChanged *:[vV\x16]",
+		config = function()
+			local bg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("Visual")), "bg#")
+			require("visual-whitespace").setup({
+				highlight = { fg = "#777799", bg = bg }
+			})
+		end,
+	},
+
+	-- Dashboard
+	{
+		"goolord/alpha-nvim",
+		config = function()
+			local alpha = require("alpha")
+			local dashboard = require("alpha.themes.dashboard")
+			dashboard.section.header.opts.hl = "@comment"
+			dashboard.section.buttons.val = {}
+			dashboard.section.header.val = {
+				"                                                     ",
+				"                                                     ",
+				"                                                     ",
+				"                                                     ",
+				"                                                     ",
+				"                                                     ",
+				"                                                     ",
+				"                                                     ",
+				"                                                     ",
+				"                                                     ",
+				"  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
+				"  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
+				"  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
+				"  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
+				"  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
+				"  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
+				"                                                     ",
+				"                                                     ",
+				"                                                     ",
+				"                                                     ",
+				"            ⣴⣶⣤⡤⠦⣤⣀⣤⠆     ⣈⣭⣿⣶⣿⣦⣼⣆                   ",
+				"             ⠉⠻⢿⣿⠿⣿⣿⣶⣦⠤⠄⡠⢾⣿⣿⡿⠋⠉⠉⠻⣿⣿⡛⣦                ",
+				"                   ⠈⢿⣿⣟⠦ ⣾⣿⣿⣷    ⠻⠿⢿⣿⣧⣄              ",
+				"                    ⣸⣿⣿⢧ ⢻⠻⣿⣿⣷⣄⣀⠄⠢⣀⡀⠈⠙⠿⠄             ",
+				"                   ⢠⣿⣿⣿⠈    ⣻⣿⣿⣿⣿⣿⣿⣿⣛⣳⣤⣀⣀            ",
+				"            ⢠⣧⣶⣥⡤⢄ ⣸⣿⣿⠘  ⢀⣴⣿⣿⡿⠛⣿⣿⣧⠈⢿⠿⠟⠛⠻⠿⠄           ",
+				"           ⣰⣿⣿⠛⠻⣿⣿⡦⢹⣿⣷   ⢊⣿⣿⡏  ⢸⣿⣿⡇ ⢀⣠⣄⣾⠄            ",
+				"          ⣠⣿⠿⠛ ⢀⣿⣿⣷⠘⢿⣿⣦⡀ ⢸⢿⣿⣿⣄ ⣸⣿⣿⡇⣪⣿⡿⠿⣿⣷⡄           ",
+				"          ⠙⠃   ⣼⣿⡟  ⠈⠻⣿⣿⣦⣌⡇⠻⣿⣿⣷⣿⣿⣿ ⣿⣿⡇ ⠛⠻⢷⣄          ",
+				"               ⢻⣿⣿⣄   ⠈⠻⣿⣿⣿⣷⣿⣿⣿⣿⣿⡟ ⠫⢿⣿⡆              ",
+				"                ⠻⣿⣿⣿⣿⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⡟⢀⣀⣤⣾⡿⠃              ",
+				"                                                     ",
+			}
+			alpha.setup(dashboard.opts)
+		end
+	},
+
+	-- Image rendering
+	{
+		"3rd/image.nvim",
+		opts = {
+			backend = "ueberzug",
+			processor = "magick_cli"
+		},
+		build = false,
+		ft = "markdown",
+	}
 }

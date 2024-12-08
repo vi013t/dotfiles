@@ -1,15 +1,20 @@
--- Wezterm API
 local wezterm = require("wezterm")
 
--- Main configuration
 local config = {}
 
 -- Text & Fonts
 config.font = wezterm.font("Consolas")
 config.font_size = 13
 config.allow_square_glyphs_to_overflow_width = "Never"
+config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+config.window_padding = {
+	left = 0,
+	right = 0,
+	bottom = 0
+}
 
 -- Colors
+config.color_scheme = "Catppuccin Mocha"
 config.colors = {
 	background = "#1E1E2E",
 	foreground = "white",
@@ -34,14 +39,6 @@ config.colors = {
 		},
 	},
 }
-
--- config.window_background_gradient = {
--- 	orientation = "Vertical",
--- 	colors = {
--- 		"#000000",
--- 		"#170F39",
--- 	},
--- }
 
 -- Tabs
 local function tab_title(tab_info)
@@ -77,10 +74,10 @@ config.cursor_blink_rate = 400
 
 -- Keys
 config.keys = {
-	{ key = "v", mods = "CTRL", action = wezterm.action.PasteFrom("Clipboard") },
-	{ key = "w", mods = "CTRL", action = wezterm.action.CloseCurrentTab({ confirm = true }) },
-	{ key = "t", mods = "CTRL", action = wezterm.action.SpawnTab("CurrentPaneDomain") },
-	{ key = "C", mods = "CTRL", action = wezterm.action.CopyTo("Clipboard") },
+	{ key = "v", mods = "CTRL",       action = wezterm.action.PasteFrom("Clipboard") },
+	{ key = "w", mods = "CTRL|SHIFT", action = wezterm.action.CloseCurrentTab({ confirm = true }) },
+	{ key = "t", mods = "CTRL",       action = wezterm.action.SpawnTab("CurrentPaneDomain") },
+	{ key = "C", mods = "CTRL",       action = wezterm.action.CopyTo("Clipboard") },
 }
 
 return config

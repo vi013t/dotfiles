@@ -2,10 +2,12 @@
 [[ $- != *i* ]] && return
 
 # Private variables such as API keys
-# . ~/.bash_private
+if [ -f ~/.bash_private ]; then
+	. ~/.bash_private
+fi
 
 # Environment variables
-export PS1="┣━ " # Set Bash prompt
+export PS1="├─ " # Set Bash prompt
 export BUN_INSTALL="$HOME/.bun" # Set Bun install location
 export MANPAGER='nvim +Man!' # Set Neovim as the editor for man pages
 export MANWIDTH=999 # Set the max width for manpages
@@ -15,12 +17,8 @@ export TERM="wezterm" # Set the terminal type: $ curl https://raw.githubusercont
 export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH="$PATH:/home/violet/.local/share/darling/source/target/release"
 export PATH="/home/violet/.scripts/lazy:$PATH"
-
-# Sourced Scripts
-sourced_scripts=($(ls /home/violet/.scripts/sourced))
-for script in "${sourced_scripts[@]}" ; do
-	. "/home/violet/.scripts/sourced/$script"
-done
+export PATH="./target/debug:$PATH"
+export PATH="./target/release:$PATH"
 
 # Wrapper around joshuto for preivews and exiting into cwd with q
 function files() {
@@ -35,7 +33,6 @@ function files() {
 			;;
 		101)
 			JOSHUTO_CWD=$(cat "$OUTPUT_FILE")
-			# z "$JOSHUTO_CWD"
 			cd "$JOSHUTO_CWD"
 			;;
 		102)
@@ -81,14 +78,12 @@ function cfg() {
 	esac
 }
 
+# cfg tab completion
 _cfg() {
 	local cur=${COMP_WORDS[COMP_CWORD]}
 	COMPREPLY=( $(compgen -W "bash lotus nvim bash stylua wezterm" -- $cur) )
 }
 complete -F _cfg cfg
-
-# Print the here directory
-cd .
 
 # Aliases
 alias i="sudo pacman -S" # Install a package
@@ -99,6 +94,7 @@ alias neofetch="neofetch --iterm2 ~/Pictures/catgirl.png --size 800"
 alias rs=". ~/.bashrc"
 alias code="codium . -r"
 
+# Update arch stuff
 function update() {
 	sudo pacman -Syu --noconfirm # Update official packages
 	yes | yay -Syu # Update AUR packages 
@@ -122,13 +118,13 @@ function llvmc() {
 }
 
 # Run C files
-function c() {(
+function c() {
 	set -e
 	fname="${1%.*}"
 	gcc -o "$fname" "$fname.c"
 	./"$fname"
 	rm "$fname"
-)}
+}
 
 # Convert markdown to PDF
 function md() {
@@ -146,8 +142,13 @@ function clean() {
 # Set tab size
 tabs -4
 
+# Source Cargo
 . "$HOME/.cargo/env"
 
 # Luaver
 [ -s ~/.luaver/luaver ] && . ~/.luaver/luaver
 [ -s ~/.luaver/completions/luaver.bash ] && . ~/.luaver/completions/luaver.bash
+
+# Pls
+eval "$(pls --init)"
+cd .

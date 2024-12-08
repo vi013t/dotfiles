@@ -1,56 +1,16 @@
 return {
-	-- Auto-generate licenses
-	{
-		"antoyo/vim-licenses",
-		config = function()
-			vim.g.license_copyright_holders_name = "Neph Iapalucci"
-			vim.g.license_authors_name = "Neph Iapalucci"
-		end,
-		cmd = {
-			"Affero",
-			"Allpermissive",
-			"Apache",
-			"Boost",
-			"Bsd2",
-			"Bsd3",
-			"Cc0",
-			"Ccby",
-			"Ccbysa",
-			"Cecill",
-			"Epl",
-			"Gfdl",
-			"Gpl",
-			"Gplv2",
-			"Isc",
-			"Lgpl",
-			"Mit",
-			"Mitapache",
-			"Mpl",
-			"Uiuc",
-			"Unlicense",
-			"Verbatim",
-			"Wtfpl",
-			"Zlib",
-		},
-	},
 
 	-- Icon picker for writing icons such as     etc
 	{
 		"ziontee113/icon-picker.nvim",
 		dependencies = {
-			{ "nvim-telescope/telescope.nvim", opts = {} },
+			{ "nvim-telescope/telescope.nvim", lazy = true, },
 			"stevearc/dressing.nvim",
 		},
 		opts = {},
 		keys = {
 			{ "<leader>m", "<cmd>IconPickerNormal nerd_font_v3 alt_font symbols emoji<cr>", desc = "Insert Symbols" },
 		},
-	},
-
-	-- Todo diagnostic list
-	{
-		"folke/trouble.nvim",
-		cmd = "TodoTrouble",
 	},
 
 	-- sudo write files
@@ -72,30 +32,39 @@ return {
 	-- Terminal toggler
 	{
 		"akinsho/toggleterm.nvim",
-		dependencies = {
-			{
-				"folke/edgy.nvim",
-				opts = {
-					wo = {
-						winbar = false,
-					},
-					bottom = {
-						"toggleterm",
-						size = 15,
-					},
-					left = {
-						"neo-tree",
-						size = 35,
-					},
-					animate = {
-						enabled = false,
-					},
-				},
-			},
-		},
 		opts = {},
 		keys = {
 			{ "<C-`>", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
 		},
+	},
+
+	-- Search & Replace
+	{
+		dir = "/home/violet/Documents/Coding/Developer Tools/Neovim Plugins/dragonfly.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		opts = {
+			on_open = function()
+				if vim.fn.exists(":NeoTreeClose") == 2 then vim.cmd("NeoTreeClose") end
+			end,
+			on_close = function()
+				if not vim.g.project_cwd then
+					local directory = vim.fn.expand("%:h")
+					if directory == nil or directory:match("^%s*$") then directory = vim.fn.getcwd() end
+					local root = vim.system({ "splik", "--find-root" }, { text = true, cwd = directory })
+						:wait()
+						.stdout
+						:gsub(" ", "\\ ")
+					vim.g.project_cwd = root
+				end
+				local has_neotree = pcall(function() require("neo-tree") end)
+				if has_neotree then vim.cmd("Neotree dir=" .. vim.g.project_cwd) end
+			end,
+		},
+		keys = {
+			{ "/",     "<cmd>DragonflyBuffer<cr>" },
+			{ "?",     "<cmd>DragonflyBufferReplace<cr>" },
+			{ "<C-/>", "<cmd>DragonflyProject<cr>" },
+			{ "<C-?>", "<cmd>DragonflyProjectReplace<cr>" },
+		}
 	},
 }
