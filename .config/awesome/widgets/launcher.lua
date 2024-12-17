@@ -1,11 +1,17 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local theme = require("misc.theme")
+local gears = require("gears")
 
 local launcher = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
 launcher.width = 300
 launcher.height = 500
 launcher.bg = theme.custom.primary_background
+launcher.border_width = 2
+launcher.border_color = theme.custom.primary_foreground
+launcher.shape = function(cr, width, height)
+	gears.shape.rounded_rect(cr, width, height, 15)
+end
 
 local apps = {}
 
@@ -22,7 +28,7 @@ end
 
 awful.placement.top_right(
 	launcher,
-	{ honor_workarea = true, margins = { right = theme.custom.default_margin + 500, top = theme.custom.default_margin } }
+	{ honor_workarea = true, margins = { right = theme.custom.default_margin + 512, top = theme.custom.default_margin } }
 )
 
 awful.spawn.easy_async_with_shell("ls /usr/share/applications -1", function(applications)

@@ -104,6 +104,8 @@ function taskbar:refresh()
 			end
 			awful.spawn(app)
 		end)
+
+		-- Focused pinned app
 		if client.focus and client.focus.class:lower():match(app:match("^(%S+)")) then
 			table.insert(clients, {
 				{
@@ -127,14 +129,51 @@ function taskbar:refresh()
 
 			-- Not selected
 		else
-			table.insert(clients, {
-				widget,
-				widget = wibox.container.margin,
-				top = 15,
-				bottom = 10,
-				left = gap / 2,
-				right = gap / 2,
-			})
+			local exists = false
+			for _, c in ipairs(client.get()) do
+				if c.class:match(app .. "$") == app then
+					exists = true
+				end
+			end
+
+			if exists then
+				table.insert(clients,
+					wibox.widget({
+						widget = wibox.container.margin,
+						left = gap / 2,
+						bottom = -40,
+						{
+							widget = wibox.layout.stack,
+							spacing = 0,
+							{
+								widget,
+								widget = wibox.container.margin,
+								top = 18,
+								bottom = 50,
+							},
+							{
+								widget = wibox.container.margin,
+								top = 60,
+								bottom = 40,
+								{
+									widget = wibox.container.background,
+									bg = "#8888AA",
+									shape = gears.shape.circle
+								}
+							}
+						}
+					})
+				)
+			else
+				table.insert(clients, {
+					widget,
+					widget = wibox.container.margin,
+					top = 15,
+					bottom = 10,
+					left = gap / 2,
+					right = gap / 2,
+				})
+			end
 		end
 	end
 
@@ -143,6 +182,7 @@ function taskbar:refresh()
 	-- Not pinned apps
 	for index, c in ipairs(client.get()) do
 		local client_widget = awful.widget.clienticon(c)
+		client_widget.forced_height = 40
 
 		local already_done = false
 		for _, dc in ipairs(done_clients) do
@@ -164,6 +204,7 @@ function taskbar:refresh()
 		table.insert(done_clients, c)
 
 		if not already_done then
+			-- Focused unpinned app
 			if client.focus and client.focus.class == c.class then
 				client_widget = {
 					{
@@ -181,8 +222,8 @@ function taskbar:refresh()
 					},
 					widget = wibox.container.margin,
 					right = gap / 2 - 12,
-					top = 8,
-					bottom = 5,
+					top = 3,
+					bottom = 3,
 				}
 
 				-- Unfoucsed unpinned app
@@ -193,12 +234,30 @@ function taskbar:refresh()
 				end
 				client_widget = wibox.widget({
 					widget = wibox.container.margin,
-					top = 20,
-					bottom = 17,
-					left = gap / 2,
-					right = gap / 2,
-					client_widget,
+					left = 7,
+					bottom = -40,
+					{
+						widget = wibox.layout.stack,
+						spacing = 0,
+						{
+							client_widget,
+							widget = wibox.container.margin,
+							top = 18,
+							bottom = 50,
+						},
+						{
+							widget = wibox.container.margin,
+							top = 60,
+							bottom = 40,
+							{
+								widget = wibox.container.background,
+								bg = "#8888AA",
+								shape = gears.shape.circle
+							}
+						}
+					}
 				})
+
 
 				client_widget:connect_signal("button::press", function()
 					client.focus = c
