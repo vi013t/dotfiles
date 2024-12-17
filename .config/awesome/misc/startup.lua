@@ -1,5 +1,5 @@
 local awful = require("awful")
-local naughty = require("naughty") -- Notification library
+local naughty = require("naughty")
 
 -- Handle runtime errors after startup
 if awesome.startup_errors then
@@ -20,7 +20,7 @@ do
 
 		naughty.notify({
 			preset = naughty.config.presets.critical,
-			title = "Oops, an error happened!",
+			title = "Error During Startup",
 			text = tostring(err)
 		})
 
@@ -29,6 +29,16 @@ do
 end
 
 -- Startup programs
-awful.spawn.with_shell("picom -b --backend glx --config ~/.config/picom/picom.conf")                    -- Compositor
-awful.spawn.with_shell("feh --no-fehbg --bg-fill ~/.config/awesome/assets/images/wallpaper.jpg")        -- Wallpaper
-awful.spawn.with_shell('xinput set-prop "VEN_04F3:00 04F3:320F Touchpad" "libinput Tapping Enabled" 1') -- Enable touchpad tapping
+awful.spawn.with_shell("picom -b --backend glx --config ~/.config/picom/picom.conf")             -- Compositor
+awful.spawn.with_shell("feh --no-fehbg --bg-fill ~/.config/awesome/assets/images/wallpaper.jpg") -- Wallpaper
+
+awful.spawn.easy_async_with_shell("xinput list --name-only | grep -i touchpad --color=none", function(touchpad)
+	touchpad = touchpad:match("([^\r\n]+)[\r\n]*")
+	if touchpad then
+		require("naughty").notify({
+			title = "Enabling Touchpad",
+			text = "Enabling tapping for touchpad \"" .. touchpad .. "\""
+		})
+		awful.spawn.with_shell(('xinput set-prop "%s" "libinput Tapping Enabled" 1'):format(touchpad))
+	end
+end)

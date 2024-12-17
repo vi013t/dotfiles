@@ -15,7 +15,7 @@ local menubar = require("menubar")
 require("awful.autofocus")
 require("awful.hotkeys_popup.keys")
 
-local preferences = require("misc.preferences")
+local preferences = require("preferences")
 
 require("misc.startup")                                                -- Handle errors on startup
 
@@ -26,7 +26,6 @@ local sidebar = require("widgets.sidebar")
 local tags = require("widgets.tags")
 local volume_bar = require("widgets.volume")
 local brightness_bar = require("widgets.brightness")
-local dock = require("widgets.dock")
 local launcher = require("widgets.launcher")
 local menu = require("widgets.menu").setup(launcher.widget)
 local taskbar = require("widgets.taskbar")
@@ -41,7 +40,6 @@ keys.setup({
 	tags = tags.widget,
 	volume = volume_bar.widget,
 	brightness = brightness_bar.widget,
-	dock = dock.widget,
 	launcher = launcher.widget,
 	taskbar = taskbar.widget,
 	search = menu.search
@@ -54,7 +52,7 @@ awful.layout.layouts = {
 }
 
 -- Menubar configuration
-menubar.utils.terminal = preferences.terminal -- Set the terminal for applications that require it
+menubar.utils.terminal = preferences.apps.terminal -- Set the terminal for applications that require it
 
 local function set_wallpaper(s)
 	if beautiful.wallpaper then

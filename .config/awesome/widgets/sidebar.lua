@@ -2,7 +2,7 @@ local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
 local theme = require("misc.theme")
-local preferences = require("misc.preferences")
+local preferences = require("preferences")
 local system = require("misc.system")
 
 local sidebar = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
@@ -254,7 +254,7 @@ function sidebar:refresh_numbers()
 		sidebar:toggle()
 	end)
 
-	local files_icon = wibox.widget.textclock("󰉋")
+	local files_icon = wibox.widget.textclock("")
 	files_icon.font = "OpenSans 32"
 	files_icon:connect_signal("button::press", function()
 		awful.spawn(preferences.apps.file_explorer)

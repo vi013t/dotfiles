@@ -4,7 +4,7 @@ local theme = require("misc.theme")
 local gears = require("gears")
 
 local launcher = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
-launcher.width = 300
+launcher.width = 500
 launcher.height = 500
 launcher.bg = theme.custom.primary_background
 launcher.border_width = 2
@@ -172,7 +172,7 @@ function launcher:sort(search_text)
 	sorted_widgets[1] = {
 		sorted_widgets[1],
 		widget = wibox.container.background,
-		bg = "#333344",
+		bg = "#2C2C4C",
 	}
 
 	launcher:setup({

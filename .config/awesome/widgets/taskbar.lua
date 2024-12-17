@@ -1,7 +1,7 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
-local preferences = require("misc.preferences")
+local preferences = require("preferences")
 local system = require("misc.system")
 
 local function get_app_icon(app_name)

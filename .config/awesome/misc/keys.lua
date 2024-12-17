@@ -1,6 +1,6 @@
 local awful = require("awful")
 local gears = require("gears")
-local preferences = require("misc.preferences")
+local preferences = require("preferences")
 
 local public = {}
 public.modkey = "Mod4"
@@ -16,7 +16,7 @@ local other_key_was_pressed = false
 local function f(action)
 	return function(...)
 		other_key_was_pressed = true
-		action(...)
+		return action(...)
 	end
 end
 
@@ -37,141 +37,29 @@ end
 
 function public.setup(widgets)
 	local windows = public.modkey
-	local modkey_code = "#133"
+	local windows_key_code = "#133"
+
+	local global_keys = gears.table.map(function(keybinding)
+		local mods = {}
+		if keybinding.modifiers then
+			mods = gears.table.map(function(modifier)
+				local modifiers = {
+					windows = windows,
+					shift = "Shift",
+					control = "Control"
+				}
+
+				return modifiers[modifier]
+			end, keybinding.modifiers)
+		end
+
+		return awful.key(mods, keybinding.key, f(function() keybinding.run(widgets) end))
+	end, preferences.keys)
 
 	public.globalkeys = gears.table.join(
-
-	-- Modkey (requires special press/release handling)
-		awful.key({}, modkey_code, function() modkey_pressed(widgets) end, function() end),
-		awful.key({ windows }, modkey_code, function() end, function() modkey_released(widgets) end),
-
-		-- Menus & Widgets
-		awful.key({ windows }, "`", f(function() widgets.sidebar:toggle() end)),
-		awful.key({ windows }, "b", f(function() widgets.taskbar:toggle() end)),
-
-		-- Tags
-		awful.key({ windows }, "Left", f(awful.tag.viewprev)),
-		awful.key({ windows }, "Right", f(awful.tag.viewnext)),
-
-		-- Launch Programs (These generally use mod + shift)
-		awful.key({ windows }, "Return", f(function() awful.spawn(preferences.terminal) end)),
-		awful.key({ windows, "Shift" }, "r", f(function() awful.spawn.with_shell("rofi -show-icons -show run") end)),
-		awful.key({ windows, "Shift" }, "f", f(function() awful.spawn("firefox") end)),
-		awful.key({ windows, "Shift" }, "d", f(function() awful.spawn("discord") end)),
-		awful.key({ windows, "Shift" }, "s", f(function() awful.spawn("flameshot gui") end)),
-		awful.key({ windows, "Shift" }, "c", f(function() awful.spawn(preferences.apps.calculator) end)),
-
-		-- Awesome Core Functions
-		awful.key({ windows }, "r", f(awesome.restart)),
-		awful.key({ windows }, "q", f(awesome.quit)),
-		awful.key({ windows }, "f",
-			f(function()
-				awful.layout.inc(1); for _, some_client in ipairs(client.get()) do
-					some_client:emit_signal(
-						"request::titlebars")
-				end
-			end)),
-
-		-- Print screen key
-		awful.key({}, "Print",
-			f(function()
-				awful.spawn.with_shell('flameshot full --path "' ..
-					os.getenv("HOME") ..
-					'/Pictures/Screenshots/' ..
-					tostring(os.date("%x")):gsub("/", "_") .. " at " .. tostring(os.date("%X")):gsub(":|%s", "_") .. '"')
-			end)),
-
-		-- Brightness
-		awful.key({}, "XF86MonBrightnessUp",
-			function()
-				os.execute("brightnessctl set +10%"); widgets.menu:refresh_numbers(); widgets.brightness:show()
-			end, { description = "Increase brightness", group = "brightness" }),
-		awful.key({}, "XF86MonBrightnessDown",
-			function()
-				os.execute("brightnessctl set 10%-"); widgets.menu:refresh_numbers(); widgets.brightness:show()
-			end, { description = "Decrease brightness", group = "brightness" }),
-		awful.key({ "Control" }, "XF86MonBrightnessUp",
-			function()
-				os.execute("brightnessctl set 100%"); widgets.menu:refresh_numbers(); widgets.brightness:show()
-			end, { description = "Increase brightness", group = "brightness" }),
-		awful.key({ "Control" }, "XF86MonBrightnessDown",
-			function()
-				os.execute("brightnessctl set 1%"); widgets.menu:refresh_numbers(); widgets.brightness:show()
-			end, { description = "Decrease brightness", group = "brightness" }),
-		awful.key({ "Shift" }, "XF86MonBrightnessUp",
-			function()
-				os.execute("brightnessctl set 3%+"); widgets.menu:refresh_numbers(); widgets.brightness:show()
-			end, { description = "Increase brightness", group = "brightness" }),
-		awful.key({ "Shift" }, "XF86MonBrightnessDown",
-			function()
-				os.execute("brightnessctl set 3%-"); widgets.menu:refresh_numbers(); widgets.brightness:show()
-			end, { description = "Decrease brightness", group = "brightness" }),
-
-		-- Volume
-		awful.key({}, "XF86AudioLowerVolume",
-			function()
-				os.execute("pamixer --decrease 10")
-				widgets.menu:refresh_numbers()
-				widgets.volume:show()
-				awful.spawn.easy_async_with_shell(
-					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
-					function() end
-				)
-			end, { description = "Lower Volume", group = "audio" }),
-		awful.key({}, "XF86AudioRaiseVolume",
-			function()
-				os.execute("pamixer --increase 10")
-				widgets.menu:refresh_numbers()
-				widgets.volume:show()
-				awful.spawn.easy_async_with_shell(
-					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
-					function() end
-				)
-			end, { description = "Raise Volume", group = "audio" }),
-		awful.key({ "Shift" }, "XF86AudioLowerVolume",
-			function()
-				os.execute("pamixer --decrease 3")
-				widgets.menu:refresh_numbers()
-				widgets.volume:show()
-				awful.spawn.easy_async_with_shell(
-					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
-					function() end
-				)
-			end, { description = "Lower Volume", group = "audio" }),
-		awful.key({ "Shift" }, "XF86AudioRaiseVolume",
-			function()
-				os.execute("pamixer --increase 3")
-				widgets.menu:refresh_numbers()
-				widgets.volume:show()
-				awful.spawn.easy_async_with_shell(
-					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
-					function() end
-				)
-			end, { description = "Raise Volume", group = "audio" }),
-		awful.key({ "Control" }, "XF86AudioLowerVolume",
-			function()
-				os.execute("pamixer --set-volume 0")
-				widgets.menu:refresh_numbers()
-				widgets.volume:show()
-				awful.spawn.easy_async_with_shell(
-					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
-					function() end
-				)
-			end, { description = "Mute volume", group = "audio" }),
-		awful.key({ "Control" }, "XF86AudioRaiseVolume",
-			function()
-				os.execute("pamixer --set-volume 100")
-				widgets.menu:refresh_numbers()
-				widgets.volume:show()
-				awful.spawn.easy_async_with_shell(
-					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
-					function() end
-				)
-			end, { description = "Mute volume", group = "audio" }),
-		awful.key({}, "XF86AudioMute",
-			function()
-				os.execute("pamixer --set-volume 0"); widgets.menu:refresh_numbers(); widgets.volume:show()
-			end, { description = "Mute volume", group = "audio" })
+		awful.key({}, windows_key_code, function() modkey_pressed(widgets) end, function() end),
+		awful.key({ windows }, windows_key_code, function() end, function() modkey_released(widgets) end),
+		table.unpack(global_keys)
 	)
 
 	-- Client keys (These generally use mod + ctrl)
@@ -204,15 +92,6 @@ function public.setup(widgets)
 				{ description = "view tag #" .. tag_number, group = "tag" }
 			),
 
-			-- Toggle tag display.
-			awful.key({ public.modkey, "Control" }, "#" .. tag_number + 9, function()
-				local screen = awful.screen.focused()
-				local tag = screen.tags[tag_number]
-				if tag then
-					awful.tag.viewtoggle(tag)
-				end
-			end, { description = "toggle tag #" .. tag_number, group = "tag" }),
-
 			-- Move client to tag.
 			awful.key({ public.modkey, "Shift" }, "#" .. tag_number + 9, function()
 				if client.focus then
@@ -221,17 +100,7 @@ function public.setup(widgets)
 						client.focus:move_to_tag(tag)
 					end
 				end
-			end, { description = "move focused client to tag #" .. tag_number, group = "tag" }),
-
-			-- Toggle tag on focused client.
-			awful.key({ public.modkey, "Control", "Shift" }, "#" .. tag_number + 9, function()
-				if client.focus then
-					local tag = client.focus.screen.tags[tag_number]
-					if tag then
-						client.focus:toggle_tag(tag)
-					end
-				end
-			end, { description = "toggle focused client on tag #" .. tag_number, group = "tag" })
+			end, { description = "move focused client to tag #" .. tag_number, group = "tag" })
 		)
 	end
 end

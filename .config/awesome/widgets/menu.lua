@@ -2,7 +2,7 @@ local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
 local theme = require("misc.theme")
-local preferences = require("misc.preferences")
+local preferences = require("preferences")
 
 local public = {}
 
