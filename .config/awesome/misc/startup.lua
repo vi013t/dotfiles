@@ -29,5 +29,6 @@ do
 end
 
 -- Startup programs
-awful.spawn.with_shell("picom -b --backend glx --config ~/.config/picom/picom.conf")
-awful.spawn.with_shell("feh --no-fehbg --bg-fill '/home/violet/Pictures/Wallpapers/City.jpg'")
+awful.spawn.with_shell("picom -b --backend glx --config ~/.config/picom/picom.conf")                    -- Compositor
+awful.spawn.with_shell("feh --no-fehbg --bg-fill '/home/violet/Pictures/Wallpapers/City.jpg'")          -- Wallpaper
+awful.spawn.with_shell('xinput set-prop "VEN_04F3:00 04F3:320F Touchpad" "libinput Tapping Enabled" 1') -- Enable touchpad tapping

@@ -24,7 +24,8 @@ function public.setup(launcher)
 	end
 
 	awful.placement.top_right(menu,
-		{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = theme.custom.default_margin } })
+		{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = theme.custom.default_margin } }
+	)
 
 	local time = wibox.widget.textclock("%H:%M")
 	time.font = "OpenSans 72"

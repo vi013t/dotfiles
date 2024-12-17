@@ -118,7 +118,7 @@ function taskbar:refresh()
 						left = 12,
 					},
 					widget = wibox.container.background,
-					bg = "#FFFFFF20",
+					bg = "#FFFFFF10",
 					shape = gears.shape.rounded_rect,
 				},
 				widget = wibox.container.margin,
@@ -131,7 +131,7 @@ function taskbar:refresh()
 		else
 			local exists = false
 			for _, c in ipairs(client.get()) do
-				if c.class:match(app .. "$") == app then
+				if c.class and c.class:match(app .. "$") == app then
 					exists = true
 				end
 			end
@@ -217,7 +217,7 @@ function taskbar:refresh()
 							left = 12,
 						},
 						widget = wibox.container.background,
-						bg = "#FFFFFF20",
+						bg = "#FFFFFF10",
 						shape = gears.shape.rounded_rect,
 					},
 					widget = wibox.container.margin,

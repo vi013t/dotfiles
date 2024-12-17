@@ -20,7 +20,11 @@ local function get_app_icon(app_name, icon_name)
 		function(path)
 			path = path:match("([^\r\n]+)[\r\n]*$")
 			if path then
-				table.insert(apps, { name = app_name, icon = path })
+				local scaling = nil
+				if path:match("16x16") then
+					scaling = "nearest"
+				end
+				table.insert(apps, { name = app_name, icon = path, scaling = scaling })
 			end
 		end
 	)
@@ -28,13 +32,16 @@ end
 
 awful.placement.top_right(
 	launcher,
-	{ honor_workarea = true, margins = { right = theme.custom.default_margin + 512, top = theme.custom.default_margin } }
+	{ honor_workarea = true, margins = { right = theme.custom.default_margin * 2 + 500, top = theme.custom.default_margin } }
 )
 
 awful.spawn.easy_async_with_shell("ls /usr/share/applications -1", function(applications)
 	for app in applications:gmatch("([^\n]+)") do
-		local icon = io.open("/usr/share/applications/" .. app, "r"):read("*a"):match("Icon=([^\r\n]+)")
-		local name = io.open("/usr/share/applications/" .. app, "r"):read("*a"):match("Name=([^\r\n]+)")
+		local file = assert(io.open("/usr/share/applications/" .. app, "r"))
+		local info = file:read("*a")
+		local icon = info:match("Icon=([^\r\n]+)")
+		local name = info:match("Name=([^\r\n]+)")
+		file:close()
 		get_app_icon(name, icon)
 	end
 end)
@@ -92,6 +99,7 @@ function launcher:refresh_numbers()
 		local icon_widget = wibox.widget.imagebox(app.icon)
 		icon_widget.forced_width = 70
 		icon_widget.forced_height = 70
+		icon_widget.scaling_quality = app.scaling or icon_widget.scaling_quality
 
 		local name_widget = wibox.widget.textbox()
 		name_widget.markup = ('<span color="%s">%s</span>'):format(theme.custom.primary_foreground, app.name)
@@ -145,6 +153,7 @@ function launcher:sort(search_text)
 		local icon_widget = wibox.widget.imagebox(app.icon)
 		icon_widget.forced_width = 70
 		icon_widget.forced_height = 70
+		icon_widget.scaling_quality = app.scaling or icon_widget.scaling_quality
 
 		local name_widget = wibox.widget.textbox()
 		name_widget.markup = ('<span color="%s">%s</span>'):format(theme.custom.primary_foreground, app.name)
