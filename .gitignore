@@ -16,6 +16,8 @@
 !.config/VSCodium/User
 !.config/VSCodium/User/settings.json
 !.config/VSCodium/User/README.md
+!.config/awesome/
+!.config/awesome/**/*
 !.config/nvim
 !.config/nvim/*
 !.config/nvim/lua

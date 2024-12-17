@@ -23,12 +23,12 @@ beautiful.init(os.getenv("HOME") .. "/.config/awesome/misc/theme.lua") -- Initia
 
 -- Initialize widgets
 local sidebar = require("widgets.sidebar")
-local menu = require("widgets.menu")
 local tags = require("widgets.tags")
 local volume_bar = require("widgets.volume")
 local brightness_bar = require("widgets.brightness")
 local dock = require("widgets.dock")
 local launcher = require("widgets.launcher")
+local menu = require("widgets.menu").setup(launcher.widget)
 local taskbar = require("widgets.taskbar")
 
 require("widgets.notification")
@@ -44,6 +44,7 @@ keys.setup({
 	dock = dock.widget,
 	launcher = launcher.widget,
 	taskbar = taskbar.widget,
+	search = menu.search
 })
 
 -- Table of layouts to cover with awful.layout.inc, order matters.

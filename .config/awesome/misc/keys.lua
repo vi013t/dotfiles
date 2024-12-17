@@ -30,14 +30,13 @@ local function modkey_released(widgets)
 	widgets.tags:close()
 	if not other_key_was_pressed then
 		widgets.menu:toggle()
-		-- widgets.menu.search:run()
 	else
 		other_key_was_pressed = false
 	end
 end
 
 function public.setup(widgets)
-	local modkey = public.modkey
+	local windows = public.modkey
 	local modkey_code = "#133"
 
 	-- stylua: ignore start
@@ -45,28 +44,28 @@ function public.setup(widgets)
 
 	-- Modkey (requires special press/release handling)
 		awful.key({}, modkey_code, function() modkey_pressed(widgets) end, function() end),
-		awful.key({ modkey }, modkey_code, function() end, function() modkey_released(widgets) end),
+		awful.key({ windows }, modkey_code, function() end, function() modkey_released(widgets) end),
 
 		-- Menus & Widgets
-		awful.key({ modkey }, "`", f(function() widgets.sidebar:toggle() end)),
-		awful.key({ modkey }, "b", f(function() widgets.taskbar:toggle() end)),
+		awful.key({ windows }, "`", f(function() widgets.sidebar:toggle() end)),
+		awful.key({ windows }, "b", f(function() widgets.taskbar:toggle() end)),
 
 		-- Tags
-		awful.key({ modkey }, "Left", f(awful.tag.viewprev)),
-		awful.key({ modkey }, "Right", f(awful.tag.viewnext)),
+		awful.key({ windows }, "Left", f(awful.tag.viewprev)),
+		awful.key({ windows }, "Right", f(awful.tag.viewnext)),
 
 		-- Launch Programs (These generally use mod + shift)
-		awful.key({ modkey }, "Return", f(function() awful.spawn(preferences.terminal) end)),
-		awful.key({ modkey, "Shift" }, "r", f(function() awful.spawn.with_shell("rofi -show-icons -show run") end)),
-		awful.key({ modkey, "Shift" }, "f", f(function() awful.spawn("firefox") end)),
-		awful.key({ modkey, "Shift" }, "d", f(function() awful.spawn("discord") end)),
-		awful.key({ modkey, "Shift" }, "s", f(function() awful.spawn("flameshot gui") end)),
-		awful.key({ modkey, "Shift" }, "c", f(function() awful.spawn(preferences.apps.calculator) end)),
+		awful.key({ windows }, "Return", f(function() awful.spawn(preferences.terminal) end)),
+		awful.key({ windows, "Shift" }, "r", f(function() awful.spawn.with_shell("rofi -show-icons -show run") end)),
+		awful.key({ windows, "Shift" }, "f", f(function() awful.spawn("firefox") end)),
+		awful.key({ windows, "Shift" }, "d", f(function() awful.spawn("discord") end)),
+		awful.key({ windows, "Shift" }, "s", f(function() awful.spawn("flameshot gui") end)),
+		awful.key({ windows, "Shift" }, "c", f(function() awful.spawn(preferences.apps.calculator) end)),
 
 		-- Awesome Core Functions
-		awful.key({ modkey }, "r", f(awesome.restart)),
-		awful.key({ modkey }, "q", f(awesome.quit)),
-		awful.key({ modkey }, "f",
+		awful.key({ windows }, "r", f(awesome.restart)),
+		awful.key({ windows }, "q", f(awesome.quit)),
+		awful.key({ windows }, "f",
 			f(function()
 				awful.layout.inc(1); for _, some_client in ipairs(client.get()) do
 					some_client:emit_signal(
@@ -142,9 +141,9 @@ function public.setup(widgets)
 
 	-- Client keys (These generally use mod + ctrl)
 	public.clientkeys = gears.table.join(
-		awful.key({ modkey, "Control" }, "f", f(function(c) c.fullscreen = not c.fullscreen end)),
-		awful.key({ modkey, "Control" }, "q", function(c) c:kill() end),
-		awful.key({ modkey, "Control" }, "m", function(c)
+		awful.key({ windows, "Control" }, "f", f(function(c) c.fullscreen = not c.fullscreen end)),
+		awful.key({ windows, "Control" }, "q", function(c) c:kill() end),
+		awful.key({ windows, "Control" }, "m", function(c)
 			c.maximized = not c.maximized
 			c:raise()
 		end)

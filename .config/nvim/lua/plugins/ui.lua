@@ -336,7 +336,6 @@ return {
 					"neo-tree",
 					"lazy",
 					"mason",
-					-- "toggleterm",
 					"trouble",
 					"man",
 				},

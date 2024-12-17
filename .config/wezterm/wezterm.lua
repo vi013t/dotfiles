@@ -4,7 +4,7 @@ local config = {}
 
 -- Text & Fonts
 config.font = wezterm.font("Consolas")
-config.font_size = 13
+config.font_size = 14
 config.allow_square_glyphs_to_overflow_width = "Never"
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 config.window_padding = {

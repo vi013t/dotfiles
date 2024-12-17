@@ -76,19 +76,19 @@ end, volume_widget)
 function taskbar:refresh()
 	clients = { layout = wibox.layout.fixed.horizontal }
 
-	local logo = wibox.widget.imagebox("/home/violet/.config/awesome/images/arch.png")
-	logo:connect_signal("button::press", function()
-		awful.spawn.with_shell("rofi -show run -show-icons")
-	end)
-
-	table.insert(clients, {
-		widget = wibox.container.margin,
-		top = 22,
-		bottom = 20,
-		left = 0,
-		right = gap / 2,
-		logo,
-	})
+	-- local logo = wibox.widget.imagebox("/home/violet/.config/awesome/images/arch.png")
+	-- logo:connect_signal("button::press", function()
+	-- 	awful.spawn.with_shell("rofi -show run -show-icons")
+	-- end)
+	--
+	-- table.insert(clients, {
+	-- 	widget = wibox.container.margin,
+	-- 	top = 22,
+	-- 	bottom = 20,
+	-- 	left = 0,
+	-- 	right = gap / 2,
+	-- 	logo,
+	-- })
 
 	-- Pinned apps
 	for _, app in ipairs(preferences.pinned_apps) do
@@ -226,14 +226,14 @@ function taskbar:refresh()
 		{
 			clients,
 			widget = wibox.container.margin,
-			left = 1670 / 2 - (#clients * (64 + gap)) / 2,
+			left = 1600 / 2 - (#clients * (64 + gap)) / 2,
 		},
 		{
 			{
 				{
 					clock,
 					widget = wibox.container.margin,
-					top = 14,
+					top = 6,
 				},
 				date,
 				layout = wibox.layout.fixed.vertical,
@@ -265,6 +265,8 @@ function taskbar:toggle()
 	self.visible = not self.visible
 	taskbar:refresh()
 end
+
+taskbar:refresh()
 
 return {
 	widget = taskbar,

@@ -12,6 +12,7 @@ export BUN_INSTALL="$HOME/.bun" # Set Bun install location
 export MANPAGER='nvim +Man!' # Set Neovim as the editor for man pages
 export MANWIDTH=999 # Set the max width for manpages
 export TERM="wezterm" # Set the terminal type: $ curl https://raw.githubusercontent.com/wez/wezterm/master/termwiz/data/wezterm.terminfo | tic -x -
+export EDITOR="nvim"
 
 # PATH variables
 export PATH="$BUN_INSTALL/bin:$PATH"
@@ -90,7 +91,7 @@ alias i="sudo pacman -S" # Install a package
 alias img="wezterm imgcat" # View images with Wezterm
 alias ls='ls --color=auto' # Add colors to ls
 alias grep='grep --color=auto' # Add colors to grep
-alias neofetch="neofetch --iterm2 ~/Pictures/catgirl.png --size 800"
+alias neofetch="neofetch --iterm2 ~/Pictures/arch.png --size 400"
 alias rs=". ~/.bashrc"
 alias code="codium . -r"
 

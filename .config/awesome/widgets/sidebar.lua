@@ -24,7 +24,7 @@ name.align = "center"
 name.font = "OpenSans 20"
 
 local username = wibox.widget.textbox()
-username.markup = ('<span color="#777777">%s</span>'):format(preferences.username)
+username.markup = ('<span color="#777799">%s</span>'):format(preferences.username)
 username.align = "center"
 username.font = "OpenSans 20"
 

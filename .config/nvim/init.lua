@@ -20,6 +20,8 @@ vim.opt.shiftwidth = 4       -- Use tabstop for automatic tabs
 vim.opt.showcmd = false      -- Don't show keypressed
 vim.opt.termguicolors = true -- Use true color in the terminal
 vim.opt.scrolloff = 8        -- Set scroll offset to 8 lines
+vim.opt.expandtab = false
+vim.opt.hlsearch = false
 
 vim.api.nvim_create_autocmd('FileType', {
 	pattern = 'racket',
