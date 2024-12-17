@@ -39,7 +39,6 @@ function public.setup(widgets)
 	local windows = public.modkey
 	local modkey_code = "#133"
 
-	-- stylua: ignore start
 	public.globalkeys = gears.table.join(
 
 	-- Modkey (requires special press/release handling)
@@ -111,27 +110,63 @@ function public.setup(widgets)
 		-- Volume
 		awful.key({}, "XF86AudioLowerVolume",
 			function()
-				os.execute("pamixer --decrease 10"); widgets.menu:refresh_numbers(); widgets.volume:show()
+				os.execute("pamixer --decrease 10")
+				widgets.menu:refresh_numbers()
+				widgets.volume:show()
+				awful.spawn.easy_async_with_shell(
+					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
+					function() end
+				)
 			end, { description = "Lower Volume", group = "audio" }),
 		awful.key({}, "XF86AudioRaiseVolume",
 			function()
-				os.execute("pamixer --increase 10"); widgets.menu:refresh_numbers(); widgets.volume:show()
+				os.execute("pamixer --increase 10")
+				widgets.menu:refresh_numbers()
+				widgets.volume:show()
+				awful.spawn.easy_async_with_shell(
+					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
+					function() end
+				)
 			end, { description = "Raise Volume", group = "audio" }),
 		awful.key({ "Shift" }, "XF86AudioLowerVolume",
 			function()
-				os.execute("pamixer --decrease 3"); widgets.menu:refresh_numbers(); widgets.volume:show()
+				os.execute("pamixer --decrease 3")
+				widgets.menu:refresh_numbers()
+				widgets.volume:show()
+				awful.spawn.easy_async_with_shell(
+					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
+					function() end
+				)
 			end, { description = "Lower Volume", group = "audio" }),
 		awful.key({ "Shift" }, "XF86AudioRaiseVolume",
 			function()
-				os.execute("pamixer --increase 3"); widgets.menu:refresh_numbers(); widgets.volume:show()
+				os.execute("pamixer --increase 3")
+				widgets.menu:refresh_numbers()
+				widgets.volume:show()
+				awful.spawn.easy_async_with_shell(
+					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
+					function() end
+				)
 			end, { description = "Raise Volume", group = "audio" }),
 		awful.key({ "Control" }, "XF86AudioLowerVolume",
 			function()
-				os.execute("pamixer --set-volume 0"); widgets.menu:refresh_numbers(); widgets.volume:show()
+				os.execute("pamixer --set-volume 0")
+				widgets.menu:refresh_numbers()
+				widgets.volume:show()
+				awful.spawn.easy_async_with_shell(
+					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
+					function() end
+				)
 			end, { description = "Mute volume", group = "audio" }),
 		awful.key({ "Control" }, "XF86AudioRaiseVolume",
 			function()
-				os.execute("pamixer --set-volume 100"); widgets.menu:refresh_numbers(); widgets.volume:show()
+				os.execute("pamixer --set-volume 100")
+				widgets.menu:refresh_numbers()
+				widgets.volume:show()
+				awful.spawn.easy_async_with_shell(
+					"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
+					function() end
+				)
 			end, { description = "Mute volume", group = "audio" }),
 		awful.key({}, "XF86AudioMute",
 			function()
@@ -200,7 +235,5 @@ function public.setup(widgets)
 		)
 	end
 end
-
--- stylua: ignore end
 
 return public

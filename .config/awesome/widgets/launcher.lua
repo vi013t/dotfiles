@@ -16,15 +16,12 @@ end
 local apps = {}
 
 local function get_app_icon(app_name, icon_name)
-	awful.spawn.easy_async_with_shell(('find /usr/share/icons -name %s.png | head -n 1'):format(icon_name),
+	awful.spawn.easy_async_with_shell(
+		('find /usr/share/icons -name %s.png | sort --version-sort -r | head -n 1'):format(icon_name),
 		function(path)
 			path = path:match("([^\r\n]+)[\r\n]*$")
 			if path then
-				local scaling = nil
-				if path:match("16x16") then
-					scaling = "nearest"
-				end
-				table.insert(apps, { name = app_name, icon = path, scaling = scaling })
+				table.insert(apps, { name = app_name, icon = path })
 			end
 		end
 	)
@@ -99,7 +96,6 @@ function launcher:refresh_numbers()
 		local icon_widget = wibox.widget.imagebox(app.icon)
 		icon_widget.forced_width = 70
 		icon_widget.forced_height = 70
-		icon_widget.scaling_quality = app.scaling or icon_widget.scaling_quality
 
 		local name_widget = wibox.widget.textbox()
 		name_widget.markup = ('<span color="%s">%s</span>'):format(theme.custom.primary_foreground, app.name)
@@ -153,7 +149,6 @@ function launcher:sort(search_text)
 		local icon_widget = wibox.widget.imagebox(app.icon)
 		icon_widget.forced_width = 70
 		icon_widget.forced_height = 70
-		icon_widget.scaling_quality = app.scaling or icon_widget.scaling_quality
 
 		local name_widget = wibox.widget.textbox()
 		name_widget.markup = ('<span color="%s">%s</span>'):format(theme.custom.primary_foreground, app.name)

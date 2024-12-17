@@ -85,10 +85,8 @@ function sidebar:refresh_numbers()
 	}
 
 	local calendar_title = wibox.widget.textbox()
-	-- local this_month_number = (today.month + month_override - 1) % 12 + 1
 	local this_month_number = today.month
 	local this_month = months[this_month_number]
-	-- local this_month = months[this_month_number]
 	calendar_title.markup = ('<span color="%s">%s</span>'):format(theme.custom.primary_foreground, this_month)
 	calendar_title.font = "OpenSans 20"
 	calendar_title.align = "center"
@@ -338,7 +336,7 @@ end
 
 -- Sliding animation
 
-local slide_speed = 50
+local slide_speed = 100
 local left = -400
 
 local function slide_in()

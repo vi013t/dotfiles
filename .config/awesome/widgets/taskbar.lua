@@ -92,7 +92,7 @@ function taskbar:refresh()
 		end)
 
 		-- Focused pinned app
-		if client.focus and client.focus.class:lower():match(app:match("^(%S+)")) then
+		if client.focus and client.focus.class and client.focus.class:lower():match(app:match("^(%S+)")) then
 			table.insert(clients, {
 				{
 					{
@@ -135,7 +135,7 @@ function taskbar:refresh()
 							{
 								widget,
 								widget = wibox.container.margin,
-								top = 18,
+								top = 15,
 								bottom = 50,
 							},
 							{
@@ -181,7 +181,7 @@ function taskbar:refresh()
 
 		if not already_done then
 			for _, app in ipairs(preferences.pinned_apps) do
-				if c.class:lower():match(app:match("^(%S+)")) then
+				if c.class and c.class:lower():match(app:match("^(%S+)")) then
 					already_done = true
 					break
 				end
@@ -199,7 +199,7 @@ function taskbar:refresh()
 							client_widget,
 							widget = wibox.container.margin,
 							top = 12,
-							bottom = 12,
+							bottom = 7,
 							right = 12,
 							left = 12,
 						},
@@ -212,16 +212,17 @@ function taskbar:refresh()
 					top = 3,
 					bottom = 3,
 				}
-
 				-- Unfoucsed unpinned app
 			else
 				local right = gap
 				if clients[index + 1] == client.focus then
 					right = right - 12
 				end
+
 				client_widget = wibox.widget({
 					widget = wibox.container.margin,
-					left = 7,
+					left = gap / 2,
+					right = gap / 2,
 					bottom = -40,
 					{
 						widget = wibox.layout.stack,
@@ -229,7 +230,7 @@ function taskbar:refresh()
 						{
 							client_widget,
 							widget = wibox.container.margin,
-							top = 18,
+							top = 15,
 							bottom = 50,
 						},
 						{

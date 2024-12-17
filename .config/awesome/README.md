@@ -12,42 +12,41 @@ As of the time writing this, you need to use the `awesome-git` package, *not* th
 
 ### Quick Install
 
-```
+```bash
+sudo pacman -S picom feh xorg-xinput brightnessctl pamixer ffmpeg wezterm firefox nemo discord neovim
 git clone https://github.com/vi013t/dotfiles.git
 cp -r ./dotfiles/.config/awesome ~/.config/awesome
-sudo pacman -S picom feh xorg-xinput brightnessctl pamixer wezterm firefox nemo discord neovim
 ```
 
 ### Manual Install
 
 This configuration requires the following programs to be installed:
 
-- picom
-- feh
-- xinput
-- brightnessctl
-- pamixer
+- [picom](https://github.com/yshui/picom) - For compositing
+- [feh](https://feh.finalrewind.org/) - For applying wallpapers
+- [xinput](https://wiki.archlinux.org/title/Xinput) - For enabling touchpad support
+- [brightnessctl](https://github.com/Hummer12007/brightnessctl) - For changing brightness
+- [pamixer](https://github.com/cdemoulins/pamixer) - For changing volume
+- [ffmpeg](https://www.ffmpeg.org/) - For playing sounds (such as when adjusting volume)
 
 On Arch, you can install them like so:
 
 ```bash
-sudo pacman -S picom feh xorg-xinput brightnessctl pamixer
+sudo pacman -S picom feh xorg-xinput brightnessctl pamixer ffmpeg
 ```
 
 The default programs that the configuration will try to use are as follows, which are also required unless you plan to change them:
 
-- wezterm
-- firefox
-- nemo
-- discord
-- honey
-- neovim
+- [wezterm](https://wezfurlong.org/wezterm/index.html) - Terminal
+- [firefox](https://www.mozilla.org/en-US/firefox/) - Browser
+- [nemo](https://github.com/linuxmint/nemo) - File Explorer
+- [discord](https://discord.com/) - Chat
+- [neovim](https://neovim.io/) - Editor
 
 On Arch, you can install them as well:
 
 ```bash
 sudo pacman -S wezterm firefox nemo discord neovim
-cargo install honey-calculator
 ```
 
 ## Usage
