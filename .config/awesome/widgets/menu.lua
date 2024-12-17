@@ -298,8 +298,6 @@ function public.setup(launcher)
 			},
 			layout = wibox.layout.align.vertical,
 		})
-
-		search:run()
 	end
 
 	menu.visible = false
@@ -348,6 +346,7 @@ function public.setup(launcher)
 			self.visible = true
 			self:refresh_numbers()
 			slide_in()
+			search:run()
 		else
 			slide_out()
 			launcher:hide()

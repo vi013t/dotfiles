@@ -1,11 +1,11 @@
 local preferences = {
 	terminal = "wezterm",
 	editor = "nvim",
-	profile_picture = "/home/violet/.config/awesome/images/profile.jpeg",
+	profile_picture = os.getenv("HOME") .. "/.config/awesome/assets/images/profile.jpeg",
 	name = os.getenv("USER"):upper(),
 	username = os.getenv("USER") .. "@" .. io.open("/etc/hostname"):read("a"):gsub("\n$", ""),
 	apps = {
-		calculator = "/home/neph/Documents/Coding/Desktop\\ Apps/honey/src-tauri/target/release/honey",
+		calculator = "honey",
 		file_explorer = "nemo --geometry=1000x650",
 		browser = "firefox",
 		chat = "discord",

@@ -76,20 +76,6 @@ end, volume_widget)
 function taskbar:refresh()
 	clients = { layout = wibox.layout.fixed.horizontal }
 
-	-- local logo = wibox.widget.imagebox("/home/violet/.config/awesome/images/arch.png")
-	-- logo:connect_signal("button::press", function()
-	-- 	awful.spawn.with_shell("rofi -show run -show-icons")
-	-- end)
-	--
-	-- table.insert(clients, {
-	-- 	widget = wibox.container.margin,
-	-- 	top = 22,
-	-- 	bottom = 20,
-	-- 	left = 0,
-	-- 	right = gap / 2,
-	-- 	logo,
-	-- })
-
 	-- Pinned apps
 	for _, app in ipairs(preferences.pinned_apps) do
 		local widget = wibox.widget.imagebox(get_app_icon(app:match("^(%S+)")))
@@ -141,6 +127,7 @@ function taskbar:refresh()
 					wibox.widget({
 						widget = wibox.container.margin,
 						left = gap / 2,
+						right = gap / 2,
 						bottom = -40,
 						{
 							widget = wibox.layout.stack,
@@ -257,7 +244,6 @@ function taskbar:refresh()
 						}
 					}
 				})
-
 
 				client_widget:connect_signal("button::press", function()
 					client.focus = c
