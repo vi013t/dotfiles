@@ -38,6 +38,8 @@ function tags_widget:refresh_numbers()
 				},
 				widget = wibox.container.background,
 				bg = background,
+				border_color = theme.custom.primary_foreground,
+				border_width = 2,
 				shape = function(cr, width, height)
 					gears.shape.rounded_rect(cr, width, height, 12)
 				end,

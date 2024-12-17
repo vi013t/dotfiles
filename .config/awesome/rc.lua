@@ -11,15 +11,17 @@ local gears = require("gears")
 local awful = require("awful")
 local beautiful = require("beautiful") -- Theme handling library
 local menubar = require("menubar")
-
 require("awful.autofocus")
 require("awful.hotkeys_popup.keys")
 
+-- Preferences
 local preferences = require("preferences")
 
-require("misc.startup")                                                -- Handle errors on startup
+-- Startup programs
+require("misc.startup")
 
-beautiful.init(os.getenv("HOME") .. "/.config/awesome/misc/theme.lua") -- Initialize theme
+-- Initialize theme
+beautiful.init(os.getenv("HOME") .. "/.config/awesome/misc/theme.lua")
 
 -- Initialize widgets
 local sidebar = require("widgets.sidebar")
@@ -30,6 +32,7 @@ local launcher = require("widgets.launcher")
 local menu = require("widgets.menu").setup(launcher.widget)
 local taskbar = require("widgets.taskbar")
 
+-- Style notifications
 require("widgets.notification")
 
 -- Initialize hotkeys
@@ -54,25 +57,26 @@ awful.layout.layouts = {
 -- Menubar configuration
 menubar.utils.terminal = preferences.apps.terminal -- Set the terminal for applications that require it
 
-local function set_wallpaper(s)
+--- Sets the wallpaper to the given file.
+local function set_wallpaper(file_name)
 	if beautiful.wallpaper then
 		local wallpaper = beautiful.wallpaper
 		if type(wallpaper) == "function" then
-			wallpaper = wallpaper(s)
+			wallpaper = wallpaper(file_name)
 		end
-		gears.wallpaper.maximized(wallpaper, s, true)
+		gears.wallpaper.maximized(wallpaper, file_name, true)
 	end
 end
 screen.connect_signal("property::geometry", set_wallpaper)
 
+-- Tags
 awful.screen.connect_for_each_screen(function(s)
 	set_wallpaper(s)
 	awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 end)
 
-root.buttons(gears.table.join(awful.button({}, 4, awful.tag.viewnext), awful.button({}, 5, awful.tag.viewprev)))
-
 -- Set keys
+root.buttons(gears.table.join(awful.button({}, 4, awful.tag.viewnext), awful.button({}, 5, awful.tag.viewprev)))
 root.keys(keys.globalkeys)
 
 require("misc.window")

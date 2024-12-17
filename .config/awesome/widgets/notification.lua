@@ -4,6 +4,7 @@ local naughty = require("naughty")
 local theme = require("misc.theme")
 local gears = require("gears")
 
+
 -- Style notifications
 naughty.config.spacing = theme.custom.default_margin
 naughty.config.padding = theme.custom.default_margin
@@ -20,6 +21,10 @@ naughty.config.defaults.icon_size = 60
 naughty.config.defaults.shape = function(cr, w, h)
 	gears.shape.rounded_rect(cr, w, h, 10)
 end
+
+-- Errors
+naughty.config.presets.critical.bg = theme.custom.primary_background
+naughty.config.presets.critical.border_color = "#FF0000"
 
 -- Not sure why this is needed but it is
 ruled.notification.connect_signal("request::rules", function() end)

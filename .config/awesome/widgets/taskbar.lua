@@ -32,6 +32,7 @@ local function get_app_icon(app_name)
 	end
 end
 
+-- Main taskbar widget
 local taskbar = awful.wibar({ visible = true, height = 65, position = "bottom", bg = "#111122", ontop = true })
 
 client.connect_signal("property::fullscreen", function(c)
@@ -44,36 +45,36 @@ client.connect_signal("property::fullscreen", function(c)
 	end
 end)
 
-local date = wibox.widget.textclock("%m/%d")
-date.font = "OpenSans 15"
-date.align = "center"
-
-local clock = wibox.widget.textclock("%H:%M")
-clock.font = "OpenSans 15"
-clock.align = "center"
-
-local battery = wibox.widget.textbox(system.battery:get_icon() .. " " .. system.battery:percent() .. "%")
-battery.font = "OpenSans 16"
-battery.align = "center"
-
-local wifi = wibox.widget.textbox("󰖩 " .. system.wifi:name())
-wifi.font = "OpenSans 16"
-wifi.align = "center"
-
 local gap = 25
 
 local clients = {
 	layout = wibox.layout.flex.horizontal,
 }
 
-local volume = tonumber(io.popen("pamixer --get-volume"):read("a"))
-local volume_widget = wibox.widget.textbox("󰕾 " .. tostring(volume) .. "%")
-volume_widget.font = "OpenSans 16"
-awful.widget.watch("pamixer --get-volume", 1, function(widget, stdout)
-	widget:set_text("󰕾 " .. stdout:gsub("\n+$", "") .. "%")
-end, volume_widget)
-
 function taskbar:refresh()
+	local date = wibox.widget.textclock("%m/%d")
+	date.font = "OpenSans 15"
+	date.align = "center"
+
+	local clock = wibox.widget.textclock("%H:%M")
+	clock.font = "OpenSans 15"
+	clock.align = "center"
+
+	local battery = wibox.widget.textbox(system.battery:get_icon() .. " " .. system.battery:percent() .. "%")
+	battery.font = "OpenSans 16"
+	battery.align = "center"
+
+	local volume = tonumber(io.popen("pamixer --get-volume"):read("a"))
+	local volume_widget = wibox.widget.textbox("󰕾 " .. tostring(volume) .. "%")
+	volume_widget.font = "OpenSans 16"
+	awful.widget.watch("pamixer --get-volume", 1, function(widget, stdout)
+		widget:set_text("󰕾 " .. stdout:gsub("\n+$", "") .. "%")
+	end, volume_widget)
+
+	local wifi = wibox.widget.textbox("󰖩 " .. system.wifi:name())
+	wifi.font = "OpenSans 16"
+	wifi.align = "center"
+
 	clients = { layout = wibox.layout.fixed.horizontal }
 
 	-- Pinned apps
@@ -94,35 +95,54 @@ function taskbar:refresh()
 		-- Focused pinned app
 		if client.focus and client.focus.class and client.focus.class:lower():match(app:match("^(%S+)")) then
 			table.insert(clients, {
+				widget = wibox.layout.stack,
 				{
+					widget = wibox.container.margin,
+					right = gap / 2 - 12,
+					top = 3,
+					bottom = 3,
 					{
-						widget,
-						widget = wibox.container.margin,
-						top = 12,
-						bottom = 7,
-						right = 12,
-						left = 12,
+						widget = wibox.container.background,
+						bg = "#FFFFFF10",
+						shape = gears.shape.rounded_rect,
+						{
+							top = 12,
+							bottom = 7,
+							right = 12,
+							left = 12,
+							widget = wibox.container.margin,
+							widget,
+						},
 					},
-					widget = wibox.container.background,
-					bg = "#FFFFFF10",
-					shape = gears.shape.rounded_rect,
 				},
-				widget = wibox.container.margin,
-				right = gap / 2 - 12,
-				top = 3,
-				bottom = 3,
+				-- Open Circle
+				{
+					widget = wibox.container.margin,
+					top = 62,
+					bottom = 0,
+					{
+						widget = wibox.container.margin,
+						left = 15,
+						right = 15,
+						{
+							widget = wibox.container.background,
+							bg = "#FFFFFF70",
+							shape = gears.shape.rounded_rect
+						}
+					}
+				},
 			})
 
-			-- Not selected
+			-- Pinned unfocused app
 		else
-			local exists = false
+			local client_is_open = false
 			for _, c in ipairs(client.get()) do
-				if c.class and c.class:match(app .. "$") == app then
-					exists = true
+				if c.class and c.class:lower():match(app:lower() .. "$") == app:lower() then
+					client_is_open = true
 				end
 			end
 
-			if exists then
+			if client_is_open then
 				table.insert(clients,
 					wibox.widget({
 						widget = wibox.container.margin,
@@ -194,23 +214,42 @@ function taskbar:refresh()
 			-- Focused unpinned app
 			if client.focus and client.focus.class == c.class then
 				client_widget = {
+					widget = wibox.layout.stack,
 					{
 						{
-							client_widget,
-							widget = wibox.container.margin,
-							top = 12,
-							bottom = 7,
-							right = 12,
-							left = 12,
+							{
+								client_widget,
+								widget = wibox.container.margin,
+								top = 12,
+								bottom = 7,
+								right = 12,
+								left = 12,
+							},
+							widget = wibox.container.background,
+							bg = "#FFFFFF10",
+							shape = gears.shape.rounded_rect,
 						},
-						widget = wibox.container.background,
-						bg = "#FFFFFF10",
-						shape = gears.shape.rounded_rect,
+						widget = wibox.container.margin,
+						right = gap / 2 - 12,
+						top = 3,
+						bottom = 3,
 					},
-					widget = wibox.container.margin,
-					right = gap / 2 - 12,
-					top = 3,
-					bottom = 3,
+					-- Open Circle
+					{
+						widget = wibox.container.margin,
+						top = 62,
+						bottom = 0,
+						{
+							widget = wibox.container.margin,
+							left = 15,
+							right = 15,
+							{
+								widget = wibox.container.background,
+								bg = "#FFFFFF70",
+								shape = gears.shape.rounded_rect
+							}
+						}
+					},
 				}
 				-- Unfoucsed unpinned app
 			else

@@ -3,6 +3,7 @@ local awful = require("awful")
 local theme = require("misc.theme")
 local gears = require("gears")
 
+-- Launcher
 local launcher = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
 launcher.width = 500
 launcher.height = 500
@@ -12,10 +13,28 @@ launcher.border_color = theme.custom.primary_foreground
 launcher.shape = function(cr, width, height)
 	gears.shape.rounded_rect(cr, width, height, 15)
 end
+awful.placement.top_right(
+	launcher,
+	{ honor_workarea = true, margins = { right = theme.custom.default_margin * 2 + 500, top = theme.custom.default_margin } }
+)
 
+---@alias App { name: string, icon: string }
+
+---@type App[]
 local apps = {}
 
 local function get_app_icon(app_name, icon_name)
+	-- Find the path to the app icon:
+	--
+	-- First, we run `find /usr/share/icons -name <APPNAME>.png`. This will list all icons with the given app name.
+	--
+	-- Then, that gets piped into `sort --version-sort -r`. This sorts the results alphabetically. The `--version-sort`
+	-- flag makes sure numbers are sorted correctly; So 11 comes after 2, for example. `-r` sorts in reverse order,
+	-- so we get the largest numbers first. This way higher resolution icons, such as 256x256, are listed first over
+	-- lower resolution ones like 16x16.
+	--
+	-- Finally, that gets piped into `head -n 1`, which will make it so only the first result is displayed. This is
+	-- the icon path used.
 	awful.spawn.easy_async_with_shell(
 		('find /usr/share/icons -name %s.png | sort --version-sort -r | head -n 1'):format(icon_name),
 		function(path)
@@ -27,11 +46,7 @@ local function get_app_icon(app_name, icon_name)
 	)
 end
 
-awful.placement.top_right(
-	launcher,
-	{ honor_workarea = true, margins = { right = theme.custom.default_margin * 2 + 500, top = theme.custom.default_margin } }
-)
-
+-- Register applications
 awful.spawn.easy_async_with_shell("ls /usr/share/applications -1", function(applications)
 	for app in applications:gmatch("([^\n]+)") do
 		local file = assert(io.open("/usr/share/applications/" .. app, "r"))

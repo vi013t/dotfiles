@@ -63,6 +63,20 @@ function actions.toggle_widget(widget_name)
 	end
 end
 
+function actions.next_tag()
+	return function(widgets)
+		awful.tag.viewnext()
+		widgets.tags:refresh_numbers()
+	end
+end
+
+function actions.previous_tag()
+	return function(widgets)
+		awful.tag.viewprev()
+		widgets.tags:refresh_numbers()
+	end
+end
+
 function actions.screenshot()
 	return function(_)
 		awful.spawn.with_shell(

@@ -48,8 +48,8 @@ preferences.keys = {
 	-- AwesomeWM Core
 	{ modifiers = { "windows" },          key = "r",                         run = awesome.restart },
 	{ modifiers = { "windows" },          key = "q",                         run = awesome.quit },
-	{ modifiers = { "windows" },          key = "Left",                      run = awful.tag.viewprev },
-	{ modifiers = { "windows" },          key = "Right",                     run = awful.tag.viewnext },
+	{ modifiers = { "windows" },          key = "Left",                      run = actions.previous_tag() },
+	{ modifiers = { "windows" },          key = "Right",                     run = actions.next_tag() },
 
 	-- Widgets
 	{ modifiers = { "windows" },          key = "`",                         run = actions.toggle_widget("sidebar") },

@@ -5,6 +5,7 @@ local theme = require("misc.theme")
 local preferences = require("preferences")
 local system = require("misc.system")
 
+-- Sidebar
 local sidebar = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
 sidebar.width = 400
 sidebar.height = awful.screen.focused().workarea.height - (2 * theme.custom.default_margin)
@@ -15,32 +16,37 @@ sidebar.border_color = theme.custom.primary_foreground
 sidebar.shape = function(cr, width, height)
 	gears.shape.rounded_rect(cr, width, height, 15)
 end
-
 awful.placement.top_left(sidebar, { honor_workarea = true, margins = { left = -300, top = theme.custom.default_margin } })
 
+-- Name
 local name = wibox.widget.textbox()
 name.markup = ("<b>%s</b>"):format(preferences.name)
 name.align = "center"
 name.font = "OpenSans 20"
 
+-- Username
 local username = wibox.widget.textbox()
 username.markup = ('<span color="#777799">%s</span>'):format(preferences.username)
 username.align = "center"
 username.font = "OpenSans 20"
 
+-- Profile picture
 local profile = wibox.widget.imagebox(preferences.profile_picture)
 profile.clip_shape = function(cr, width, height)
 	gears.shape.circle(cr, width, height, 150)
 end
 
+--- Offset from this month, from pressing the arrows
 local month_override = 0
 
 function sidebar:refresh_numbers()
+	-- Wifi
 	local wifi = wibox.widget.textbox()
 	wifi.markup = ('<span color="#DDDDDD">%s</span>'):format("󰖩  " .. io.popen("iwgetid -r"):read("a"):gsub("\n$", ""))
 	wifi.align = "center"
 	wifi.font = "OpenSans 20"
 
+	-- Calendar
 	local today = os.date("*t")
 	if month_override then
 		local year = today.year
@@ -115,6 +121,7 @@ function sidebar:refresh_numbers()
 			color = "#FFFFFF"
 		end
 
+		-- Create the individual day widget
 		local day_widget = wibox.widget.textbox()
 		day_widget.markup = ('<span color="%s">%s</span>'):format(color, week_day:sub(1, 2))
 		day_widget.font = "OpenSans 14"
@@ -208,9 +215,9 @@ function sidebar:refresh_numbers()
 		sidebar:refresh_numbers()
 	end)
 
-	local battery_icon = wibox.widget.textclock("     " .. system.battery:get_icon() .. " ")
+	-- Battery meter
+	local battery_icon = wibox.widget.textclock("     " .. system.battery:get_icon() .. "")
 	battery_icon.font = "OpenSans 20"
-
 	local battery = wibox.widget({
 		max_value = 100,
 		value = system.battery:percent(),
@@ -223,13 +230,12 @@ function sidebar:refresh_numbers()
 		widget = wibox.widget.progressbar,
 		bar_shape = gears.shape.rounded_bar,
 	})
-
 	local battery_text = wibox.widget.textclock(tostring(system.battery:percent() .. "%%"))
 	battery_text.font = "OpenSans 15"
 
-	local disk_icon = wibox.widget.textclock("    󰅟")
+	-- Disk Usage meter
+	local disk_icon = wibox.widget.textclock("    ")
 	disk_icon.font = "OpenSans 20"
-
 	local disk_usage = tonumber(io.popen("df -H"):read("a"):match("(%d+)%%%s+/home"))
 	local disk_usage_widget = wibox.widget({
 		max_value = 100,
@@ -243,10 +249,10 @@ function sidebar:refresh_numbers()
 		widget = wibox.widget.progressbar,
 		bar_shape = gears.shape.rounded_bar,
 	})
-
 	local disk_text = wibox.widget.textclock(tostring(disk_usage) .. "%%")
 	disk_text.font = "OpenSans 15"
 
+	-- Calculator widget
 	local calculator_icon = wibox.widget.textclock("󰃬")
 	calculator_icon.font = "OpenSans 32"
 	calculator_icon:connect_signal("button::press", function()
@@ -254,6 +260,7 @@ function sidebar:refresh_numbers()
 		sidebar:toggle()
 	end)
 
+	-- Storage widget
 	local files_icon = wibox.widget.textclock("")
 	files_icon.font = "OpenSans 32"
 	files_icon:connect_signal("button::press", function()
@@ -261,6 +268,7 @@ function sidebar:refresh_numbers()
 		sidebar:toggle()
 	end)
 
+	-- Calendar widget
 	local calendar_icon = wibox.widget.textclock("󰸗")
 	calendar_icon.font = "OpenSans 32"
 	calendar_icon:connect_signal("button::press", function()
@@ -268,9 +276,11 @@ function sidebar:refresh_numbers()
 		sidebar:toggle()
 	end)
 
+	-- Mail widget
 	local mail_icon = wibox.widget.textclock("󰇮")
 	mail_icon.font = "OpenSans 32"
 
+	-- App widgets
 	local apps = {
 		{
 			calculator_icon,

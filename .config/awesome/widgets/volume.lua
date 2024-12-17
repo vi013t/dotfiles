@@ -3,20 +3,24 @@ local awful = require("awful")
 local gears = require("gears")
 local theme = require("misc.theme")
 
+-- Main volume bar widget
 local volume_bar = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
 volume_bar.width = 300
 volume_bar.height = 50
 volume_bar.bg = theme.custom.primary_background
-
-awful.placement.top_right(volume_bar, { honor_workarea = true, margins = { right = theme.custom.default_margin, top = theme.custom.default_margin } })
+awful.placement.top_right(volume_bar,
+	{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = theme.custom.default_margin } })
 
 function volume_bar:refresh_numbers()
+	-- Number
 	local volume = tonumber(io.popen("pamixer --get-volume"):read("a"))
 	local volume_percent = volume / 100
 
+	-- Icon
 	local volume_icon = wibox.widget.textclock((volume > 0 and "󰕾" or "󰝟") .. "    ")
 	volume_icon.font = "OpenSans 20"
 
+	-- Slider
 	local volume_widget = wibox.widget.slider({
 		maximum = 100,
 		value = volume,
@@ -29,10 +33,10 @@ function volume_bar:refresh_numbers()
 			from = { 0, 0 },
 			to = { 200, 0 },
 			stops = {
-				{ 0, theme.custom.primary_foreground },
+				{ 0,                     theme.custom.primary_foreground },
 				{ volume_percent - 0.01, theme.custom.primary_foreground },
-				{ volume_percent, theme.custom.secondary_foreground },
-				{ 1, theme.custom.secondary_foreground },
+				{ volume_percent,        theme.custom.secondary_foreground },
+				{ 1,                     theme.custom.secondary_foreground },
 			},
 		}),
 		handle_shape = gears.shape.circle,
@@ -40,21 +44,23 @@ function volume_bar:refresh_numbers()
 		forced_width = 300,
 	})
 
+	-- Text
 	local volume_text = wibox.widget.textclock("    " .. tostring(volume) .. "%%")
 	volume_text.font = "OpenSans 20"
 	volume_text.align = "center"
 
+	-- Add widgets
 	volume_bar:setup({
 		{
+			widget = wibox.container.margin,
+			right = 25,
+			left = 25,
 			{
 				volume_icon,
 				volume_widget,
 				volume_text,
 				layout = wibox.layout.fixed.horizontal,
 			},
-			widget = wibox.container.margin,
-			right = 25,
-			left = 25,
 		},
 		layout = wibox.layout.flex.vertical,
 	})
