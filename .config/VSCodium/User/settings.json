@@ -34,7 +34,8 @@
 	"html.autoClosingTags": false,
 	"html.format.wrapAttributes": "aligned-multiple",
 	"[java]": {
-		"editor.defaultFormatter": "redhat.java"
+		// "editor.defaultFormatter": "redhat.java"
+		"editor.formatOnSave": false
 	},
 	"[rust]": {
 		"editor.defaultFormatter": "rust-lang.rust-analyzer",

@@ -77,21 +77,6 @@ function public.setup(widgets)
 		public.globalkeys = gears.table.join(
 			public.globalkeys,
 
-			-- View tag only.
-			awful.key(
-				{ public.modkey },
-				"#" .. tag_number + 9,
-				f(function()
-					local screen = awful.screen.focused()
-					local tag = screen.tags[tag_number]
-					if tag then
-						tag:view_only()
-						widgets.tags:refresh_numbers()
-					end
-				end),
-				{ description = "view tag #" .. tag_number, group = "tag" }
-			),
-
 			-- Move client to tag.
 			awful.key({ public.modkey, "Shift" }, "#" .. tag_number + 9, function()
 				if client.focus then

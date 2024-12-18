@@ -1,5 +1,4 @@
 local actions = require("misc.actions")
-local awful = require("awful")
 
 local preferences = {
 
@@ -22,6 +21,7 @@ preferences.apps = {
 	chat = "discord",
 	terminal = "wezterm",
 	editor = "nvim",
+	calculator = "silico-calculator"
 }
 
 -- Apps that are pinned to the taskbar, in order.
@@ -75,6 +75,23 @@ preferences.keys = {
 	{ key = "XF86MonBrightnessDown",      run = actions.lower_brightness(10) },
 	{ modifiers = { "shift" },            key = "XF86MonBrightnessUp",       run = actions.raise_brightness(3) },
 	{ modifiers = { "shift" },            key = "XF86MonBrightnessDown",     run = actions.lower_brightness(3) },
+
+	-- Tags
+	{ modifiers = { "windows" },          key = "1",                         run = actions.view_tag(1) },
+	{ modifiers = { "windows" },          key = "2",                         run = actions.view_tag(2) },
+	{ modifiers = { "windows" },          key = "3",                         run = actions.view_tag(3) },
+	{ modifiers = { "windows" },          key = "4",                         run = actions.view_tag(4) },
+	{ modifiers = { "windows" },          key = "5",                         run = actions.view_tag(5) },
+	{ modifiers = { "windows", "shift" }, key = "1",                         run = actions.move_client_to_tag(1) },
+	{ modifiers = { "windows", "shift" }, key = "2",                         run = actions.move_client_to_tag(2) },
+	{ modifiers = { "windows", "shift" }, key = "3",                         run = actions.move_client_to_tag(3) },
+	{ modifiers = { "windows", "shift" }, key = "4",                         run = actions.move_client_to_tag(4) },
+	{ modifiers = { "windows", "shift" }, key = "5",                         run = actions.move_client_to_tag(5) },
+}
+
+-- Taskbar icon overrides
+preferences.icon_overrides = {
+	nemo = os.getenv("HOME") .. "/.config/awesome/assets/images/file_explorer.png"
 }
 
 return preferences

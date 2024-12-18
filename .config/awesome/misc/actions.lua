@@ -77,6 +77,28 @@ function actions.previous_tag()
 	end
 end
 
+function actions.view_tag(tag_number)
+	return function(widgets)
+		local screen = awful.screen.focused()
+		local tag = screen.tags[tag_number]
+		if tag then
+			tag:view_only()
+			widgets.tags:refresh_numbers()
+		end
+	end
+end
+
+function actions.move_client_to_tag(tag_number)
+	return function(_)
+		if client.focus then
+			local tag = client.focus.screen.tags[tag_number]
+			if tag then
+				client.focus:move_to_tag(tag)
+			end
+		end
+	end
+end
+
 function actions.screenshot()
 	return function(_)
 		awful.spawn.with_shell(

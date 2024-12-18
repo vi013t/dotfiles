@@ -5,6 +5,9 @@ local preferences = require("preferences")
 local system = require("misc.system")
 
 local function get_app_icon(app_name)
+	local override = preferences.icon_overrides[app_name]
+	if override then return override end
+
 	local dirs_to_check = {
 		"scalable",
 		"512x512",

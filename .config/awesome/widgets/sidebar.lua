@@ -18,28 +18,30 @@ sidebar.shape = function(cr, width, height)
 end
 awful.placement.top_left(sidebar, { honor_workarea = true, margins = { left = -300, top = theme.custom.default_margin } })
 
--- Name
-local name = wibox.widget.textbox()
-name.markup = ("<b>%s</b>"):format(preferences.name)
-name.align = "center"
-name.font = "OpenSans 20"
-
--- Username
-local username = wibox.widget.textbox()
-username.markup = ('<span color="#777799">%s</span>'):format(preferences.username)
-username.align = "center"
-username.font = "OpenSans 20"
-
--- Profile picture
-local profile = wibox.widget.imagebox(preferences.profile_picture)
-profile.clip_shape = function(cr, width, height)
-	gears.shape.circle(cr, width, height, 150)
-end
-
 --- Offset from this month, from pressing the arrows
 local month_override = 0
 
+local is_moving = false
+
 function sidebar:refresh_numbers()
+	-- Name
+	local name = wibox.widget.textbox()
+	name.markup = ("<b>%s</b>"):format(preferences.name)
+	name.align = "center"
+	name.font = "OpenSans 20"
+
+	-- Username
+	local username = wibox.widget.textbox()
+	username.markup = ('<span color="#777799">%s</span>'):format(preferences.username)
+	username.align = "center"
+	username.font = "OpenSans 20"
+
+	-- Profile picture
+	local profile = wibox.widget.imagebox(preferences.profile_picture)
+	profile.clip_shape = function(cr, width, height)
+		gears.shape.circle(cr, width, height, 150)
+	end
+
 	-- Wifi
 	local wifi = wibox.widget.textbox()
 	wifi.markup = ('<span color="#DDDDDD">%s</span>'):format("󰖩  " .. io.popen("iwgetid -r"):read("a"):gsub("\n$", ""))
@@ -350,6 +352,7 @@ local slide_speed = 100
 local left = -400
 
 local function slide_in()
+	is_moving = true
 	awful.placement.top_left(sidebar,
 		{ honor_workarea = true, margins = { left = left, top = theme.custom.default_margin } })
 	left = left + slide_speed
@@ -357,7 +360,8 @@ local function slide_in()
 		awful.spawn.easy_async_with_shell("sleep 0.001", function()
 			slide_in()
 		end)
-	elseif left > 10 then
+	else
+		is_moving = false
 		left = 10
 		awful.placement.top_left(sidebar,
 			{ honor_workarea = true, margins = { left = left, top = theme.custom.default_margin } })
@@ -365,6 +369,7 @@ local function slide_in()
 end
 
 local function slide_out()
+	is_moving = true
 	awful.placement.top_left(sidebar,
 		{ honor_workarea = true, margins = { left = left, top = theme.custom.default_margin } })
 	left = left - slide_speed
@@ -372,7 +377,8 @@ local function slide_out()
 		awful.spawn.easy_async_with_shell("sleep 0.001", function()
 			slide_out()
 		end)
-	elseif left < -400 then
+	else
+		is_moving = false
 		left = -400
 		awful.placement.top_left(sidebar,
 			{ honor_workarea = true, margins = { left = left, top = theme.custom.default_margin } })
@@ -381,8 +387,11 @@ local function slide_out()
 end
 
 function sidebar:toggle()
+	if is_moving then return end
+
 	awful.placement.top_left(self,
-		{ honor_workarea = true, margins = { left = left, top = theme.custom.default_margin } })
+		{ honor_workarea = true, margins = { left = left, top = theme.custom.default_margin } }
+	)
 	if not self.visible then
 		self.visible = true
 		sidebar:refresh_numbers()

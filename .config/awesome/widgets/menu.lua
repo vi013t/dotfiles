@@ -10,6 +10,7 @@ local search
 
 function public.setup(launcher)
 	local is_hiding = false
+	local is_showing = false
 
 	local slide_speed = 70
 	local top = -700
@@ -308,6 +309,7 @@ function public.setup(launcher)
 
 	--- Shows the menu with a sliding in animation.
 	local function slide_in()
+		is_showing = true
 		awful.placement.top_right(menu,
 			{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } })
 		top = top + slide_speed
@@ -315,7 +317,8 @@ function public.setup(launcher)
 			awful.spawn.easy_async_with_shell("sleep 0.001", function()
 				slide_in()
 			end)
-		elseif top > 10 then
+		else
+			is_showing = false
 			top = 10
 			awful.placement.top_right(menu,
 				{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } })
@@ -335,7 +338,7 @@ function public.setup(launcher)
 			end)
 
 			-- Done
-		elseif top < -775 then
+		else
 			is_hiding = false
 			top = -775
 			awful.placement.top_right(menu,
@@ -346,8 +349,12 @@ function public.setup(launcher)
 
 	--- Toggles visibility of the menu. If the menu is visible, all data on it will be refreshed.
 	function menu:toggle()
+		if is_hiding or is_showing then return end
+
 		awful.placement.top_right(menu,
-			{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } })
+			{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } }
+		)
+
 		if not self.visible then
 			self.visible = true
 			self:refresh_numbers()

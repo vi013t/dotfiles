@@ -40,21 +40,25 @@ sudo pacman -S picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg
 
 The default programs that the configuration will try to use are as follows, which are also required unless you plan to change them:
 
-- [wezterm](https://wezfurlong.org/wezterm/index.html) - Terminal
-- [firefox](https://www.mozilla.org/en-US/firefox/) - Browser
-- [nemo](https://github.com/linuxmint/nemo) - File Explorer
-- [discord](https://discord.com/) - Chat
-- [neovim](https://neovim.io/) - Editor
+- [WezTerm](https://wezfurlong.org/wezterm/index.html) - Terminal
+- [Firefox](https://www.mozilla.org/en-US/firefox/) - Browser
+- [Nemo](https://github.com/linuxmint/nemo) - File Explorer
+- [Discord](https://discord.com/) - Chat
+- [Neovim](https://neovim.io/) - Editor
+- [Silico Calculator](https://github.com/silico-apps/calculator) - Calculator
 
 On Arch, you can install them as well:
 
 ```bash
 sudo pacman -S wezterm firefox nemo discord neovim
+cargo install silico-calculator
 ```
 
 ## Usage
 
 ### Keybindings
+
+Below are some common keybindings. For a full list of keybindings, see [`preferences.lua`](https://github.com/vi013t/dotfiles/tree/main/.config/awesome/preferences.lua).
 
 - Widgets
     - `Windows` - Open start menu
@@ -71,4 +75,4 @@ sudo pacman -S wezterm firefox nemo discord neovim
 
 All assets used by this configuration are stored in `/assets`. Replace the ones of your choosing to customize.
 
-Also see [`preferences.lua`](https://github.com/vi013t/tree/main/preferences.lua).
+Also see [`preferences.lua`](https://github.com/vi013t/tree/main/preferences.lua) for changing pinned applications, preferred applications, keybindings, etc.

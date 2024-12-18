@@ -32,6 +32,7 @@ end
 awful.spawn.with_shell("picom -b --backend glx --config ~/.config/picom/picom.conf")             -- Compositor
 awful.spawn.with_shell("feh --no-fehbg --bg-fill ~/.config/awesome/assets/images/wallpaper.jpg") -- Wallpaper
 
+-- Enable touchpad tapping
 awful.spawn.easy_async_with_shell("xinput list --name-only | grep -i touchpad --color=none", function(touchpad)
 	touchpad = touchpad:match("([^\r\n]+)[\r\n]*")
 	if touchpad then

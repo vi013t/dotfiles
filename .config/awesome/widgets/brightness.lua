@@ -3,6 +3,8 @@ local awful = require("awful")
 local gears = require("gears")
 local theme = require("misc.theme")
 
+--- The brightness widget. This is the little bar that appears when you change the screen's
+--- brightness.
 local brightness_bar = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
 brightness_bar.width = 300
 brightness_bar.height = 50
