@@ -52,11 +52,11 @@ end
 
 function actions.open(command)
 	return function(_)
-		awful.spawn.easy_async_with_shell(command, function() end)
+		awful.spawn(command)
 	end
 end
 
----@param widget_name "sidebar" | "taskbar"
+---@param widget_name "sidebar" | "taskbar" | "alttab"
 function actions.toggle_widget(widget_name)
 	return function(widgets)
 		widgets[widget_name]:toggle()

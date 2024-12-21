@@ -110,8 +110,7 @@ function public.setup(launcher)
 				end
 			end,
 			exe_callback = function(_)
-				local first = launcher.apps[1].name:lower()
-				awful.spawn(first)
+				awful.spawn(launcher.apps[1].command)
 				menu:toggle()
 			end,
 			autoexec = false

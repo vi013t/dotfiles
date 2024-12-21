@@ -28,6 +28,7 @@ end
 -- Called when the modkey is released
 local function modkey_released(widgets)
 	widgets.tags:close()
+	widgets.alttab:hide()
 	if not other_key_was_pressed then
 		widgets.menu:toggle()
 	else
@@ -38,6 +39,8 @@ end
 function public.setup(widgets)
 	local windows = public.modkey
 	local windows_key_code = "#133"
+	local alt = "Mod1"
+	local alt_key_code = "#64"
 
 	local global_keys = gears.table.map(function(keybinding)
 		local mods = {}
@@ -46,19 +49,21 @@ function public.setup(widgets)
 				local modifiers = {
 					windows = windows,
 					shift = "Shift",
-					control = "Control"
+					control = "Control",
+					alt = "Alt",
 				}
 
 				return modifiers[modifier]
 			end, keybinding.modifiers)
 		end
 
-		return awful.key(mods, keybinding.key, f(function() keybinding.run(widgets) end))
+		return awful.key(mods, keybinding.key, f(function() keybinding.run(widgets) end), keybinding.on_release)
 	end, preferences.keys)
 
 	public.globalkeys = gears.table.join(
 		awful.key({}, windows_key_code, function() modkey_pressed(widgets) end, function() end),
 		awful.key({ windows }, windows_key_code, function() end, function() modkey_released(widgets) end),
+		awful.key({ windows }, "Tab", f(function() widgets.alttab:cycle() end)),
 		table.unpack(global_keys)
 	)
 

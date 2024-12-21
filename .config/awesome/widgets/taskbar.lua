@@ -36,17 +36,13 @@ local function get_app_icon(app_name)
 end
 
 -- Main taskbar widget
-local taskbar = awful.wibar({ visible = true, height = 65, position = "bottom", bg = "#111122", ontop = true })
-
-client.connect_signal("property::fullscreen", function(c)
-	if c.fullscreen then
-		taskbar.visible = false
-		taskbar:refresh()
-	else
-		taskbar.visible = true
-		taskbar:refresh()
-	end
-end)
+local taskbar = awful.wibar({
+	visible = true,
+	height = 65,
+	position = "bottom",
+	bg = "#111122",
+	ontop = true,
+})
 
 local gap = 25
 

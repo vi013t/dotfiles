@@ -32,7 +32,7 @@ preferences.pinned_apps = {
 	preferences.apps.file_explorer,
 }
 
----@alias Modifier "windows" | "shift" | "control"
+---@alias Modifier "windows" | "shift" | "control" | "alt"
 ---@alias Keybinding { modifiers?: Modifier[]; key: string; run: fun(widgets: any): nil }
 
 --- Global keybindings.

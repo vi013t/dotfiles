@@ -3,14 +3,17 @@ local awful = require("awful")
 local gears = require("gears")
 local theme = require("misc.theme")
 
-local tags_widget = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
+local tags_widget = wibox({ visible = false, ontop = true, type = "popup_menu", screen = screen.primary })
 tags_widget.width = 600
 tags_widget.height = 100
 tags_widget.visible = true
-tags_widget.bg = "#FF000000"
+tags_widget.bg = "#ff000000"
 
-awful.placement.align(tags_widget,
-	{ position = "top", honor_workarea = true, margins = { top = theme.custom.default_margin } })
+awful.placement.align(tags_widget, {
+	position = "top",
+	honor_workarea = true,
+	margins = { top = theme.custom.default_margin }
+})
 
 function tags_widget:refresh_numbers()
 	local tag_widgets = { layout = wibox.layout.flex.horizontal }
@@ -27,7 +30,7 @@ function tags_widget:refresh_numbers()
 
 		individual_widget.markup = ('<span color="%s">%s</span>'):format(color, tostring(tag_number))
 		individual_widget.align = "center"
-		individual_widget.font = "OpenSans 48"
+		individual_widget.font = "opensans 48"
 		individual_widget = {
 			{
 				{
@@ -108,7 +111,6 @@ function tags_widget:toggle()
 end
 
 function tags_widget:close()
-	if is_moving then return end
 	slide_out()
 end
 

@@ -140,7 +140,7 @@ local function maximize_button(c)
 	return widget
 end
 
-local function workspace_button(c, tag_number)
+local function tag_button(c, tag_number)
 	local current_tag = awful.tag.selected(1).index
 	local color = "#7700FF"
 	if current_tag == tag_number then
@@ -221,11 +221,11 @@ client.connect_signal("request::titlebars", function(c)
 		-- Left
 		{
 			{
-				workspace_button(c, 1),
-				workspace_button(c, 2),
-				workspace_button(c, 3),
-				workspace_button(c, 4),
-				workspace_button(c, 5),
+				tag_button(c, 1),
+				tag_button(c, 2),
+				tag_button(c, 3),
+				tag_button(c, 4),
+				tag_button(c, 5),
 				layout = wibox.layout.fixed.horizontal(),
 			},
 			widget = wibox.container.margin,

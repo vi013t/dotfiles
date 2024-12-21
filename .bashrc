@@ -44,47 +44,11 @@ function files() {
 	esac
 }
 
-# Quickly configure dotfiles
-function cfg() {
-	if [[ $# < 1 ]] ; then
-		echo "Error: Please provide one argument; For examle, cfg nvim"
-		return 1
-	fi
-
-	case "$1" in
-		"darling")
-			nvim ~/.config/darling/darling.toml
-			;;
-		"joshuto")
-			nvim ~/.config/joshuto/joshuto.toml
-			;;
-		"lotus")
-			nvim ~/.config/lotus/rc.lotus
-			;;
-		"nvim")
-			nvim ~/.config/nvim/init.lua
-			;;
-		"bash")
-			nvim ~/.bashrc
-			;;
-		"stylua")
-			nvim ~/.config/stylua/stylua.toml
-			;;
-		"wezterm")
-			nvim ~/.config/wezterm/wezterm.lua
-			;;
-		*)
-			echo "Unknown configuration: $1"
-			;;
-	esac
-}
-
-# cfg tab completion
-_cfg() {
-	local cur=${COMP_WORDS[COMP_CWORD]}
-	COMPREPLY=( $(compgen -W "bash lotus nvim bash stylua wezterm" -- $cur) )
-}
-complete -F _cfg cfg
+# _cfg() {
+# 	local cur=${COMP_WORDS[COMP_CWORD]}
+# 	COMPREPLY=( $(compgen -W "bash lotus nvim bash stylua wezterm" -- $cur) )
+# }
+# complete -F _cfg cfg
 
 # Aliases
 alias i="sudo pacman -S" # Install a package

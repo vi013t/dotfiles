@@ -31,6 +31,7 @@ local brightness_bar = require("widgets.brightness")
 local launcher = require("widgets.launcher")
 local menu = require("widgets.menu").setup(launcher.widget)
 local taskbar = require("widgets.taskbar")
+local alttab = require("widgets.alttab")
 
 -- Style notifications
 require("widgets.notification")
@@ -45,7 +46,8 @@ keys.setup({
 	brightness = brightness_bar.widget,
 	launcher = launcher.widget,
 	taskbar = taskbar.widget,
-	search = menu.search
+	search = menu.search,
+	alttab = alttab.widget,
 })
 
 -- Table of layouts to cover with awful.layout.inc, order matters.

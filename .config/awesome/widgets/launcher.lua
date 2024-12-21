@@ -23,7 +23,7 @@ awful.placement.top_right(
 ---@type App[]
 local apps = {}
 
-local function get_app_icon(app_name, icon_name)
+local function get_app_icon(app_name, icon_name, command)
 	-- Find the path to the app icon:
 	--
 	-- First, we run `find /usr/share/icons -name <APPNAME>.png`. This will list all icons with the given app name.
@@ -40,7 +40,7 @@ local function get_app_icon(app_name, icon_name)
 		function(path)
 			path = path:match("([^\r\n]+)[\r\n]*$")
 			if path then
-				table.insert(apps, { name = app_name, icon = path })
+				table.insert(apps, { name = app_name, icon = path, command = command })
 			end
 		end
 	)
@@ -53,8 +53,9 @@ awful.spawn.easy_async_with_shell("ls /usr/share/applications -1", function(appl
 		local info = file:read("*a")
 		local icon = info:match("Icon=([^\r\n]+)")
 		local name = info:match("Name=([^\r\n]+)")
+		local command = info:match("Exec=([^\r\n]+)")
 		file:close()
-		get_app_icon(name, icon)
+		get_app_icon(name, icon, command)
 	end
 end)
 
