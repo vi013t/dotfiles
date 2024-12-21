@@ -21,7 +21,8 @@ preferences.apps = {
 	chat = "discord",
 	terminal = "wezterm",
 	editor = "nvim",
-	calculator = "silico-calculator"
+	music = "spotify-launcher",
+	calculator = "silico-calculator",
 }
 
 -- Apps that are pinned to the taskbar, in order.
@@ -47,7 +48,6 @@ preferences.keys = {
 
 	-- AwesomeWM Core
 	{ modifiers = { "windows" },          key = "r",                         run = awesome.restart },
-	{ modifiers = { "windows" },          key = "q",                         run = awesome.quit },
 	{ modifiers = { "windows" },          key = "Left",                      run = actions.previous_tag() },
 	{ modifiers = { "windows" },          key = "Right",                     run = actions.next_tag() },
 

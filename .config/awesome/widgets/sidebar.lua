@@ -263,7 +263,7 @@ function sidebar:refresh_numbers()
 	end)
 
 	-- Storage widget
-	local files_icon = wibox.widget.textclock("")
+	local files_icon = wibox.widget.textclock("")
 	files_icon.font = "OpenSans 32"
 	files_icon:connect_signal("button::press", function()
 		awful.spawn(preferences.apps.file_explorer)
@@ -271,10 +271,10 @@ function sidebar:refresh_numbers()
 	end)
 
 	-- Calendar widget
-	local calendar_icon = wibox.widget.textclock("󰸗")
+	local calendar_icon = wibox.widget.textclock("󰎈")
 	calendar_icon.font = "OpenSans 32"
 	calendar_icon:connect_signal("button::press", function()
-		awful.spawn(preferences.apps.calendar)
+		awful.spawn(preferences.apps.music)
 		sidebar:toggle()
 	end)
 

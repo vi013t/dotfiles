@@ -39,8 +39,6 @@ end
 function public.setup(widgets)
 	local windows = public.modkey
 	local windows_key_code = "#133"
-	local alt = "Mod1"
-	local alt_key_code = "#64"
 
 	local global_keys = gears.table.map(function(keybinding)
 		local mods = {}
@@ -63,7 +61,10 @@ function public.setup(widgets)
 	public.globalkeys = gears.table.join(
 		awful.key({}, windows_key_code, function() modkey_pressed(widgets) end, function() end),
 		awful.key({ windows }, windows_key_code, function() end, function() modkey_released(widgets) end),
-		awful.key({ windows }, "Tab", f(function() widgets.alttab:cycle() end)),
+		awful.key({ windows }, "Tab", f(function()
+			widgets.alttab:cycle()
+			widgets.tags:close()
+		end)),
 		table.unpack(global_keys)
 	)
 

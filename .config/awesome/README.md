@@ -15,7 +15,8 @@ As of the time writing this, you need to use the `awesome-git` package, *not* th
 ### Quick Install
 
 ```bash
-sudo pacman -S picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg wezterm firefox nemo discord neovim 
+sudo pacman -S picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg wezterm firefox nemo discord neovim spotify-launcher
+cargo install silico-calculator
 git clone https://github.com/vi013t/dotfiles.git
 cp -r ./dotfiles/.config/awesome ~/.config/awesome
 ```
@@ -46,11 +47,12 @@ The default programs that the configuration will try to use are as follows, whic
 - [Discord](https://discord.com/) - Chat
 - [Neovim](https://neovim.io/) - Editor
 - [Silico Calculator](https://github.com/silico-apps/calculator) - Calculator
+- [Spotify](https://open.spotify.com/) - Music Player
 
 On Arch, you can install them as well:
 
 ```bash
-sudo pacman -S wezterm firefox nemo discord neovim
+sudo pacman -S wezterm firefox nemo discord neovim spotify-launcher
 cargo install silico-calculator
 ```
 
@@ -70,6 +72,9 @@ Below are some common keybindings. For a full list of keybindings, see [`prefere
     - `Windows + Shift + E` - File Explorer (Nemo by default)
     - `Windows + Shift + D` - Chat (Discord by default)
     - `Windows + Shift + S` - Screenshot (Flameshot by default)
+- Other Functionality
+    - `Windows + Tab` - Switch bentween open applications
+    - `Windows + R` - Reload Awesome
 
 ## Customization
 
