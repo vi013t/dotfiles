@@ -1,6 +1,6 @@
 # AwesomeWM Configuration
 
-My configuration for AwesomeWM.
+My configuration for AwesomeWM. 
 
 ![demo](./.docs/demo.png)
 
@@ -21,6 +21,8 @@ eval "$(curl https://raw.githubusercontent.com/vi013t/dotfiles/refs/heads/main/.
 ```
 
 This will install all the required and default packages for this configuration.
+
+Check out [the usage section](https://github.com/vi013t/dotfiles/tree/main/.config/awesome#usage) for information on how to use this configuration.
 
 ### Manual Install
 

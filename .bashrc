@@ -16,10 +16,6 @@ export EDITOR="nvim"
 
 # PATH variables
 export PATH="$BUN_INSTALL/bin:$PATH"
-export PATH="$PATH:/home/violet/.local/share/darling/source/target/release"
-export PATH="/home/violet/.scripts/lazy:$PATH"
-export PATH="./target/debug:$PATH"
-export PATH="./target/release:$PATH"
 
 # Wrapper around joshuto for preivews and exiting into cwd with q
 function files() {

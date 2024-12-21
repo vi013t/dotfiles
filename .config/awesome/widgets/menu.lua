@@ -3,6 +3,7 @@ local awful = require("awful")
 local gears = require("gears")
 local theme = require("misc.theme")
 local preferences = require("preferences")
+local actions = require("misc.actions")
 
 local public = {}
 
@@ -63,11 +64,16 @@ function public.setup(launcher)
 			"December",
 		}
 		local suffixes = { "st", "nd", "rd" }
-		local today_suffix = suffixes[today.day] or "th"
+		local today_suffix = suffixes[today.day % 10] or "th"
 		local today_month = months[today.month]
 		local date_widget = wibox.widget.textbox()
-		date_widget.markup = ('<span color="%s">%s, %s %s%s</span>'):format("#AAAAAA", today_day, today_month, today.day,
-			today_suffix)
+		date_widget.markup = ('<span color="%s">%s, %s %s<sup>%s</sup></span>'):format(
+			"#AAAAAA",
+			today_day,
+			today_month,
+			today.day,
+			today_suffix
+		)
 		date_widget.font = "OpenSans 15"
 		date_widget.align = "center"
 
@@ -99,6 +105,8 @@ function public.setup(launcher)
 				if key == "Super_L" then
 					menu:toggle()
 					awful.keygrabber.stop()
+				elseif key == "Print" then
+					actions.screenshot()()
 				end
 			end,
 			changed_callback = function(search_term)
