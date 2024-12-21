@@ -65,39 +65,45 @@ end
 local top = -110
 local slide_speed = 20
 
-local is_moving = false
-
 local function slide_in()
-	is_moving = true
-	awful.placement.align(tags_widget,
-		{ position = "top", honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } })
+	awful.placement.align(tags_widget, {
+		position = "top",
+		honor_workarea = true,
+		margins = { right = theme.custom.default_margin, top = top }
+	})
 	top = top + slide_speed
 	if top < 20 then
 		awful.spawn.easy_async_with_shell("sleep 0.001", function()
 			slide_in()
 		end)
 	else
-		is_moving = false
 		top = 20
-		awful.placement.align(tags_widget,
-			{ position = "top", honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } })
+		awful.placement.align(tags_widget, {
+			position = "top",
+			honor_workarea = true,
+			margins = { right = theme.custom.default_margin, top = top }
+		})
 	end
 end
 
 local function slide_out()
-	is_moving = true
-	awful.placement.align(tags_widget,
-		{ position = "top", honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } })
+	awful.placement.align(tags_widget, {
+		position = "top",
+		honor_workarea = true,
+		margins = { right = theme.custom.default_margin, top = top }
+	})
 	top = top - slide_speed
 	if top > -110 then
 		awful.spawn.easy_async_with_shell("sleep 0.001", function()
 			slide_out()
 		end)
 	else
-		is_moving = false
 		top = -110
-		awful.placement.align(tags_widget,
-			{ position = "top", honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } })
+		awful.placement.align(tags_widget, {
+			position = "top",
+			honor_workarea = true,
+			margins = { right = theme.custom.default_margin, top = top }
+		})
 		tags_widget.visible = false
 	end
 end
@@ -115,7 +121,6 @@ function tags_widget:close()
 end
 
 function tags_widget:open()
-	if is_moving then return end
 	self.visible = true
 	self:refresh_numbers()
 	slide_in()

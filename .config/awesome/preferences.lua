@@ -31,6 +31,7 @@ preferences.pinned_apps = {
 	preferences.apps.browser,
 	preferences.apps.chat,
 	preferences.apps.file_explorer,
+	preferences.apps.music,
 }
 
 ---@alias Modifier "windows" | "shift" | "control" | "alt"

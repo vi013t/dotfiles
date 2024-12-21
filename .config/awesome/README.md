@@ -32,6 +32,8 @@ Check out [the usage section](https://github.com/vi013t/dotfiles/tree/main/.conf
 
 ### Manual Install
 
+If you prefer a more fine-tuned installation, you can install the prerequisites manually. For example, you may not need certain packages; i.e., if you're not on a laptop, you may not require brightness control. Read on for specifics about the used packages and what they do.
+
 This configuration requires the following programs to be installed:
 
 - [picom](https://github.com/yshui/picom) - For compositing
@@ -40,7 +42,7 @@ This configuration requires the following programs to be installed:
 - [xinput](https://wiki.archlinux.org/title/Xinput) - For enabling touchpad support
 - [brightnessctl](https://github.com/Hummer12007/brightnessctl) - For changing brightness
 - [pamixer](https://github.com/cdemoulins/pamixer) - For changing volume
-- [ffmpeg](https://www.ffmpeg.org/) - For playing sounds (such as when adjusting volume)
+- [ffmpeg](https://www.ffmpeg.org/) - For playing sounds (such as the ping when adjusting volume)
 
 On Arch, you can install them like so:
 
@@ -55,8 +57,8 @@ The default programs that the configuration will try to use are as follows, whic
 - [Nemo](https://github.com/linuxmint/nemo) - File Explorer
 - [Discord](https://discord.com/) - Chat
 - [Neovim](https://neovim.io/) - Editor
-- [Silico Calculator](https://github.com/silico-apps/calculator) - Calculator
 - [Spotify](https://open.spotify.com/) - Music Player
+- [Silico Calculator](https://github.com/silico-apps/calculator) - Calculator
 
 On Arch, you can install them as well:
 

@@ -4,36 +4,7 @@ local gears = require("gears")
 local preferences = require("preferences")
 local system = require("misc.system")
 
-local function get_app_icon(app_name)
-	local override = preferences.icon_overrides[app_name]
-	if override then return override end
-
-	local dirs_to_check = {
-		"scalable",
-		"512x512",
-		"384x384",
-		"256x256",
-		"192x192",
-		"128x128",
-		"96x96",
-		"72x72",
-		"48x48",
-		"36x36",
-		"32x32",
-		"24x24",
-		"22x22",
-		"16x16",
-	}
-
-	for _, dir in ipairs(dirs_to_check) do
-		local path_to_directory = "/usr/share/icons/hicolor/" .. dir .. "/apps/"
-		for file in io.popen("ls " .. path_to_directory):lines() do
-			if file:match("%f[%a]" .. app_name .. "%f[%A]") then
-				return path_to_directory .. file
-			end
-		end
-	end
-end
+local pinned_apps = {}
 
 -- Main taskbar widget
 local taskbar = awful.wibar({
@@ -44,11 +15,51 @@ local taskbar = awful.wibar({
 	ontop = true,
 })
 
+
+local function get_app_icon(app_name)
+	local override = preferences.icon_overrides[app_name]
+	if override then
+		pinned_apps[app_name] = { icon = override, command = app_name }
+		return
+	end
+
+	local ripgrep = ("rg -l --color=never --follow ^Exec=.*\\\\b%s\\\\b /usr/share/applications"):format(app_name)
+	awful.spawn.easy_async_with_shell(ripgrep,
+		function(path)
+			path = path:match("([^\r\n]+)[\r\n]*$")
+			local file = assert(io.open(path, "r"))
+			local info = file:read("*a")
+			local icon = info:match("Icon=([^\r\n]+)")
+			local command = info:match("Exec=([^\r\n]+)")
+			file:close()
+			awful.spawn.easy_async_with_shell(
+				('find /usr/share/icons -name %s.png | sort --version-sort -r | head -n 1'):format(icon),
+				function(icon_path)
+					icon_path = icon_path:match("([^\r\n]+)[\r\n]*$")
+					pinned_apps[app_name] = { icon = icon_path, command = command }
+
+					local app_count = 0
+					for _, _ in pairs(pinned_apps) do
+						app_count = app_count + 1
+					end
+
+					if app_count == #preferences.pinned_apps then
+						taskbar:refresh()
+					end
+				end
+			)
+		end)
+end
+
 local gap = 25
 
 local clients = {
 	layout = wibox.layout.flex.horizontal,
 }
+
+for _, app in ipairs(preferences.pinned_apps) do
+	get_app_icon(app)
+end
 
 function taskbar:refresh()
 	local date = wibox.widget.textclock("%m/%d")
@@ -78,7 +89,7 @@ function taskbar:refresh()
 
 	-- Pinned apps
 	for _, app in ipairs(preferences.pinned_apps) do
-		local widget = wibox.widget.imagebox(get_app_icon(app:match("^(%S+)")))
+		local widget = wibox.widget.imagebox(pinned_apps[app].icon)
 		widget:connect_signal("button::press", function()
 			for _, c in ipairs(client.get()) do
 				if c.class:match(app .. "$") == app then
@@ -88,8 +99,9 @@ function taskbar:refresh()
 					return
 				end
 			end
-			awful.spawn(app)
+			awful.spawn(pinned_apps[app].command)
 		end)
+
 
 		-- Focused pinned app
 		if client.focus and client.focus.class and client.focus.class:lower():match(app:match("^(%S+)")) then
@@ -131,7 +143,6 @@ function taskbar:refresh()
 					}
 				},
 			})
-
 			-- Pinned unfocused app
 		else
 			local client_is_open = false
@@ -310,7 +321,7 @@ function taskbar:refresh()
 		{
 			clients,
 			widget = wibox.container.margin,
-			left = 1600 / 2 - (#clients * (64 + gap)) / 2,
+			left = 1680 / 2 - (#clients * (64 + gap)) / 2,
 		},
 		{
 			{
@@ -323,7 +334,7 @@ function taskbar:refresh()
 				layout = wibox.layout.fixed.vertical,
 			},
 			widget = wibox.container.margin,
-			left = 800,
+			left = 735,
 		},
 		layout = wibox.layout.fixed.horizontal,
 	})
@@ -349,8 +360,6 @@ function taskbar:toggle()
 	self.visible = not self.visible
 	taskbar:refresh()
 end
-
-taskbar:refresh()
 
 return {
 	widget = taskbar,
