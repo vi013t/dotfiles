@@ -17,7 +17,7 @@ As of the time writing this, you need to use the `awesome-git` package, *not* th
 On Arch, you can install with one command by downloading and running the install script:
 
 ```bash
-curl https://raw.githubusercontent.com/vi013t/dotfiles/refs/heads/main/.config/awesome/install.sh | sh
+eval "$(curl https://raw.githubusercontent.com/vi013t/dotfiles/refs/heads/main/.config/awesome/install.sh)"
 ```
 
 This will install all the required and default packages for this configuration.
