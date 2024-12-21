@@ -22,6 +22,8 @@ eval "$(curl https://raw.githubusercontent.com/vi013t/dotfiles/refs/heads/main/.
 
 This will install all the required and default packages for this configuration.
 
+You may also want to check out [my picom config](https://github.com/vi013t/dotfiles/tree/main/.config/picom/picom.conf), which sets up window shadows, vsync, etc.
+
 Check out [the usage section](https://github.com/vi013t/dotfiles/tree/main/.config/awesome#usage) for information on how to use this configuration.
 
 ### Manual Install
@@ -29,7 +31,7 @@ Check out [the usage section](https://github.com/vi013t/dotfiles/tree/main/.conf
 This configuration requires the following programs to be installed:
 
 - [picom](https://github.com/yshui/picom) - For compositing
-- [flameshot](https://flameshot.org/) -- For screenshotting
+- [flameshot](https://flameshot.org/) - For screenshotting
 - [feh](https://feh.finalrewind.org/) - For applying wallpapers
 - [xinput](https://wiki.archlinux.org/title/Xinput) - For enabling touchpad support
 - [brightnessctl](https://github.com/Hummer12007/brightnessctl) - For changing brightness

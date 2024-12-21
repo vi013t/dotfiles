@@ -18,6 +18,8 @@
 !.config/VSCodium/User/README.md
 !.config/awesome/
 !.config/awesome/**/*
+!.config/picom/
+!.config/picom/**/*
 !.config/nvim
 !.config/nvim/*
 !.config/nvim/lua
