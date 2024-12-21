@@ -1,6 +1,15 @@
 # Install packages
 echo "Installing required packages..."
 sudo pacman -S picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg wezterm firefox nemo discord neovim spotify-launcher
+
+# Install Rust if it isn't already
+if !command -v cargo 2>&1 >/dev/null ; then
+	sudo pacman -S rustup
+	. "$HOME/.cargo/env"
+	rustup default stable
+fi
+
+# Install required Rust crates
 cargo install silico-calculator
 
 # Download the config
@@ -21,4 +30,5 @@ cp -r ./dotfiles/.config/awesome ~/.config/awesome
 echo "Removing original downloaded config..."
 rm ./dotfiles -rf
 
+# Finish
 echo "Installation complete! Reload AwesomeWM for changes to take effect."
