@@ -43,11 +43,12 @@ This configuration requires the following programs to be installed:
 - [brightnessctl](https://github.com/Hummer12007/brightnessctl) - For changing brightness
 - [pamixer](https://github.com/cdemoulins/pamixer) - For changing volume
 - [ffmpeg](https://www.ffmpeg.org/) - For playing sounds (such as the ping when adjusting volume)
+- [ripgrep](https://github.com/BurntSushi/ripgrep) - For locating program files
 
 On Arch, you can install them like so:
 
 ```bash
-sudo pacman -S picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg
+sudo pacman -S picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg ripgrep
 ```
 
 The default programs that the configuration will try to use are as follows, which are also required unless you plan to change them:

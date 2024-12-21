@@ -1,6 +1,6 @@
 # Install packages
 echo "Installing required packages..."
-sudo pacman -S picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg wezterm firefox nemo discord neovim spotify-launcher
+sudo pacman -S picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg wezterm firefox nemo discord neovim spotify-launcher ripgrep
 
 # Install Rust if it isn't already
 if !command -v cargo 2>&1 >/dev/null ; then
