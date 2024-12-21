@@ -81,4 +81,4 @@ Below are some common keybindings. For a full list of keybindings, see [`prefere
 
 All assets used by this configuration are stored in `/assets`. Replace the ones of your choosing to customize.
 
-Also see [`preferences.lua`](https://github.com/vi013t/tree/main/preferences.lua) for changing pinned applications, preferred applications, keybindings, etc.
+Also see [`preferences.lua`](https://github.com/vi013t/dotfiles/tree/main/.config/awesome/preferences.lua) for changing pinned applications, preferred applications, keybindings, etc.
