@@ -6,7 +6,11 @@ My configuration for AwesomeWM.
 
 This configuration is *not* designed to be hyper-extensible or to meet everyone's needs. It's my *personal* configuration.
 
-## Prerequisites
+## Installation
+
+Below are instructions for installing this configuration on your own machine.
+
+### Prerequisites
 
 This configuration is designed only to work on Arch Linux. It may work on others, but there's no guarantee. In theory, if all of the packages exist and run on your distro, it should work.
 
