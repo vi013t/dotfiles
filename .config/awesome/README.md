@@ -8,18 +8,19 @@ This configuration is *not* designed to be hyper-extensible or to meet everyone'
 
 ## Prerequisites
 
-This configuration is designed only to work on Arch Linux. It may work on others, but there's no guarantee.
+This configuration is designed only to work on Arch Linux. It may work on others, but there's no guarantee. In theory, if all of the packages exist and run on your distro, it should work.
 
 As of the time writing this, you need to use the `awesome-git` package, *not* the regular `awesome` package. It contains newer features that this configuration relies on.
 
 ### Quick Install
 
+On Arch, you can install with one command by downloading and running the install script:
+
 ```bash
-sudo pacman -S picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg wezterm firefox nemo discord neovim spotify-launcher
-cargo install silico-calculator
-git clone https://github.com/vi013t/dotfiles.git
-cp -r ./dotfiles/.config/awesome ~/.config/awesome
+curl https://raw.githubusercontent.com/vi013t/dotfiles/refs/heads/main/.config/awesome/install.sh | sh
 ```
+
+This will install all the required and default packages for this configuration.
 
 ### Manual Install
 
