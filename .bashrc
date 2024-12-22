@@ -52,7 +52,6 @@ alias img="wezterm imgcat" # View images with Wezterm
 alias ls='ls --color=auto' # Add colors to ls
 alias grep='grep --color=auto' # Add colors to grep
 alias neofetch="neofetch --iterm2 ~/Pictures/arch.png --size 400"
-alias rs=". ~/.bashrc"
 alias code="codium . -r"
 
 # Update arch stuff
@@ -63,6 +62,13 @@ function update() {
 	sudo paccache -ruk0 # Remove uninstalled packages
 	sudo pacman -Qdtq | sudo pacman -Rns - # Remove orphans
 	rm ~/go -rf # Remove go folder
+}
+
+# Clean old packages
+function clean() {
+	paccache -rk1
+	sudo paccache -ruk0
+	sudo pacman -Qdtq | ifne sudo pacman -Rns - # Remove orphans
 }
 
 # Session Information
@@ -91,13 +97,6 @@ function c() {
 function md() {
 	fname="${1%.*}"
 	pandoc "$1" -o "$fname.pdf" -V geometry:margin=1in -f markdown-implicit_figures -V colorlinks=true -V linkcolor=blue -V urlcolor=blue -V tocolor=blue
-}
-
-# Clean old packages
-function clean() {
-	paccache -rk1
-	sudo paccache -ruk0
-	sudo pacman -Qdtq | sudo pacman -Rns - # Remove orphans
 }
 
 # Set tab size

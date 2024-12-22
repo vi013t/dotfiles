@@ -16,7 +16,7 @@ cargo install silico-calculator
 echo "Downloading AwesomeWM configuration..."
 git clone https://github.com/vi013t/dotfiles.git
 
-# Check for existnig configuration
+# Check for existing configuration
 if [ -d ~/.config/awesome ] ; then
 	echo "Backing up current configuration to ~/.config/awesome_old..."
 	mv ~/.config/awesome ~/.config/awesome_old

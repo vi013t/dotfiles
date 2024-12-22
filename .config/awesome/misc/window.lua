@@ -5,10 +5,6 @@ local beautiful = require("beautiful")
 
 local keys = require("misc.keys")
 
--- Bind all key numbers to tags.
--- Be careful: we use keycodes to make it work on any keyboard layout.
--- This should map on the top row of your keyboard, usually 1 to 9.
-
 local clientbuttons = gears.table.join(
 	awful.button({}, 1, function(c)
 		c:emit_signal("request::activate", "mouse_click", { raise = true })
@@ -260,16 +256,9 @@ client.connect_signal("request::titlebars", function(c)
 end)
 
 -- Enable sloppy focus, so that focus follows mouse.
-client.connect_signal("mouse::enter", function(c)
-	c:emit_signal("request::activate", "mouse_enter", { raise = false })
-end)
-
-client.connect_signal("focus", function(c)
-	c.border_color = beautiful.border_focus
-end)
-client.connect_signal("unfocus", function(c)
-	c.border_color = beautiful.border_normal
-end)
+-- client.connect_signal("mouse::enter", function(c)
+-- 	c:emit_signal("request::activate", "mouse_enter", { raise = false })
+-- end)
 
 client.connect_signal("manage", function(c)
 	c.shape = function(cr, w, h)

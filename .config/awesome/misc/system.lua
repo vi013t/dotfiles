@@ -2,18 +2,23 @@ local public = {}
 
 public.battery = {}
 
----@return number
+--- Returns the current battery percentage as a number.
+---
+---@return number percent The battery percentage.
 function public.battery:percent()
 	return assert(tonumber(io.open("/sys/class/power_supply/BAT0/capacity"):read("a")))
 end
 
----@return boolean
+--- Returns whether the battery is currently charging.
+---
+---@return boolean is_charging Whether the battery supply is currently charging.
 function public.battery:is_charging()
 	return io.open("/sys/class/power_supply/BAT0/status"):read("a"):match("%s*([^%s]+)%s*") == "Charging"
 end
 
 -- Returns an icon for the battery based on the current state.
----@return string
+--
+---@return string icon The battery icon.
 function public.battery:get_icon()
 	local battery_icons = {
 		"󱊡", -- 00% - 10%
@@ -53,6 +58,9 @@ end
 
 public.wifi = {}
 
+--- Returns the SSID name of the currently connected wifi.
+---
+--- @return string ssid The name of the current wifi network.
 function public.wifi:name()
 	return io.popen("iwgetid -r"):read("a"):gsub("\n$", "")
 end

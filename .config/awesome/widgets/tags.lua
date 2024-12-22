@@ -1,7 +1,7 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
-local theme = require("misc.theme")
+local preferences = require("preferences")
 
 local tags_widget = wibox({ visible = false, ontop = true, type = "popup_menu", screen = screen.primary })
 tags_widget.width = 600
@@ -12,7 +12,7 @@ tags_widget.bg = "#ff000000"
 awful.placement.align(tags_widget, {
 	position = "top",
 	honor_workarea = true,
-	margins = { top = theme.custom.default_margin }
+	margins = { top = preferences.theme.default_margin }
 })
 
 function tags_widget:refresh_numbers()
@@ -21,11 +21,11 @@ function tags_widget:refresh_numbers()
 	for tag_number = 1, 5 do
 		local individual_widget = wibox.widget.textbox()
 
-		local color = theme.custom.primary_foreground
-		local background = theme.custom.primary_background
+		local color = preferences.theme.primary_foreground
+		local background = preferences.theme.primary_background
 		if awful.screen.focused().selected_tag and awful.screen.focused().selected_tag.index == tag_number then
-			color = theme.custom.primary_background
-			background = theme.custom.primary_foreground
+			color = preferences.theme.primary_background
+			background = preferences.theme.primary_foreground
 		end
 
 		individual_widget.markup = ('<span color="%s">%s</span>'):format(color, tostring(tag_number))
@@ -41,7 +41,7 @@ function tags_widget:refresh_numbers()
 				},
 				widget = wibox.container.background,
 				bg = background,
-				border_color = theme.custom.primary_foreground,
+				border_color = preferences.theme.primary_foreground,
 				border_width = 2,
 				shape = function(cr, width, height)
 					gears.shape.rounded_rect(cr, width, height, 12)
@@ -69,7 +69,7 @@ local function slide_in()
 	awful.placement.align(tags_widget, {
 		position = "top",
 		honor_workarea = true,
-		margins = { right = theme.custom.default_margin, top = top }
+		margins = { right = preferences.theme.default_margin, top = top }
 	})
 	top = top + slide_speed
 	if top < 20 then
@@ -81,7 +81,7 @@ local function slide_in()
 		awful.placement.align(tags_widget, {
 			position = "top",
 			honor_workarea = true,
-			margins = { right = theme.custom.default_margin, top = top }
+			margins = { right = preferences.theme.default_margin, top = top }
 		})
 	end
 end
@@ -90,7 +90,7 @@ local function slide_out()
 	awful.placement.align(tags_widget, {
 		position = "top",
 		honor_workarea = true,
-		margins = { right = theme.custom.default_margin, top = top }
+		margins = { right = preferences.theme.default_margin, top = top }
 	})
 	top = top - slide_speed
 	if top > -110 then
@@ -102,7 +102,7 @@ local function slide_out()
 		awful.placement.align(tags_widget, {
 			position = "top",
 			honor_workarea = true,
-			margins = { right = theme.custom.default_margin, top = top }
+			margins = { right = preferences.theme.default_margin, top = top }
 		})
 		tags_widget.visible = false
 	end

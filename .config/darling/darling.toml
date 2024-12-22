@@ -62,6 +62,7 @@ wireplumber = { version = "0.5.7-1" }
 xclip = { version = "0.13-6" }
 yay = { version = "12.4.2-1" }
 yay-debug = { version = "12.4.2-1" }
+moreutils = { version = "0.70-1" }
 
 [vscode]
 "svelte.svelte-vscode" = { version = "109.3.3" }

@@ -1,7 +1,6 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
-local theme = require("misc.theme")
 local preferences = require("preferences")
 local actions = require("misc.actions")
 
@@ -21,14 +20,14 @@ function public.setup(launcher)
 	menu.width = 500
 	menu.height = 775
 	menu.visible = true
-	menu.bg = theme.custom.primary_background
+	menu.bg = preferences.theme.primary_background
 	menu.border_width = 2
-	menu.border_color = theme.custom.primary_foreground
+	menu.border_color = preferences.theme.primary_foreground
 	menu.shape = function(cr, width, height)
 		gears.shape.rounded_rect(cr, width, height, 15)
 	end
 	awful.placement.top_right(menu,
-		{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = theme.custom.default_margin } }
+		{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = preferences.theme.default_margin } }
 	)
 
 	function menu:refresh_numbers()
@@ -142,7 +141,7 @@ function public.setup(launcher)
 				shape = function(cr, width, height)
 					gears.shape.rounded_bar(cr, width, height)
 				end,
-				bg = theme.custom.secondary_foreground,
+				bg = preferences.theme.secondary_foreground,
 			}
 		}
 
@@ -163,10 +162,10 @@ function public.setup(launcher)
 				from = { 0, 0 },
 				to = { 300, 0 },
 				stops = {
-					{ 0,                     theme.custom.primary_foreground },
-					{ volume_percent - 0.01, theme.custom.primary_foreground },
-					{ volume_percent,        theme.custom.secondary_foreground },
-					{ 1,                     theme.custom.secondary_foreground },
+					{ 0,                     preferences.theme.primary_foreground },
+					{ volume_percent - 0.01, preferences.theme.primary_foreground },
+					{ volume_percent,        preferences.theme.secondary_foreground },
+					{ 1,                     preferences.theme.secondary_foreground },
 				},
 			}),
 			handle_shape = gears.shape.circle,
@@ -195,10 +194,10 @@ function public.setup(launcher)
 				from = { 0, 0 },
 				to = { 300, 0 },
 				stops = {
-					{ 0,                         theme.custom.primary_foreground },
-					{ brightness_percent - 0.01, theme.custom.primary_foreground },
-					{ brightness_percent,        theme.custom.secondary_foreground },
-					{ 1,                         theme.custom.secondary_foreground },
+					{ 0,                         preferences.theme.primary_foreground },
+					{ brightness_percent - 0.01, preferences.theme.primary_foreground },
+					{ brightness_percent,        preferences.theme.secondary_foreground },
+					{ 1,                         preferences.theme.secondary_foreground },
 				},
 			}),
 			handle_shape = gears.shape.circle,
@@ -318,7 +317,7 @@ function public.setup(launcher)
 	local function slide_in()
 		is_showing = true
 		awful.placement.top_right(menu,
-			{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } })
+			{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = top } })
 		top = top + slide_speed
 		if top < 10 then
 			awful.spawn.easy_async_with_shell("sleep 0.001", function()
@@ -328,7 +327,7 @@ function public.setup(launcher)
 			is_showing = false
 			top = 10
 			awful.placement.top_right(menu,
-				{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } })
+				{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = top } })
 		end
 	end
 
@@ -336,7 +335,7 @@ function public.setup(launcher)
 	local function slide_out()
 		is_hiding = true
 		awful.placement.top_right(menu,
-			{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } }
+			{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = top } }
 		)
 		top = top - slide_speed
 		if top > -775 then
@@ -349,7 +348,7 @@ function public.setup(launcher)
 			is_hiding = false
 			top = -775
 			awful.placement.top_right(menu,
-				{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } })
+				{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = top } })
 			menu.visible = false
 		end
 	end
@@ -359,7 +358,7 @@ function public.setup(launcher)
 		if is_hiding or is_showing then return end
 
 		awful.placement.top_right(menu,
-			{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = top } }
+			{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = top } }
 		)
 
 		if not self.visible then

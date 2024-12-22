@@ -2,81 +2,141 @@ local actions = {}
 
 local awful = require("awful")
 
+--- Returns a function that when called, will raise the volume by the given amount.
+--- The menu and brightness volume will be refreshed.
+---
+---@param amount number The amount to raise the volume by.
+---
+---@return fun(widgets): nil function The function to lower the volume
 function actions.raise_volume(amount)
 	return function(widgets)
-		os.execute("pamixer --increase " .. amount)
-		widgets.menu:refresh_numbers()
-		widgets.volume:show()
-		awful.spawn.easy_async_with_shell(
-			"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
-			function() end
-		)
+		awful.spawn.easy_async("pamixer --increase " .. amount, function()
+			widgets.menu:refresh_numbers()
+			widgets.volume:show()
+			awful.spawn.easy_async(
+				("ffplay %s/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit"):format(os.getenv("HOME")),
+				function() end
+			)
+		end)
 	end
 end
 
+--- Returns a function that when called, will lower the volume by the given amount.
+--- The menu and brightness volume will be refreshed.
+---
+---@param amount number The amount to lower the volume by.
+---
+---@return fun(widgets): nil function The function to lower the volume
 function actions.lower_volume(amount)
 	return function(widgets)
-		os.execute("pamixer --decrease " .. amount)
-		widgets.menu:refresh_numbers()
-		widgets.volume:show()
-		awful.spawn.easy_async_with_shell(
-			"ffplay ~/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit",
-			function() end
-		)
+		awful.spawn.easy_async("pamixer --decrease " .. amount, function()
+			widgets.menu:refresh_numbers()
+			widgets.volume:show()
+			awful.spawn.easy_async(
+				("ffplay %s/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit"):format(os.getenv("HOME")),
+				function() end
+			)
+		end)
 	end
 end
 
+--- Returns a function that when called, will mute the volume. The menu and volume
+--- widgets will be refreshed.
+---
+---@return fun(widgets): nil function The function to run
 function actions.mute()
 	return function(widgets)
-		os.execute("pamixer --set-volume 0")
-		widgets.menu:refresh_numbers()
-		widgets.volume:show()
+		awful.spawn.easy_async("pamixer --set-volume 0", function()
+			widgets.menu:refresh_numbers()
+			widgets.volume:show()
+		end)
 	end
 end
 
+--- Returns a function that when called, will raise the brightness by the given amount.
+--- The menu and brightness widgets will be refreshed.
+---
+---@param amount number The amount to lower the brightness by.
+---
+---@return fun(widgets): nil function The function to run
 function actions.raise_brightness(amount)
 	return function(widgets)
-		os.execute("brightnessctl set +" .. tostring(amount) .. "%")
-		widgets.menu:refresh_numbers()
-		widgets.brightness:show()
+		awful.spawn.easy_async("brightnessctl set +" .. tostring(amount) .. "%", function()
+			widgets.menu:refresh_numbers()
+			widgets.brightness:show()
+		end)
 	end
 end
 
+--- Returns a function that when called, will lower the brightness by the given amount.
+--- The menu and brightness widgets will be refreshed.
+---
+---@param amount number The amount to lower the brightness by.
+---
+---@return fun(widgets): nil function The function to run
 function actions.lower_brightness(amount)
 	return function(widgets)
-		os.execute("brightnessctl set " .. tostring(amount) .. "%-")
-		widgets.menu:refresh_numbers()
-		widgets.brightness:show()
+		awful.spawn.easy_async("brightnessctl set " .. tostring(amount) .. "%-", function()
+			widgets.menu:refresh_numbers()
+			widgets.brightness:show()
+		end)
 	end
 end
 
+--- Returns a function that when called, will run the given command (synchronously).
+---
+---@param command string The command to run
+---
+---@return fun(): nil function The function to run
 function actions.open(command)
-	return function(_)
+	return function()
+		-- NOTE: This *cannot* use awful.easy_async(). For some reason
+		-- (unknown to me) it causes errors with certain programs. For example,
+		-- Discord would repeatedly crash with "write EPIPE" errors. I don't know the
+		-- specifics but using awful.spawn() seems to work; So just as a note to future
+		-- me and anyone else wondering why this is synchronous, that's why.
 		awful.spawn(command)
 	end
 end
 
+--- Returns a function that toggles the visibility of the given widget, by name.
+---
 ---@param widget_name "sidebar" | "taskbar" | "alttab"
+---
+---@return fun(widgets): nil function The function that will toggle visibility for the given widget
 function actions.toggle_widget(widget_name)
 	return function(widgets)
 		widgets[widget_name]:toggle()
 	end
 end
 
-function actions.next_tag()
+--- Returns a function that will open the next tag incrementally. The
+--- tags widget will be refreshed.
+---
+---@return fun(widgets): nil function The function to open the next tag.
+function actions.view_next_tag()
 	return function(widgets)
 		awful.tag.viewnext()
 		widgets.tags:refresh_numbers()
 	end
 end
 
-function actions.previous_tag()
+--- Returns a function that will open the previous tag incrementally. The
+--- tags widget will be refreshed.
+---
+---@return fun(widgets): nil function The function to open the previous tag.
+function actions.view_previous_tag()
 	return function(widgets)
 		awful.tag.viewprev()
 		widgets.tags:refresh_numbers()
 	end
 end
 
+--- Returns a function that when called will open the given tag.
+---
+--- @param tag_number integer The tag number to view
+---
+--- @return fun(widgets): nil function The function that will view the given tag.
 function actions.view_tag(tag_number)
 	return function(widgets)
 		local screen = awful.screen.focused()
@@ -88,8 +148,14 @@ function actions.view_tag(tag_number)
 	end
 end
 
+--- Returns a function that when called, will move the currently focused client
+--- to the given tag number.
+---
+--- @param tag_number integer The tag to move the client to
+---
+--- @return fun(): nil function The function to move the client with
 function actions.move_client_to_tag(tag_number)
-	return function(_)
+	return function()
 		if client.focus then
 			local tag = client.focus.screen.tags[tag_number]
 			if tag then
@@ -99,9 +165,13 @@ function actions.move_client_to_tag(tag_number)
 	end
 end
 
+--- Returns a function that will take a screenshot of the entire screen and
+--- save it to `~/Pictures/Screenshots/`
+---
+---@return fun(): nil function The function to take a screenshot
 function actions.screenshot()
-	return function(_)
-		awful.spawn.with_shell(
+	return function()
+		awful.spawn.easy_async(
 			'flameshot full --path "' ..
 			os.getenv("HOME") ..
 			'/Pictures/Screenshots/' ..
@@ -113,6 +183,10 @@ function actions.screenshot()
 	end
 end
 
+--- Returns a function that will take a screenshot of a rectangular section of
+--- the screen.
+---
+---@return fun(widgets): nil function The function to take a screenshot
 function actions.screenshot_section()
 	return function(widgets)
 		widgets.tags.visible = false

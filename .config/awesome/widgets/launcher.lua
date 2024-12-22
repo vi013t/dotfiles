@@ -1,22 +1,22 @@
 local wibox = require("wibox")
 local awful = require("awful")
-local theme = require("misc.theme")
+local preferences = require("preferences")
 local gears = require("gears")
 
 -- Launcher
 local launcher = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
 launcher.width = 500
 launcher.height = 500
-launcher.bg = theme.custom.primary_background
+launcher.bg = preferences.theme.primary_background
 launcher.border_width = 2
-launcher.border_color = theme.custom.primary_foreground
+launcher.border_color = preferences.theme.primary_foreground
 launcher.shape = function(cr, width, height)
 	gears.shape.rounded_rect(cr, width, height, 15)
 end
-awful.placement.top_right(
-	launcher,
-	{ honor_workarea = true, margins = { right = theme.custom.default_margin * 2 + 500, top = theme.custom.default_margin } }
-)
+awful.placement.top_right(launcher, {
+	honor_workarea = true,
+	margins = { right = preferences.theme.default_margin * 2 + 500, top = preferences.theme.default_margin }
+})
 
 ---@alias App { name: string, icon: string }
 
@@ -114,7 +114,7 @@ function launcher:refresh_numbers()
 		icon_widget.forced_height = 70
 
 		local name_widget = wibox.widget.textbox()
-		name_widget.markup = ('<span color="%s">%s</span>'):format(theme.custom.primary_foreground, app.name)
+		name_widget.markup = ('<span color="%s">%s</span>'):format(preferences.theme.primary_foreground, app.name)
 		name_widget.font = "OpenSans 20"
 
 		local app_widget = {
@@ -167,7 +167,7 @@ function launcher:sort(search_text)
 		icon_widget.forced_height = 70
 
 		local name_widget = wibox.widget.textbox()
-		name_widget.markup = ('<span color="%s">%s</span>'):format(theme.custom.primary_foreground, app.name)
+		name_widget.markup = ('<span color="%s">%s</span>'):format(preferences.theme.primary_foreground, app.name)
 		name_widget.font = "OpenSans 20"
 
 		local app_widget = {
@@ -204,9 +204,10 @@ function launcher:sort(search_text)
 end
 
 function launcher:toggle()
-	self.visible = not self.visible
 	if self.visible then
-		launcher:refresh_numbers()
+		self:hide()
+	else
+		self:show()
 	end
 end
 

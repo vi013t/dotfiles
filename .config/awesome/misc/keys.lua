@@ -20,13 +20,18 @@ local function f(action)
 	end
 end
 
--- Called when the modkey is pressed
-local function modkey_pressed(widgets)
+--- Called when the windows key is pressed. Opens the tag widget.
+---
+---@param widgets any The widgets.
+local function on_windows_key_press(widgets)
 	widgets.tags:open()
 end
 
--- Called when the modkey is released
-local function modkey_released(widgets)
+--- Called when the windows key is released. Closes the tag and alt-tab widgets,
+--- and opens te menu if no other key was pressed.
+---
+---@param widgets any The widgets.
+local function on_windows_key_released(widgets)
 	widgets.tags:close()
 	widgets.alttab:hide()
 	if not other_key_was_pressed then
@@ -48,7 +53,7 @@ function public.setup(widgets)
 					windows = windows,
 					shift = "Shift",
 					control = "Control",
-					alt = "Alt",
+					alt = "Alt_L",
 				}
 
 				return modifiers[modifier]
@@ -59,8 +64,8 @@ function public.setup(widgets)
 	end, preferences.keys)
 
 	public.globalkeys = gears.table.join(
-		awful.key({}, windows_key_code, function() modkey_pressed(widgets) end, function() end),
-		awful.key({ windows }, windows_key_code, function() end, function() modkey_released(widgets) end),
+		awful.key({}, windows_key_code, function() on_windows_key_press(widgets) end, function() end),
+		awful.key({ windows }, windows_key_code, function() end, function() on_windows_key_released(widgets) end),
 		awful.key({ windows }, "Tab", f(function()
 			widgets.alttab:cycle()
 			widgets.tags:close()
@@ -77,23 +82,6 @@ function public.setup(widgets)
 			c:raise()
 		end)
 	)
-
-	-- Tags
-	for tag_number = 1, 9 do
-		public.globalkeys = gears.table.join(
-			public.globalkeys,
-
-			-- Move client to tag.
-			awful.key({ public.modkey, "Shift" }, "#" .. tag_number + 9, function()
-				if client.focus then
-					local tag = client.focus.screen.tags[tag_number]
-					if tag then
-						client.focus:move_to_tag(tag)
-					end
-				end
-			end, { description = "move focused client to tag #" .. tag_number, group = "tag" })
-		)
-	end
 end
 
 return public

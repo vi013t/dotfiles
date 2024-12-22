@@ -34,8 +34,7 @@ preferences.pinned_apps = {
 	preferences.apps.music,
 }
 
----@alias Modifier "windows" | "shift" | "control" | "alt"
----@alias Keybinding { modifiers?: Modifier[]; key: string; run: fun(widgets: any): nil }
+---@alias Keybinding { modifiers?: ("windows" | "shift" | "control" | "alt")[]; key: string; run: fun(widgets: any): nil }
 
 --- Global keybindings.
 ---
@@ -49,8 +48,6 @@ preferences.keys = {
 
 	-- AwesomeWM Core
 	{ modifiers = { "windows" },          key = "r",                         run = awesome.restart },
-	{ modifiers = { "windows" },          key = "Left",                      run = actions.previous_tag() },
-	{ modifiers = { "windows" },          key = "Right",                     run = actions.next_tag() },
 
 	-- Widgets
 	{ modifiers = { "windows" },          key = "`",                         run = actions.toggle_widget("sidebar") },
@@ -88,11 +85,35 @@ preferences.keys = {
 	{ modifiers = { "windows", "shift" }, key = "3",                         run = actions.move_client_to_tag(3) },
 	{ modifiers = { "windows", "shift" }, key = "4",                         run = actions.move_client_to_tag(4) },
 	{ modifiers = { "windows", "shift" }, key = "5",                         run = actions.move_client_to_tag(5) },
+	{ modifiers = { "windows" },          key = "Left",                      run = actions.view_previous_tag() },
+	{ modifiers = { "windows" },          key = "Right",                     run = actions.view_next_tag() },
 }
 
 -- Taskbar icon overrides
 preferences.icon_overrides = {
 	nemo = os.getenv("HOME") .. "/.config/awesome/assets/images/file_explorer.png"
+}
+
+-- Colors and styling
+preferences.theme = {
+
+	-- THe primary background color on widgets
+	primary_background = "#0E0C12",
+
+	-- The primary color of text and borders on widgets
+	primary_foreground = "#9280FF",
+
+	-- The secondary foreground color for slider backgrounds and such on widgets
+	secondary_foreground = "#50496B",
+
+	-- The background color of the taskbar
+	taskbar_background = "#111122",
+
+	-- The position of the taskbar
+	taskbar_position = "bottom",
+
+	-- The margin between widgets and the edge of the screen
+	default_margin = 12,
 }
 
 return preferences

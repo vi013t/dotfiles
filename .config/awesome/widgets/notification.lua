@@ -1,21 +1,21 @@
 local ruled = require("ruled")
 local awful = require("awful")
 local naughty = require("naughty")
-local theme = require("misc.theme")
+local preferences = require("preferences")
 local gears = require("gears")
 
 
 -- Style notifications
-naughty.config.spacing = theme.custom.default_margin
-naughty.config.padding = theme.custom.default_margin
-naughty.config.defaults.border_color = theme.custom.primary_foreground
+naughty.config.spacing = preferences.theme.default_margin
+naughty.config.padding = preferences.theme.default_margin
+naughty.config.defaults.border_color = preferences.theme.primary_foreground
 naughty.config.defaults.border_width = 2
 naughty.config.defaults.position = "bottom_right"
 naughty.config.defaults.screen = awful.screen.preferred
 naughty.config.defaults.implicit_timeout = 5
 naughty.config.defaults.margin = 25
 naughty.config.defaults.border_radius = 6
-naughty.config.defaults.bg = theme.custom.primary_background
+naughty.config.defaults.bg = preferences.theme.primary_background
 naughty.config.defaults.font = "OpenSans 14"
 naughty.config.defaults.icon_size = 60
 naughty.config.defaults.shape = function(cr, w, h)
@@ -23,7 +23,7 @@ naughty.config.defaults.shape = function(cr, w, h)
 end
 
 -- Errors
-naughty.config.presets.critical.bg = theme.custom.primary_background
+naughty.config.presets.critical.bg = preferences.theme.primary_background
 naughty.config.presets.critical.border_color = "#FF0000"
 
 -- Not sure why this is needed but it is

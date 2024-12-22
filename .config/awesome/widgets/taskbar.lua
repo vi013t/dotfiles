@@ -10,9 +10,9 @@ local pinned_apps = {}
 local taskbar = awful.wibar({
 	visible = true,
 	height = 65,
-	position = "bottom",
-	bg = "#111122",
-	ontop = true,
+	position = preferences.theme.taskbar_position,
+	bg = preferences.theme.taskbar_background,
+	--ontop = true,
 })
 
 
@@ -20,6 +20,14 @@ local function get_app_icon(app_name)
 	local override = preferences.icon_overrides[app_name]
 	if override then
 		pinned_apps[app_name] = { icon = override, command = app_name }
+		local app_count = 0
+		for _, _ in pairs(pinned_apps) do
+			app_count = app_count + 1
+		end
+
+		if app_count == #preferences.pinned_apps then
+			taskbar:refresh()
+		end
 		return
 	end
 

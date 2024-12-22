@@ -1,7 +1,7 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
-local theme = require("misc.theme")
+local preferences = require("preferences")
 
 --- The main alt tab wibox widget.
 local alt_tab_widget = wibox({
@@ -67,7 +67,7 @@ function alt_tab_widget:refresh()
 		local title = wibox.widget.textbox()
 		local max_characters = 35
 		local name = window.name:match((".?"):rep(max_characters))
-		local color = theme.custom.primary_foreground
+		local color = preferences.theme.primary_foreground
 		local tag = window.first_tag.index
 		if index == selected_client_index then color = "#FFFFFF" end
 		title.markup = ('<span color="%s">[%d] %s</span>'):format(color, tag, name)
@@ -86,7 +86,7 @@ function alt_tab_widget:refresh()
 			right = 10,
 			{
 				widget = wibox.container.background,
-				bg = theme.custom.primary_background,
+				bg = preferences.theme.primary_background,
 				border_color = color,
 				border_width = 2,
 				shape = function(cr, width, height)
@@ -136,7 +136,7 @@ function alt_tab_widget:refresh()
 
 	-- Place the widget
 	awful.placement.align(alt_tab_widget,
-		{ position = "centered", honor_workarea = true, margins = { top = theme.custom.default_margin } }
+		{ position = "centered", honor_workarea = true, margins = { top = preferences.theme.default_margin } }
 	)
 
 	-- Add the inner widgets

@@ -1,18 +1,18 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
-local theme = require("misc.theme")
+local preferences = require("preferences")
 
 --- The brightness widget. This is the little bar that appears when you change the screen's
 --- brightness.
 local brightness_bar = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
 brightness_bar.width = 300
 brightness_bar.height = 50
-brightness_bar.bg = theme.custom.primary_background
+brightness_bar.bg = preferences.theme.primary_background
 
 awful.placement.top_right(
 	brightness_bar,
-	{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = theme.custom.default_margin } }
+	{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = preferences.theme.default_margin } }
 )
 
 function brightness_bar:refresh_numbers()
@@ -29,16 +29,16 @@ function brightness_bar:refresh_numbers()
 		minimum = 0,
 		bar_height = 10,
 		forced_height = 10,
-		handle_color = theme.custom.primary_foreground,
+		handle_color = preferences.theme.primary_foreground,
 		bar_color = gears.color({
 			type = "linear",
 			from = { 0, 0 },
 			to = { 200, 0 },
 			stops = {
-				{ 0,                         theme.custom.primary_foreground },
-				{ brightness_percent - 0.01, theme.custom.primary_foreground },
-				{ brightness_percent,        theme.custom.secondary_foreground },
-				{ 1,                         theme.custom.secondary_foreground },
+				{ 0,                         preferences.theme.primary_foreground },
+				{ brightness_percent - 0.01, preferences.theme.primary_foreground },
+				{ brightness_percent,        preferences.theme.secondary_foreground },
+				{ 1,                         preferences.theme.secondary_foreground },
 			},
 		}),
 		handle_shape = gears.shape.circle,
@@ -67,17 +67,22 @@ function brightness_bar:refresh_numbers()
 end
 
 function brightness_bar:toggle()
-	self.visible = not self.visible
-	if self.visible then
-		brightness_bar:refresh_numbers()
+	if brightness_bar.visible then
+		brightness_bar:hide()
+	else
+		brightness_bar:show()
 	end
 end
 
 function brightness_bar:show()
 	brightness_bar.visible = true
 	brightness_bar:refresh_numbers()
+
+	-- Timer already exists - Restart it
 	if brightness_bar.timer then
 		brightness_bar.timer:again()
+
+		-- No timer yet - create one and start it
 	else
 		brightness_bar.timer = gears.timer({
 			timeout = 2,

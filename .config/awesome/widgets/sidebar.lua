@@ -1,22 +1,22 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
-local theme = require("misc.theme")
 local preferences = require("preferences")
 local system = require("misc.system")
 
 -- Sidebar
 local sidebar = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
 sidebar.width = 400
-sidebar.height = awful.screen.focused().workarea.height - (2 * theme.custom.default_margin)
+sidebar.height = awful.screen.focused().workarea.height - (2 * preferences.theme.default_margin)
 sidebar.visible = true
-sidebar.bg = theme.custom.primary_background
+sidebar.bg = preferences.theme.primary_background
 sidebar.border_width = 2
-sidebar.border_color = theme.custom.primary_foreground
+sidebar.border_color = preferences.theme.primary_foreground
 sidebar.shape = function(cr, width, height)
 	gears.shape.rounded_rect(cr, width, height, 15)
 end
-awful.placement.top_left(sidebar, { honor_workarea = true, margins = { left = -300, top = theme.custom.default_margin } })
+awful.placement.top_left(sidebar,
+	{ honor_workarea = true, margins = { left = -300, top = preferences.theme.default_margin } })
 
 --- Offset from this month, from pressing the arrows
 local month_override = 0
@@ -95,7 +95,7 @@ function sidebar:refresh_numbers()
 	local calendar_title = wibox.widget.textbox()
 	local this_month_number = today.month
 	local this_month = months[this_month_number]
-	calendar_title.markup = ('<span color="%s">%s</span>'):format(theme.custom.primary_foreground, this_month)
+	calendar_title.markup = ('<span color="%s">%s</span>'):format(preferences.theme.primary_foreground, this_month)
 	calendar_title.font = "OpenSans 20"
 	calendar_title.align = "center"
 
@@ -118,7 +118,7 @@ function sidebar:refresh_numbers()
 	local week_days = { layout = wibox.layout.flex.horizontal }
 	for index, week_day in ipairs(days) do
 		-- This week?
-		local color = theme.custom.primary_foreground
+		local color = preferences.theme.primary_foreground
 		if today.wday == index and month_override == 0 then
 			color = "#FFFFFF"
 		end
@@ -136,7 +136,7 @@ function sidebar:refresh_numbers()
 		local week = { layout = wibox.layout.flex.horizontal }
 		for day = 1, 7 do
 			local day_number = (week_number - 1) * 7 + day - first_of_month + 1
-			local color = theme.custom.primary_foreground
+			local color = preferences.theme.primary_foreground
 
 			-- Last month
 			if day_number < 1 then
@@ -145,17 +145,17 @@ function sidebar:refresh_numbers()
 					last_month = { 12, today.year - 1 }
 				end
 				day_number = days_in_month(last_month[1], last_month[2]) - math.abs(day_number)
-				color = theme.custom.secondary_foreground
+				color = preferences.theme.secondary_foreground
 
 				-- Next month
 			elseif day_number > days_in_month(this_month_number, today.year) then
 				day_number = day_number - days_in_month(this_month_number, today.year)
-				color = theme.custom.secondary_foreground
+				color = preferences.theme.secondary_foreground
 			end
 
 			local is_today = false
-			if color == theme.custom.primary_foreground and day_number == today.day and month_override == 0 then
-				color = theme.custom.primary_background
+			if color == preferences.theme.primary_foreground and day_number == today.day and month_override == 0 then
+				color = preferences.theme.primary_background
 				is_today = true
 			end
 
@@ -163,11 +163,11 @@ function sidebar:refresh_numbers()
 			day_widget.markup = ('<span color="%s">%d</span>'):format(color, day_number)
 			day_widget.font = "OpenSans 12"
 			day_widget.align = "center"
-			day_widget.bg = theme.custom.primary_background
+			day_widget.bg = preferences.theme.primary_background
 
-			local bg = theme.custom.primary_background
+			local bg = preferences.theme.primary_background
 			if is_today then
-				bg = theme.custom.primary_foreground
+				bg = preferences.theme.primary_foreground
 			end
 
 			day_widget = {
@@ -201,7 +201,7 @@ function sidebar:refresh_numbers()
 	local calendar = month
 
 	local calendar_left = wibox.widget.textbox()
-	calendar_left.markup = ('<span color="%s">    󰍞</span>'):format(theme.custom.primary_foreground)
+	calendar_left.markup = ('<span color="%s">    󰍞</span>'):format(preferences.theme.primary_foreground)
 	calendar_left.font = "OpenSans 30"
 	calendar_left:connect_signal("button::press", function()
 		month_override = month_override - 1
@@ -209,7 +209,7 @@ function sidebar:refresh_numbers()
 	end)
 
 	local calendar_right = wibox.widget.textbox()
-	calendar_right.markup = ('<span color="%s">󰍟   </span>'):format(theme.custom.primary_foreground)
+	calendar_right.markup = ('<span color="%s">󰍟   </span>'):format(preferences.theme.primary_foreground)
 	calendar_right.font = "OpenSans 30"
 	calendar_right.align = "right"
 	calendar_right:connect_signal("button::press", function()
@@ -225,10 +225,10 @@ function sidebar:refresh_numbers()
 		value = system.battery:percent(),
 		forced_height = 20,
 		forced_width = 300,
-		color = theme.custom.primary_foreground,
+		color = preferences.theme.primary_foreground,
 		margins = { right = 25, left = 25 },
 		shape = gears.shape.rounded_bar,
-		background_color = theme.custom.secondary_foreground,
+		background_color = preferences.theme.secondary_foreground,
 		widget = wibox.widget.progressbar,
 		bar_shape = gears.shape.rounded_bar,
 	})
@@ -245,9 +245,9 @@ function sidebar:refresh_numbers()
 		forced_height = 20,
 		forced_width = 300,
 		margins = { right = 25, left = 25 },
-		color = theme.custom.primary_foreground,
+		color = preferences.theme.primary_foreground,
 		shape = gears.shape.rounded_bar,
-		background_color = theme.custom.secondary_foreground,
+		background_color = preferences.theme.secondary_foreground,
 		widget = wibox.widget.progressbar,
 		bar_shape = gears.shape.rounded_bar,
 	})
@@ -354,7 +354,7 @@ local left = -400
 local function slide_in()
 	is_moving = true
 	awful.placement.top_left(sidebar,
-		{ honor_workarea = true, margins = { left = left, top = theme.custom.default_margin } })
+		{ honor_workarea = true, margins = { left = left, top = preferences.theme.default_margin } })
 	left = left + slide_speed
 	if left < 10 then
 		awful.spawn.easy_async_with_shell("sleep 0.001", function()
@@ -364,14 +364,14 @@ local function slide_in()
 		is_moving = false
 		left = 10
 		awful.placement.top_left(sidebar,
-			{ honor_workarea = true, margins = { left = left, top = theme.custom.default_margin } })
+			{ honor_workarea = true, margins = { left = left, top = preferences.theme.default_margin } })
 	end
 end
 
 local function slide_out()
 	is_moving = true
 	awful.placement.top_left(sidebar,
-		{ honor_workarea = true, margins = { left = left, top = theme.custom.default_margin } })
+		{ honor_workarea = true, margins = { left = left, top = preferences.theme.default_margin } })
 	left = left - slide_speed
 	if left > -400 then
 		awful.spawn.easy_async_with_shell("sleep 0.001", function()
@@ -381,7 +381,7 @@ local function slide_out()
 		is_moving = false
 		left = -400
 		awful.placement.top_left(sidebar,
-			{ honor_workarea = true, margins = { left = left, top = theme.custom.default_margin } })
+			{ honor_workarea = true, margins = { left = left, top = preferences.theme.default_margin } })
 		sidebar.visible = false
 	end
 end
@@ -390,7 +390,7 @@ function sidebar:toggle()
 	if is_moving then return end
 
 	awful.placement.top_left(self,
-		{ honor_workarea = true, margins = { left = left, top = theme.custom.default_margin } }
+		{ honor_workarea = true, margins = { left = left, top = preferences.theme.default_margin } }
 	)
 	if not self.visible then
 		self.visible = true

@@ -1,15 +1,15 @@
 local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
-local theme = require("misc.theme")
+local preferences = require("preferences")
 
 -- Main volume bar widget
 local volume_bar = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
 volume_bar.width = 300
 volume_bar.height = 50
-volume_bar.bg = theme.custom.primary_background
+volume_bar.bg = preferences.theme.primary_background
 awful.placement.top_right(volume_bar,
-	{ honor_workarea = true, margins = { right = theme.custom.default_margin, top = theme.custom.default_margin } })
+	{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = preferences.theme.default_margin } })
 
 function volume_bar:refresh_numbers()
 	-- Number
@@ -27,16 +27,16 @@ function volume_bar:refresh_numbers()
 		minimum = 0,
 		bar_height = 10,
 		forced_height = 10,
-		handle_color = theme.custom.primary_foreground,
+		handle_color = preferences.theme.primary_foreground,
 		bar_color = gears.color({
 			type = "linear",
 			from = { 0, 0 },
 			to = { 200, 0 },
 			stops = {
-				{ 0,                     theme.custom.primary_foreground },
-				{ volume_percent - 0.01, theme.custom.primary_foreground },
-				{ volume_percent,        theme.custom.secondary_foreground },
-				{ 1,                     theme.custom.secondary_foreground },
+				{ 0,                     preferences.theme.primary_foreground },
+				{ volume_percent - 0.01, preferences.theme.primary_foreground },
+				{ volume_percent,        preferences.theme.secondary_foreground },
+				{ 1,                     preferences.theme.secondary_foreground },
 			},
 		}),
 		handle_shape = gears.shape.circle,

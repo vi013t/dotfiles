@@ -10,6 +10,7 @@ if awesome.startup_errors then
 	})
 end
 
+-- Error checking
 do
 	local in_error = false
 	awesome.connect_signal("debug::error", function(err)
