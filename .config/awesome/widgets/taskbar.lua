@@ -316,6 +316,9 @@ function taskbar:refresh()
 
 	-- Set up the taskbar
 	taskbar:setup({
+		layout = wibox.layout.stack,
+
+		-- Left widgets
 		{
 			{
 				battery,
@@ -326,11 +329,15 @@ function taskbar:refresh()
 			widget = wibox.container.margin,
 			left = 20,
 		},
+
+		-- Client icons
 		{
 			clients,
 			widget = wibox.container.margin,
-			left = 1680 / 2 - (#clients * (64 + gap)) / 2,
+			left = 1920 / 2 - (#clients * 47 + (#clients - 1) * gap) / 2
 		},
+
+		-- Right widgets
 		{
 			{
 				{
@@ -342,9 +349,8 @@ function taskbar:refresh()
 				layout = wibox.layout.fixed.vertical,
 			},
 			widget = wibox.container.margin,
-			left = 735,
+			left = 1920 - 64
 		},
-		layout = wibox.layout.fixed.horizontal,
 	})
 end
 
