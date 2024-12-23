@@ -1,5 +1,7 @@
 local public = {}
 
+local awful = require("awful")
+
 public.battery = {}
 
 --- Returns the current battery percentage as a number.
@@ -64,5 +66,14 @@ public.wifi = {}
 function public.wifi:name()
 	return io.popen("iwgetid -r"):read("a"):gsub("\n$", "")
 end
+
+public.screen = {
+	height = function()
+		return awful.screen.focused().workarea.height
+	end,
+	width = function()
+		return awful.screen.focused().workarea.width
+	end
+}
 
 return public

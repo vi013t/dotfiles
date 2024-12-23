@@ -334,7 +334,7 @@ function taskbar:refresh()
 		{
 			clients,
 			widget = wibox.container.margin,
-			left = 1920 / 2 - (#clients * 47 + (#clients - 1) * gap) / 2
+			left = system.screen.width() / 2 - (#clients * 47 + (#clients - 1) * gap) / 2
 		},
 
 		-- Right widgets
@@ -349,7 +349,7 @@ function taskbar:refresh()
 				layout = wibox.layout.fixed.vertical,
 			},
 			widget = wibox.container.margin,
-			left = 1920 - 64
+			left = system.screen.width() - 64
 		},
 	})
 end

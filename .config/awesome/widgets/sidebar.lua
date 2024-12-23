@@ -15,15 +15,17 @@ sidebar.border_color = preferences.theme.primary_foreground
 sidebar.shape = function(cr, width, height)
 	gears.shape.rounded_rect(cr, width, height, 15)
 end
-awful.placement.top_left(sidebar,
-	{ honor_workarea = true, margins = { left = -300, top = preferences.theme.default_margin } })
+awful.placement.top_left(sidebar, {
+	honor_workarea = true,
+	margins = { left = -300, top = preferences.theme.default_margin }
+})
 
 --- Offset from this month, from pressing the arrows
 local month_override = 0
 
 local is_moving = false
 
-function sidebar:refresh_numbers()
+function sidebar:refresh()
 	-- Name
 	local name = wibox.widget.textbox()
 	name.markup = ("<b>%s</b>"):format(preferences.name)
@@ -205,7 +207,7 @@ function sidebar:refresh_numbers()
 	calendar_left.font = "OpenSans 30"
 	calendar_left:connect_signal("button::press", function()
 		month_override = month_override - 1
-		sidebar:refresh_numbers()
+		sidebar:refresh()
 	end)
 
 	local calendar_right = wibox.widget.textbox()
@@ -214,7 +216,7 @@ function sidebar:refresh_numbers()
 	calendar_right.align = "right"
 	calendar_right:connect_signal("button::press", function()
 		month_override = month_override + 1
-		sidebar:refresh_numbers()
+		sidebar:refresh()
 	end)
 
 	-- Battery meter
@@ -271,10 +273,10 @@ function sidebar:refresh_numbers()
 	end)
 
 	-- Calendar widget
-	local calendar_icon = wibox.widget.textclock("󰎈")
+	local calendar_icon = wibox.widget.textclock("")
 	calendar_icon.font = "OpenSans 32"
 	calendar_icon:connect_signal("button::press", function()
-		awful.spawn(preferences.apps.music)
+		awful.spawn(preferences.apps.calendar)
 		sidebar:toggle()
 	end)
 
@@ -394,7 +396,7 @@ function sidebar:toggle()
 	)
 	if not self.visible then
 		self.visible = true
-		sidebar:refresh_numbers()
+		sidebar:refresh()
 		slide_in()
 	else
 		slide_out()
