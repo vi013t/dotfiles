@@ -2,6 +2,7 @@ local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
 local preferences = require("preferences")
+local system = require("misc.system")
 
 --- The brightness widget. This is the little bar that appears when you change the screen's
 --- brightness.
@@ -16,11 +17,11 @@ awful.placement.top_right(
 )
 
 function brightness_bar:refresh_numbers()
-	local brightness = tonumber(io.popen("brightnessctl get"):read("a"))
-	local max_brightness = tonumber(io.popen("brightnessctl max"):read("a"))
+	local brightness = system.brightness.amount()
+	local max_brightness = system.brightness.max()
 	local brightness_percent = brightness / max_brightness
 
-	local brightness_icon = wibox.widget.textclock("󰃠" .. "    ")
+	local brightness_icon = wibox.widget.texbox("󰃠" .. "    ")
 	brightness_icon.font = "OpenSans 20"
 
 	local brightness_widget = wibox.widget.slider({
@@ -46,7 +47,7 @@ function brightness_bar:refresh_numbers()
 		forced_width = 300,
 	})
 
-	local brightness_text = wibox.widget.textclock("    " .. tostring(brightness) .. "%%")
+	local brightness_text = wibox.widget.texbox("    " .. tostring(brightness) .. "%%")
 	brightness_text.font = "OpenSans 20"
 	brightness_text.align = "center"
 

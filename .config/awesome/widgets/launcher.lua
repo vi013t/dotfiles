@@ -59,15 +59,16 @@ awful.spawn.easy_async_with_shell("ls /usr/share/applications -1", function(appl
 	end
 end)
 
-local function levenshtein(a, b)
+local function distance_between(a, b)
 	a = a:lower()
 	b = b:lower()
 
 	if a == b then
-		return -2
+		return 0
 	end
+
 	if b:sub(1, #a) == a then
-		return -1
+		return 1
 	end
 
 	local dummy
@@ -103,48 +104,14 @@ local function levenshtein(a, b)
 	return v0[n]
 end
 
-local app_widgets
-
-function launcher:refresh_numbers()
-	app_widgets = { layout = wibox.layout.fixed.vertical }
-
-	for _, app in ipairs(apps) do
-		local icon_widget = wibox.widget.imagebox(app.icon)
-		icon_widget.forced_width = 70
-		icon_widget.forced_height = 70
-
-		local name_widget = wibox.widget.textbox()
-		name_widget.markup = ('<span color="%s">%s</span>'):format(preferences.theme.primary_foreground, app.name)
-		name_widget.font = "OpenSans 20"
-
-		local app_widget = {
-			{
-				icon_widget,
-				widget = wibox.container.margin,
-				top = 15,
-				left = 15,
-				right = 15,
-				bottom = 15,
-			},
-			name_widget,
-			layout = wibox.layout.fixed.horizontal,
-		}
-		table.insert(app_widgets, app_widget)
-	end
-
-	launcher:setup({
-		{
-			app_widgets,
-			widget = wibox.container.background,
-			clip = true,
-			spacing = 25,
-			layout = wibox.layout.fixed.vertical,
-		},
-		layout = wibox.layout.align.vertical,
-	})
-end
-
+--- Sorts the launcher's programs by the given search text, showing closest
+--- matches first.
+---
+---@param search_text string The program being searched
+---
+---@return nil
 function launcher:sort(search_text)
+	-- Sort programs by search text
 	local sorted = {}
 	for _, app in ipairs(apps) do
 		table.insert(sorted, app)
@@ -152,45 +119,51 @@ function launcher:sort(search_text)
 	table.sort(sorted, function(a, b)
 		local a_text = a.name
 		local b_text = b.name
-		local a_distance = levenshtein(a_text, search_text)
-		local b_distance = levenshtein(b_text, search_text)
+		local a_distance = distance_between(a_text, search_text)
+		local b_distance = distance_between(b_text, search_text)
 		return a_distance < b_distance
 	end)
-
 	launcher.apps = sorted
-
 	local sorted_widgets = { layout = wibox.layout.fixed.vertical }
 
+	-- Add program result widgets
 	for _, app in ipairs(sorted) do
+		-- Program icon
 		local icon_widget = wibox.widget.imagebox(app.icon)
 		icon_widget.forced_width = 70
 		icon_widget.forced_height = 70
 
+		-- Program name
 		local name_widget = wibox.widget.textbox()
 		name_widget.markup = ('<span color="%s">%s</span>'):format(preferences.theme.primary_foreground, app.name)
 		name_widget.font = "OpenSans 20"
 
+		-- Composite widget
 		local app_widget = {
+			layout = wibox.layout.fixed.horizontal,
 			{
-				icon_widget,
 				widget = wibox.container.margin,
 				top = 15,
 				left = 15,
 				right = 15,
 				bottom = 15,
+				icon_widget,
 			},
 			name_widget,
-			layout = wibox.layout.fixed.horizontal,
 		}
+
+		-- Add it
 		table.insert(sorted_widgets, app_widget)
 	end
 
+	-- Highlight first entry
 	sorted_widgets[1] = {
 		sorted_widgets[1],
 		widget = wibox.container.background,
 		bg = "#2C2C4C",
 	}
 
+	-- Add the widgets to the launcher
 	launcher:setup({
 		{
 			sorted_widgets,
@@ -203,6 +176,7 @@ function launcher:sort(search_text)
 	})
 end
 
+--- Toggles the launcher widget, refreshing if necessary.
 function launcher:toggle()
 	if self.visible then
 		self:hide()
@@ -211,15 +185,18 @@ function launcher:toggle()
 	end
 end
 
+--- Shows the launcher widget. It's refreshed to be updated with what's being
+--- searched.
 function launcher:show()
 	self.visible = true
-	launcher:refresh_numbers()
 end
 
+--- Hides the launcher widget.
 function launcher:hide()
 	self.visible = false
 end
 
+-- Return the widget
 return {
 	widget = launcher,
 }

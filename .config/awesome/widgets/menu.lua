@@ -3,6 +3,7 @@ local awful = require("awful")
 local gears = require("gears")
 local preferences = require("preferences")
 local actions = require("misc.actions")
+local system = require("misc.system")
 
 local public = {}
 
@@ -146,9 +147,9 @@ function public.setup(launcher)
 		}
 
 		-- Volume widget
-		local volume = tonumber(io.popen("pamixer --get-volume"):read("a"))
+		local volume = system.volume.amount()
 		local volume_percent = volume / 100
-		local volume_icon = wibox.widget.textclock("    " .. (volume > 0 and "󰕾" or "󰝟") .. "    ")
+		local volume_icon = wibox.widget.textbox("    " .. (volume > 0 and "󰕾" or "󰝟") .. "    ")
 		volume_icon.font = "OpenSans 20"
 		local volume_widget = wibox.widget.slider({
 			maximum = 100,
@@ -172,15 +173,15 @@ function public.setup(launcher)
 			bar_shape = gears.shape.rounded_bar,
 			forced_width = 300,
 		})
-		local volume_text = wibox.widget.textclock("    " .. tostring(volume) .. "%%")
+		local volume_text = wibox.widget.textbox("    " .. tostring(volume) .. "%")
 		volume_text.font = "OpenSans 20"
 		volume_text.align = "center"
 
 		-- Brightness widget
-		local brightness = tonumber(io.popen("brightnessctl get"):read("a"))
-		local max_brightness = tonumber(io.popen("brightnessctl max"):read("a"))
+		local brightness = system.brightness.amount()
+		local max_brightness = system.brightness.max()
 		local brightness_percent = brightness / max_brightness
-		local brightness_icon = wibox.widget.textclock("    " .. "󰃠" .. "    ")
+		local brightness_icon = wibox.widget.textbox("    " .. "󰃠" .. "    ")
 		brightness_icon.font = "OpenSans 20"
 		local brightness_widget = wibox.widget.slider({
 			maximum = max_brightness,
@@ -204,7 +205,7 @@ function public.setup(launcher)
 			bar_shape = gears.shape.rounded_bar,
 			forced_width = 300,
 		})
-		local brightness_text = wibox.widget.textclock("    " .. tostring(math.floor(brightness_percent * 100)) .. "%%")
+		local brightness_text = wibox.widget.textbox("    " .. tostring(math.floor(brightness_percent * 100)) .. "%")
 		brightness_text.font = "OpenSans 20"
 		brightness_text.align = "center"
 

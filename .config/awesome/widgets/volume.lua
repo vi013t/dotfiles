@@ -2,6 +2,7 @@ local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
 local preferences = require("preferences")
+local system = require("misc.system")
 
 -- Main volume bar widget
 local volume_bar = wibox({ visible = false, ontop = true, type = "dock", screen = screen.primary })
@@ -13,11 +14,11 @@ awful.placement.top_right(volume_bar,
 
 function volume_bar:refresh_numbers()
 	-- Number
-	local volume = tonumber(io.popen("pamixer --get-volume"):read("a"))
+	local volume = system.volume.amount()
 	local volume_percent = volume / 100
 
 	-- Icon
-	local volume_icon = wibox.widget.textclock((volume > 0 and "󰕾" or "󰝟") .. "    ")
+	local volume_icon = wibox.widget.textbox((volume > 0 and "󰕾" or "󰝟") .. "    ")
 	volume_icon.font = "OpenSans 20"
 
 	-- Slider
@@ -45,7 +46,7 @@ function volume_bar:refresh_numbers()
 	})
 
 	-- Text
-	local volume_text = wibox.widget.textclock("    " .. tostring(volume) .. "%%")
+	local volume_text = wibox.widget.textbox("    " .. tostring(volume) .. "%%")
 	volume_text.font = "OpenSans 20"
 	volume_text.align = "center"
 

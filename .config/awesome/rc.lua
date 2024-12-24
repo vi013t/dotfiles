@@ -4,13 +4,12 @@ AwesomeWM configuration
 
 --]]
 
-pcall(require, "luarocks.loader") -- Check luarocks packages if luarocks is installed
+-- Check luarocks packages if luarocks is installed
+pcall(require, "luarocks.loader")
 
 -- Standard awesome libraries
 local gears = require("gears")
 local awful = require("awful")
-local beautiful = require("beautiful") -- Theme handling library
-local menubar = require("menubar")
 require("awful.autofocus")
 require("awful.hotkeys_popup.keys")
 
@@ -21,6 +20,7 @@ local preferences = require("preferences")
 require("misc.startup")
 
 -- Initialize theme
+local beautiful = require("beautiful")
 beautiful.init(os.getenv("HOME") .. "/.config/awesome/misc/theme.lua")
 
 -- Initialize widgets
@@ -57,6 +57,7 @@ awful.layout.layouts = {
 }
 
 -- Menubar configuration
+local menubar = require("menubar")
 menubar.utils.terminal = preferences.apps.terminal -- Set the terminal for applications that require it
 
 --- Sets the wallpaper to the given file.
@@ -78,9 +79,9 @@ awful.screen.connect_for_each_screen(function(s)
 end)
 
 -- Set keys
---root.buttons(gears.table.join(awful.button({}, 4, awful.tag.viewnext), awful.button({}, 5, awful.tag.viewprev)))
 root.keys(keys.globalkeys)
 
+-- Window styling such as titlebars
 require("misc.window")
 
 -- Signal function to execute when a new client appears.

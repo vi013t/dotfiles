@@ -3,11 +3,16 @@ local awful = require("awful")
 local gears = require("gears")
 local preferences = require("preferences")
 
-local tags_widget = wibox({ visible = false, ontop = true, type = "popup_menu", screen = screen.primary })
-tags_widget.width = 600
-tags_widget.height = 100
-tags_widget.visible = true
-tags_widget.bg = "#ff000000"
+-- Tag widget
+local tags_widget = wibox({
+	visible = false,
+	ontop = true,
+	type = "popup_menu",
+	screen = screen.primary,
+	width = 600,
+	height = 100,
+	bg = "#ff000000",
+})
 
 awful.placement.align(tags_widget, {
 	position = "top",
@@ -110,17 +115,17 @@ end
 
 function tags_widget:toggle()
 	if not self.visible then
-		self:open()
+		self:show()
 	else
-		self:close()
+		self:hide()
 	end
 end
 
-function tags_widget:close()
+function tags_widget:hide()
 	slide_out()
 end
 
-function tags_widget:open()
+function tags_widget:show()
 	self.visible = true
 	self:refresh_numbers()
 	slide_in()

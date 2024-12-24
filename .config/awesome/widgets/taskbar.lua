@@ -78,20 +78,19 @@ function taskbar:refresh()
 	clock.font = "OpenSans 15"
 	clock.align = "center"
 
-	local battery = wibox.widget.textbox(system.battery:get_icon() .. " " .. system.battery:percent() .. "%")
+	-- Battery widget
+	local battery = wibox.widget.textbox("")
 	battery.font = "OpenSans 16"
 	battery.align = "center"
+	system.battery.keep_updated(battery, function(percent, icon) return icon .. " " .. percent .. "%" end)
 
-	local volume = tonumber(io.popen("pamixer --get-volume"):read("a"))
+	-- Volume widget
+	local volume = system.volume.amount()
 	local volume_widget = wibox.widget.textbox("󰕾 " .. tostring(volume) .. "%")
 	volume_widget.font = "OpenSans 16"
 	awful.widget.watch("pamixer --get-volume", 1, function(widget, stdout)
 		widget:set_text("󰕾 " .. stdout:gsub("\n+$", "") .. "%")
 	end, volume_widget)
-
-	local wifi = wibox.widget.textbox("󰖩 " .. system.wifi:name())
-	wifi.font = "OpenSans 16"
-	wifi.align = "center"
 
 	clients = { layout = wibox.layout.fixed.horizontal }
 
@@ -314,6 +313,10 @@ function taskbar:refresh()
 		end
 	end
 
+	local wifi = wibox.widget.textbox("")
+	wifi.font = "OpenSans 20"
+	system.wifi.keep_updated(wifi, function(_, icon) return icon end)
+
 	-- Set up the taskbar
 	taskbar:setup({
 		layout = wibox.layout.stack,
@@ -339,17 +342,25 @@ function taskbar:refresh()
 
 		-- Right widgets
 		{
-			{
-				{
-					clock,
-					widget = wibox.container.margin,
-					top = 6,
-				},
-				date,
-				layout = wibox.layout.fixed.vertical,
-			},
 			widget = wibox.container.margin,
-			left = system.screen.width() - 64
+			left = system.screen.width() - 110,
+			{
+				layout = wibox.layout.fixed.horizontal,
+				{
+					widget = wibox.container.margin,
+					right = 20,
+					wifi,
+				},
+				{
+					layout = wibox.layout.fixed.vertical,
+					{
+						widget = wibox.container.margin,
+						top = 6,
+						clock,
+					},
+					date,
+				},
+			}
 		},
 	})
 end

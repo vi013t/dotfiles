@@ -45,10 +45,10 @@ function sidebar:refresh()
 	end
 
 	-- Wifi
-	local wifi = wibox.widget.textbox()
-	wifi.markup = ('<span color="#DDDDDD">%s</span>'):format("󰖩  " .. io.popen("iwgetid -r"):read("a"):gsub("\n$", ""))
+	local wifi = wibox.widget.textbox("")
 	wifi.align = "center"
 	wifi.font = "OpenSans 20"
+	system.wifi.keep_updated(wifi, function(wifi_name, icon) return icon .. "  " .. wifi_name end)
 
 	-- Calendar
 	local today = os.date("*t")
@@ -220,11 +220,12 @@ function sidebar:refresh()
 	end)
 
 	-- Battery meter
-	local battery_icon = wibox.widget.textclock("     " .. system.battery:get_icon() .. "")
+	local battery_icon = wibox.widget.textbox("")
+	system.battery.keep_updated(battery_icon, function(_, icon) return "     " .. icon end)
 	battery_icon.font = "OpenSans 20"
-	local battery = wibox.widget({
+	local battery_slider = wibox.widget({
 		max_value = 100,
-		value = system.battery:percent(),
+		value = system.battery.percent(),
 		forced_height = 20,
 		forced_width = 300,
 		color = preferences.theme.primary_foreground,
@@ -234,14 +235,15 @@ function sidebar:refresh()
 		widget = wibox.widget.progressbar,
 		bar_shape = gears.shape.rounded_bar,
 	})
-	local battery_text = wibox.widget.textclock(tostring(system.battery:percent() .. "%%"))
+	local battery_text = wibox.widget.textbox("")
 	battery_text.font = "OpenSans 15"
+	system.battery.keep_updated(battery_text, function(percent) return percent .. "%" end)
 
 	-- Disk Usage meter
-	local disk_icon = wibox.widget.textclock("    ")
+	local disk_icon = wibox.widget.textbox("    ")
 	disk_icon.font = "OpenSans 20"
-	local disk_usage = tonumber(io.popen("df -H"):read("a"):match("(%d+)%%%s+/home"))
-	local disk_usage_widget = wibox.widget({
+	local disk_usage = math.floor(system.disk.home_usage() * 100)
+	local disk_usage_slider = wibox.widget({
 		max_value = 100,
 		value = disk_usage,
 		forced_height = 20,
@@ -253,11 +255,11 @@ function sidebar:refresh()
 		widget = wibox.widget.progressbar,
 		bar_shape = gears.shape.rounded_bar,
 	})
-	local disk_text = wibox.widget.textclock(tostring(disk_usage) .. "%%")
+	local disk_text = wibox.widget.textbox(tostring(disk_usage) .. "%")
 	disk_text.font = "OpenSans 15"
 
 	-- Calculator widget
-	local calculator_icon = wibox.widget.textclock("󰃬")
+	local calculator_icon = wibox.widget.textbox("󰃬")
 	calculator_icon.font = "OpenSans 32"
 	calculator_icon:connect_signal("button::press", function()
 		awful.spawn(preferences.apps.calculator)
@@ -265,7 +267,7 @@ function sidebar:refresh()
 	end)
 
 	-- Storage widget
-	local files_icon = wibox.widget.textclock("")
+	local files_icon = wibox.widget.textbox("")
 	files_icon.font = "OpenSans 32"
 	files_icon:connect_signal("button::press", function()
 		awful.spawn(preferences.apps.file_explorer)
@@ -273,7 +275,7 @@ function sidebar:refresh()
 	end)
 
 	-- Calendar widget
-	local calendar_icon = wibox.widget.textclock("")
+	local calendar_icon = wibox.widget.textbox("")
 	calendar_icon.font = "OpenSans 32"
 	calendar_icon:connect_signal("button::press", function()
 		awful.spawn(preferences.apps.calendar)
@@ -281,7 +283,7 @@ function sidebar:refresh()
 	end)
 
 	-- Mail widget
-	local mail_icon = wibox.widget.textclock("󰇮")
+	local mail_icon = wibox.widget.textbox("󰇮")
 	mail_icon.font = "OpenSans 32"
 
 	-- App widgets
@@ -322,11 +324,11 @@ function sidebar:refresh()
 				{
 					{
 						battery_icon,
-						battery,
+						battery_slider,
 						battery_text,
 						layout = wibox.layout.fixed.horizontal,
 					},
-					{ disk_icon, disk_usage_widget, disk_text, layout = wibox.layout.fixed.horizontal },
+					{ disk_icon, disk_usage_slider, disk_text, layout = wibox.layout.fixed.horizontal },
 					layout = wibox.layout.fixed.vertical,
 					spacing = 25,
 				},

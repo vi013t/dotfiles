@@ -24,7 +24,7 @@ end
 ---
 ---@param widgets any The widgets.
 local function on_windows_key_press(widgets)
-	widgets.tags:open()
+	widgets.tags:show()
 end
 
 --- Called when the windows key is released. Closes the tag and alt-tab widgets,
@@ -32,7 +32,7 @@ end
 ---
 ---@param widgets any The widgets.
 local function on_windows_key_released(widgets)
-	widgets.tags:close()
+	widgets.tags:hide()
 	widgets.alttab:hide()
 	if not other_key_was_pressed then
 		widgets.menu:toggle()
@@ -68,7 +68,7 @@ function public.setup(widgets)
 		awful.key({ windows }, windows_key_code, function() end, function() on_windows_key_released(widgets) end),
 		awful.key({ windows }, "Tab", f(function()
 			widgets.alttab:cycle()
-			widgets.tags:close()
+			widgets.tags:hide()
 		end)),
 		table.unpack(global_keys)
 	)
