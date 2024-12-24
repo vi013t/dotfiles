@@ -12,6 +12,8 @@
 # Config
 !.config
 .config/*
+!.docs/
+!.docs/**/*
 !.config/VSCodium
 !.config/VSCodium/User
 !.config/VSCodium/User/settings.json
