@@ -1,3 +1,3 @@
 # Neovim Configuration
 
-![neovim demo](../../.docs/nvim-demo.png)
+![neovim demo](./.docs/demo.png)
