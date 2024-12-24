@@ -24,12 +24,6 @@ awful.placement.top_right(launcher, {
 local apps = {}
 
 local function get_app_icon(app_name, icon_name, command)
-	local override = preferences.icon_overrides[app_name]
-	if override then
-		table.insert(apps, { name = app_name, icon = override, command = command })
-		return
-	end
-
 	-- Find the path to the app icon:
 	--
 	-- First, we run `find /usr/share/icons -name <APPNAME>.png`. This will list all icons with the given app name.
