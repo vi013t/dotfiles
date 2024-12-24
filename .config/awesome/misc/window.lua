@@ -2,7 +2,7 @@ local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
-
+local preferences = require("preferences")
 local keys = require("misc.keys")
 
 local clientbuttons = gears.table.join(
@@ -92,7 +92,7 @@ local function close_button(c)
 			left = 5,
 		},
 		widget = wibox.container.background,
-		bg = "#FF4444",
+		bg = preferences.theme.close_button,
 		shape = gears.shape.circle,
 	})
 
@@ -104,10 +104,7 @@ local function close_button(c)
 end
 
 local function maximize_button(c)
-	local color = "#00FF00"
-	if c.maximized then
-		color = "#FFFF00"
-	end
+	local color = preferences.theme.maximize_button
 	local widget = wibox.widget({
 		{
 			wibox.widget.textbox(" "),
@@ -131,6 +128,29 @@ local function maximize_button(c)
 		c:raise()
 		c:emit_signal("request::titlebars")
 		awful.placement.centered(c, { honor_workarea = true })
+	end)
+
+	return widget
+end
+
+local function minimize_button(c)
+	local color = preferences.theme.minimize_button
+	local widget = wibox.widget({
+		{
+			wibox.widget.textbox(" "),
+			widget = wibox.container.margin,
+			top = 5,
+			bottom = 5,
+			right = 5,
+			left = 5,
+		},
+		widget = wibox.container.background,
+		bg = color,
+		shape = gears.shape.circle,
+	})
+
+	widget:connect_signal("button::press", function()
+		c.minimized = true
 	end)
 
 	return widget
@@ -171,34 +191,6 @@ local function tag_button(c, tag_number)
 	}
 end
 
-local function layout_widget()
-	local current_tag = awful.tag.selected(1)
-
-	local current_layout = tostring(current_tag.layout.name)
-	local current_layout_color = "#FFFFFF"
-
-	if current_layout == "tile" then
-		current_layout = "▦"
-		current_layout_color = "#00FFAA"
-	elseif current_layout == "floating" then
-		current_layout = "󰅟"
-		current_layout_color = "#00AAFF"
-	end
-
-	local layout = wibox.widget.textbox(('<span color="%s">%s</span>'):format(current_layout_color, current_layout))
-	layout.font = "OpenSans 15"
-
-	layout:connect_signal("button::press", function()
-		awful.layout.inc(1)
-
-		for _, c in ipairs(client.get()) do
-			c:emit_signal("request::titlebars")
-		end
-	end)
-
-	return layout
-end
-
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
 	local buttons = gears.table.join(
@@ -230,10 +222,10 @@ client.connect_signal("request::titlebars", function(c)
 
 		-- Middle
 		{
-			{
-				align = "center",
-				widget = awful.titlebar.widget.titlewidget(c),
-			},
+			-- {
+			-- 	align = "center",
+			-- 	widget = awful.titlebar.widget.titlewidget(c),
+			-- },
 			buttons = buttons,
 			layout = wibox.layout.flex.horizontal,
 		},
@@ -241,8 +233,8 @@ client.connect_signal("request::titlebars", function(c)
 		-- Right
 		{
 			{
-				layout_widget(),
 				maximize_button(c),
+				minimize_button(c),
 				close_button(c),
 				layout = wibox.layout.fixed.horizontal(),
 				spacing = 10,

@@ -12,10 +12,24 @@ export BUN_INSTALL="$HOME/.bun" # Set Bun install location
 export MANPAGER='nvim +Man!' # Set Neovim as the editor for man pages
 export MANWIDTH=999 # Set the max width for manpages
 export TERM="wezterm" # Set the terminal type: $ curl https://raw.githubusercontent.com/wez/wezterm/master/termwiz/data/wezterm.terminfo | tic -x -
-export EDITOR="nvim"
+export EDITOR="nvim" # Editor for things like cfg
 
 # PATH variables
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Aliases
+alias i="sudo pacman -S" # Install a package
+alias img="wezterm imgcat" # View images with Wezterm
+alias ls='ls --color=auto' # Add colors to ls
+alias grep='grep --color=auto' # Add colors to grep
+alias neofetch="neofetch --iterm2 ~/Pictures/arch.png --size 400"
+alias code="codium . -r"
+
+# Session Information
+alias x11?="loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}' | cut -d'=' -f2"
+alias wayland?="loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}' | cut -d'=' -f2"
+alias de?="echo $DESKTOP_SESSION"
+alias battery?="cat /sys/class/power_supply/BAT0/capacity"
 
 # Wrapper around joshuto for preivews and exiting into cwd with q
 function files() {
@@ -40,41 +54,19 @@ function files() {
 	esac
 }
 
-# _cfg() {
-# 	local cur=${COMP_WORDS[COMP_CWORD]}
-# 	COMPREPLY=( $(compgen -W "bash lotus nvim bash stylua wezterm" -- $cur) )
-# }
-# complete -F _cfg cfg
-
-# Aliases
-alias i="sudo pacman -S" # Install a package
-alias img="wezterm imgcat" # View images with Wezterm
-alias ls='ls --color=auto' # Add colors to ls
-alias grep='grep --color=auto' # Add colors to grep
-alias neofetch="neofetch --iterm2 ~/Pictures/arch.png --size 400"
-alias code="codium . -r"
-
 # Update arch stuff
 function update() {
 	sudo pacman -Syu --noconfirm # Update official packages
 	yes | yay -Syu # Update AUR packages 
-	paccache -rk1 # Remove older package versions
-	sudo paccache -ruk0 # Remove uninstalled packages
-	sudo pacman -Qdtq | sudo pacman -Rns - # Remove orphans
+	clean # Clean up
 	rm ~/go -rf # Remove go folder
 }
 
 # Clean old packages
 function clean() {
-	paccache -rk1
-	sudo paccache -ruk0
+	sudo paccache -ruk0 # Remove old package versions
 	sudo pacman -Qdtq | ifne sudo pacman -Rns - # Remove orphans
 }
-
-# Session Information
-alias x11?="loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}' | cut -d'=' -f2"
-alias wayland?="loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}' | cut -d'=' -f2"
-alias de?="echo $DESKTOP_SESSION"
 
 # Compile .ll (LLVM) files to native executable
 function llvmc() {

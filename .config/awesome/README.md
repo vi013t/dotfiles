@@ -37,6 +37,7 @@ If you prefer a more fine-tuned installation, you can install the prerequisites 
 This configuration requires the following programs to be installed:
 
 - [coreutils](https://www.gnu.org/software/coreutils/) - For various required utilities 
+- [fontconfig](https://www.freedesktop.org/wiki/Software/fontconfig/) - For font installation
 - [wireless_tools](https://hewlettpackard.github.io/wireless-tools/Tools.html) - For fetching wifi information
 - [picom](https://github.com/yshui/picom) - For compositing
 - [flameshot](https://flameshot.org/) - For screenshotting
@@ -50,7 +51,7 @@ This configuration requires the following programs to be installed:
 On Arch, you can install them like so:
 
 ```bash
-sudo pacman -S coreutils wireless_tools picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg ripgrep
+sudo pacman -S coreutils fontconfig wireless_tools picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg ripgrep
 ```
 
 This configuration also requires Rust. If you don't have it installed, install it:

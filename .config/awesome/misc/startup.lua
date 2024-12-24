@@ -30,8 +30,8 @@ do
 end
 
 -- Startup programs
-awful.spawn.with_shell("picom -b --backend glx --config ~/.config/picom/picom.conf")             -- Compositor
-awful.spawn.with_shell("feh --no-fehbg --bg-fill ~/.config/awesome/assets/images/wallpaper.jpg") -- Wallpaper
+awful.spawn.easy_async("picom -b --backend glx --config ~/.config/picom/picom.conf")             -- Compositor
+awful.spawn.easy_async("feh --no-fehbg --bg-fill ~/.config/awesome/assets/images/wallpaper.jpg") -- Wallpaper
 
 -- Enable touchpad tapping
 awful.spawn.easy_async_with_shell("xinput list --name-only | grep -i touchpad --color=none", function(touchpad)
@@ -41,6 +41,6 @@ awful.spawn.easy_async_with_shell("xinput list --name-only | grep -i touchpad --
 			title = "Enabling Touchpad",
 			text = "Enabling tapping for touchpad \"" .. touchpad .. "\""
 		})
-		awful.spawn.with_shell(('xinput set-prop "%s" "libinput Tapping Enabled" 1'):format(touchpad))
+		awful.spawn.easy_async(('xinput set-prop "%s" "libinput Tapping Enabled" 1'):format(touchpad))
 	end
 end)

@@ -47,7 +47,7 @@ local function get_app_icon(app_name, icon_name, command)
 end
 
 -- Register applications
-awful.spawn.easy_async_with_shell("ls /usr/share/applications -1", function(applications)
+awful.spawn.easy_async("ls /usr/share/applications -1", function(applications)
 	for app in applications:gmatch("([^\n]+)") do
 		local file = assert(io.open("/usr/share/applications/" .. app, "r"))
 		local info = file:read("*a")
@@ -157,7 +157,7 @@ function launcher:sort(search_text)
 		-- Program name
 		local name_widget = wibox.widget.textbox()
 		name_widget.markup = ('<span color="%s">%s</span>'):format(preferences.theme.primary_foreground, app.name)
-		name_widget.font = "OpenSans 20"
+		name_widget.font = preferences.theme.font_size(20)
 
 		-- Composite widget
 		local app_widget = {
@@ -197,7 +197,7 @@ function launcher:sort(search_text)
 	})
 end
 
---- Toggles the launcher widget, refreshing if necessary.
+--- Toggles the launcher widget
 function launcher:toggle()
 	if self.visible then
 		self:hide()
@@ -206,8 +206,7 @@ function launcher:toggle()
 	end
 end
 
---- Shows the launcher widget. It's refreshed to be updated with what's being
---- searched.
+--- Shows the launcher widget.
 function launcher:show()
 	self.visible = true
 end

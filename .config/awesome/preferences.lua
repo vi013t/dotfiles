@@ -118,23 +118,56 @@ preferences.icon_overrides = {
 -- Colors and styling
 preferences.theme = {
 
-	-- THe primary background color on widgets
+	--- The primary background color on widgets
 	primary_background = "#0E0C12",
 
-	-- The primary color of text and borders on widgets
+	--- The primary color of text and borders on widgets
 	primary_foreground = "#9280FF",
 
-	-- The secondary foreground color for slider backgrounds and such on widgets
-	secondary_foreground = "#50496B",
+	--- The secondary foreground color for dimmed text
+	secondary_foreground = "#666688",
 
-	-- The background color of the taskbar
+	--- The secondary background color for slider backgrounds and such on widgets
+	secondary_background = "#312d3d",
+
+	--- The color for the maximize button on window titlebars.
+	maximize_button = "#AAFF88",
+
+	--- The color for the minimize button on window titlebars.
+	minimize_button = "#FFFF88",
+
+	--- The color for the close button on window titlebars.
+	close_button = "#FF8888",
+
+	--- The background color of the taskbar
 	taskbar_background = "#111122",
 
-	-- The position of the taskbar
+	--- The position of the taskbar
 	taskbar_position = "bottom",
 
-	-- The margin between widgets and the edge of the screen
+	--- The margin between widgets and the edge of the screen
 	default_margin = 12,
+
+	--- The font to use when displaying text. Note that different fonts can seemingly
+	--- display at different sizes and with different spacing; Changing this may require
+	--- manually changing some font sizes and spacing numbers throughout the config.
+	font = "SF Pro Display",
+
+	--- The border width for widgets and windows,
+	border_width = 2,
+
+	--- The border color for widgets and windows.
+	border_color = "#9280FF",
+
+	--- Returns a font using the default font family specified by `preferences.theme.font`, using the
+	--- given number as the font size.
+	---
+	---@param size integer The font size, in pixels.
+	---
+	---@return string font The font with the given size.
+	font_size = function(size)
+		return preferences.theme.font .. " " .. tostring(size)
+	end,
 }
 
 return preferences

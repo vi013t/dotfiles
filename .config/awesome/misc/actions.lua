@@ -4,7 +4,6 @@ local system = require("misc.system")
 local actions = {}
 
 --- Returns a function that when called, will raise the volume by the given amount.
---- The menu and brightness volume will be refreshed.
 ---
 ---@param amount number The amount to raise the volume by.
 ---
@@ -12,7 +11,6 @@ local actions = {}
 function actions.raise_volume(amount)
 	return function(widgets)
 		awful.spawn.easy_async("pamixer --increase " .. amount, function()
-			widgets.menu:refresh_numbers()
 			widgets.volume:show()
 
 			-- NOTE: Preferences has to be imported here instead of at the top-level to avoid circular
@@ -30,7 +28,6 @@ function actions.raise_volume(amount)
 end
 
 --- Returns a function that when called, will lower the volume by the given amount.
---- The menu and brightness volume will be refreshed.
 ---
 ---@param amount number The amount to lower the volume by.
 ---
@@ -38,7 +35,6 @@ end
 function actions.lower_volume(amount)
 	return function(widgets)
 		awful.spawn.easy_async("pamixer --decrease " .. amount, function()
-			widgets.menu:refresh_numbers()
 			widgets.volume:show()
 
 			-- NOTE: Preferences has to be imported here instead of at the top-level to avoid circular
@@ -55,21 +51,18 @@ function actions.lower_volume(amount)
 	end
 end
 
---- Returns a function that when called, will mute the volume. The menu and volume
---- widgets will be refreshed.
+--- Returns a function that when called, will mute the volume.
 ---
 ---@return fun(widgets): nil function The function to run
 function actions.mute()
 	return function(widgets)
 		awful.spawn.easy_async("pamixer --set-volume 0", function()
-			widgets.menu:refresh_numbers()
 			widgets.volume:show()
 		end)
 	end
 end
 
 --- Returns a function that when called, will raise the brightness by the given amount.
---- The menu and brightness widgets will be refreshed.
 ---
 ---@param amount number The amount to lower the brightness by.
 ---
@@ -77,14 +70,12 @@ end
 function actions.raise_brightness(amount)
 	return function(widgets)
 		awful.spawn.easy_async("brightnessctl set +" .. tostring(amount) .. "%", function()
-			widgets.menu:refresh_numbers()
 			widgets.brightness:show()
 		end)
 	end
 end
 
 --- Returns a function that when called, will lower the brightness by the given amount.
---- The menu and brightness widgets will be refreshed.
 ---
 ---@param amount number The amount to lower the brightness by.
 ---
@@ -92,7 +83,6 @@ end
 function actions.lower_brightness(amount)
 	return function(widgets)
 		awful.spawn.easy_async("brightnessctl set " .. tostring(amount) .. "%-", function()
-			widgets.menu:refresh_numbers()
 			widgets.brightness:show()
 		end)
 	end
@@ -125,25 +115,21 @@ function actions.toggle_widget(widget_name)
 	end
 end
 
---- Returns a function that will open the next tag incrementally. The
---- tags widget will be refreshed.
+--- Returns a function that will open the next tag incrementally.
 ---
 ---@return fun(widgets): nil function The function to open the next tag.
 function actions.view_next_tag()
-	return function(widgets)
+	return function()
 		awful.tag.viewnext()
-		widgets.tags:refresh_numbers()
 	end
 end
 
---- Returns a function that will open the previous tag incrementally. The
---- tags widget will be refreshed.
+--- Returns a function that will open the previous tag incrementally.
 ---
 ---@return fun(widgets): nil function The function to open the previous tag.
 function actions.view_previous_tag()
-	return function(widgets)
+	return function()
 		awful.tag.viewprev()
-		widgets.tags:refresh_numbers()
 	end
 end
 
@@ -153,12 +139,11 @@ end
 ---
 --- @return fun(widgets): nil function The function that will view the given tag.
 function actions.view_tag(tag_number)
-	return function(widgets)
+	return function()
 		local screen = awful.screen.focused()
 		local tag = screen.tags[tag_number]
 		if tag then
 			tag:view_only()
-			widgets.tags:refresh_numbers()
 		end
 	end
 end
@@ -209,6 +194,12 @@ function actions.screenshot_section()
 	end
 end
 
+--- Returns a function that toggle wifi hiding. This makes it so that the name returned by
+--- `system.wifi.name()` is `"Hidden"` instead of the actual wifi name. This can be used
+--- for taking screenshots, for example, when you don't want to expose your wifi SSID
+--- publicly.
+---
+--- @return fun(): nil function The function to toggle wifi hiding.
 function actions.toggle_wifi_hiding()
 	return function()
 		system.wifi.toggle_hidden()

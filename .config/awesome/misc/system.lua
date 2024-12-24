@@ -1,4 +1,5 @@
 local awful = require("awful")
+local naughty = require("naughty")
 
 --- Information about the device, such as wifi information, battery information, etc.
 local system = {}
@@ -14,13 +15,21 @@ system.battery = {
 	---@param format nil | fun(percent: string, icon: string): string A function to format the output,
 	--- taking the battery percent and icon as arguments. If `nil`, the widget will be updated to just
 	--- show the percent number.
-	---
-	---@return nil
 	keep_updated = function(widget_to_watch, format)
-		awful.widget.watch("cat /sys/class/power_supply/BAT0/capacity", 1, function(widget, stdout)
-			local percent = tonumber(stdout:match("(%d+)"))
-			local icon = system.battery.icon(percent)
-			widget:set_text(format and format(tostring(percent), icon) or tostring(percent))
+		return awful.widget.watch("cat /sys/class/power_supply/BAT0/capacity", 1, function(widget, stdout)
+			local success, error_message = pcall(function()
+				local percent = tonumber(stdout:match("(%d+)"))
+				local icon = system.battery.icon(percent)
+				widget:set_text(format and format(tostring(percent), icon) or tostring(percent))
+			end)
+
+			if not success then
+				naughty.notify({
+					title = "Error updating battery",
+					text = tostring(error_message),
+					preset = naughty.config.presets.critical,
+				})
+			end
 		end, widget_to_watch)
 	end,
 
@@ -89,6 +98,7 @@ system.wifi = {
 	name = function()
 		local output = io.popen("iwgetid -r"):read("a"):gsub("\n$", "")
 		if output == "" then return nil end
+		if system.wifi.__is_hidden then return "Hidden" end
 		return output
 	end,
 
@@ -138,14 +148,22 @@ system.wifi = {
 	---@param format nil | fun(percent: string, icon: string): string A function to format the output,
 	--- taking the wifi name and icon as arguments. If `nil`, the widget will be updated to just
 	--- show the wifi name.
-	---
-	---@return nil
 	keep_updated = function(widget_to_watch, format)
-		awful.widget.watch("iwgetid -r", 1, function(widget, stdout)
-			local network_name = stdout:gsub("\n$", "")
-			if system.wifi.__is_hidden then network_name = "Hidden" end
-			local icon = system.wifi.icon()
-			widget:set_text(format and format(network_name, icon) or network_name)
+		return awful.widget.watch("iwgetid -r", 1, function(widget, stdout)
+			local success, error_message = pcall(function()
+				local network_name = stdout:gsub("\n$", "")
+				if system.wifi.__is_hidden then network_name = "Hidden" end
+				local icon = system.wifi.icon()
+				widget:set_text(format and format(network_name, icon) or network_name)
+			end)
+
+			if not success then
+				naughty.notify({
+					title = "Error updating wifi",
+					text = tostring(error_message),
+					preset = naughty.config.presets.critical,
+				})
+			end
 		end, widget_to_watch)
 	end,
 
@@ -208,7 +226,25 @@ system.volume = {
 	---@return number percent The system's current volume as a percent.
 	percent = function()
 		return system.volume.amount() / 100
-	end
+	end,
+
+	keep_updated_with = function(widget_to_watch, callback)
+		return awful.widget.watch("pamixer --get-volume", 0.1, function(_, stdout)
+			local success, error_message = pcall(function()
+				local output = tonumber(stdout)
+				callback(output)
+			end)
+
+			if not success then
+				naughty.notify({
+					title = "Error updating volume",
+					text = tostring(error_message),
+					preset = naughty.config.presets.critical,
+				})
+			end
+		end, widget_to_watch)
+	end,
+
 }
 
 --- Information about the system's brightness.
@@ -234,7 +270,138 @@ system.brightness = {
 	---@return number percent The current brightness percent.
 	percent = function()
 		return system.brightness.amount() / system.brightness.max()
-	end
+	end,
+
+	keep_updated_with = function(widget_to_watch, callback)
+		return awful.widget.watch("brightnessctl get", 0.1, function(_, stdout)
+			local success, error_message = pcall(function()
+				local output = tonumber(stdout)
+				callback(output)
+			end)
+
+			if not success then
+				naughty.notify({
+					title = "Error updating brightness",
+					text = tostring(error_message),
+					preset = naughty.config.presets.critical,
+				})
+			end
+		end, widget_to_watch)
+	end,
+}
+
+---@class Weather
+---@field condition string
+---@field condition_name string
+---@field condition_symbol string
+---@field humidity string
+---@field temperature string
+---@field wind string
+---@field location string
+---@field moon_phase string
+---@field moon_day string
+---@field precipitation string
+---@field pressure string
+---@field uv_index string
+---@field dawn string
+---@field sunrise string
+---@field zenith string
+---@field sunset string
+---@field dusk string
+---@field time string
+---@field timezone string
+
+system.weather = {
+
+	--- Returns the current weather, with the specified format.
+	---
+	--- The given format function should take a single weather table as arguments, which contains
+	--- formatting codes that can be used to format the output. For example:
+	---
+	--- ```lua
+	--- local weather = system.weather.get(function(weather)
+	---     return weather.temperature .. " with " .. weather.humidity
+	--- end)
+	--- ```
+	---
+	---@param format fun(weather: Weather): string The formatting function to use
+	get = function(format)
+		local codes = {
+			condition = "%c",
+			condition_name = "%C",
+			condition_symbol = "%x",
+			humidity = "%h",
+			temperature = "%f",
+			wind = "%w",
+			location = "%l",
+			moon_phase = "%m",
+			moon_day = "%M",
+			precipitation = "%p",
+			pressure = "%P",
+			uv_index = "%u",
+			dawn = "%D",
+			sunrise = "%S",
+			zenith = "%z",
+			sunset = "%s",
+			dusk = "%d",
+			time = "%T",
+			timezone = "%Z"
+		}
+
+		return io.popen('curl wttr.in/?format="' .. format(codes) .. '"'):read("a")
+	end,
+
+	--- Keeps a widget updated by setting its text to the current weather, with the given format.
+	---
+	--- The given format function should take a single weather table as arguments, which contains
+	--- formatting codes that can be used to format the output. For example:
+	---
+	--- ```lua
+	--- local weather = system.weather.keep_updated(weather_widget, function(weather)
+	---     return weather.temperature .. " with " .. weather.humidity
+	--- end)
+	--- ```
+	---
+	---@param format fun(weather: Weather): string The formatting function to use
+	keep_updated = function(widget_to_watch, format)
+		local codes = {
+			condition = "%c",
+			condition_name = "%C",
+			condition_symbol = "%x",
+			humidity = "%h",
+			temperature = "%t",
+			temperature_feels_like = "%f",
+			wind = "%w",
+			location = "%l",
+			moon_phase = "%m",
+			moon_day = "%M",
+			precipitation = "%p",
+			pressure = "%P",
+			uv_index = "%u",
+			dawn = "%D",
+			sunrise = "%S",
+			zenith = "%z",
+			sunset = "%s",
+			dusk = "%d",
+			time = "%T",
+			timezone = "%Z"
+		}
+
+		return awful.widget.watch('curl wttr.in/?format="' .. format(codes):gsub(" ", "%%20") .. '"', 1,
+			function(widget, stdout)
+				local success, error_message = pcall(function()
+					widget:set_text(stdout:gsub("\n$", ""):gsub("%+", ""))
+				end)
+
+				if not success then
+					naughty.notify({
+						title = "Error updating weather",
+						text = tostring(error_message),
+						preset = naughty.config.presets.critical,
+					})
+				end
+			end, widget_to_watch)
+	end,
 }
 
 return system

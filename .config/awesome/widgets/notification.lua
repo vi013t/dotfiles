@@ -16,7 +16,7 @@ naughty.config.defaults.implicit_timeout = 5
 naughty.config.defaults.margin = 25
 naughty.config.defaults.border_radius = 6
 naughty.config.defaults.bg = preferences.theme.primary_background
-naughty.config.defaults.font = "OpenSans 14"
+naughty.config.defaults.font = preferences.theme.font_size(14)
 naughty.config.defaults.icon_size = 60
 naughty.config.defaults.shape = function(cr, w, h)
 	gears.shape.rounded_rect(cr, w, h, 10)
@@ -70,6 +70,7 @@ awful.widget.watch("cat /sys/class/power_supply/BAT0/capacity", 1, function(_, s
 		naughty.notify({
 			title = "Battery",
 			text = "Warning: Battery is low (" .. stdout:gsub("\n$", "") .. "%)",
+			preset = naughty.config.presets.critical,
 		})
 		gave_20_warning = true
 	end
@@ -78,6 +79,7 @@ awful.widget.watch("cat /sys/class/power_supply/BAT0/capacity", 1, function(_, s
 		naughty.notify({
 			title = "Battery",
 			text = "Warning: Battery is critical (" .. stdout:gsub("\n$", "") .. "%)",
+			preset = naughty.config.presets.critical,
 		})
 		gave_10_warning = true
 	end

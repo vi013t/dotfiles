@@ -32,7 +32,7 @@ local function get_app_icon(app_name)
 	end
 
 	local ripgrep = ("rg -l --color=never --follow ^Exec=.*\\\\b%s\\\\b /usr/share/applications"):format(app_name)
-	awful.spawn.easy_async_with_shell(ripgrep,
+	awful.spawn.easy_async(ripgrep,
 		function(path)
 			path = path:match("([^\r\n]+)[\r\n]*$")
 			local file = assert(io.open(path, "r"))
@@ -71,23 +71,23 @@ end
 
 function taskbar:refresh()
 	local date = wibox.widget.textclock("%m/%d")
-	date.font = "OpenSans 15"
+	date.font = preferences.theme.font_size(15)
 	date.align = "center"
 
 	local clock = wibox.widget.textclock("%H:%M")
-	clock.font = "OpenSans 15"
+	clock.font = preferences.theme.font_size(15)
 	clock.align = "center"
 
 	-- Battery widget
 	local battery = wibox.widget.textbox("")
-	battery.font = "OpenSans 16"
+	battery.font = preferences.theme.font_size(16)
 	battery.align = "center"
-	system.battery.keep_updated(battery, function(percent, icon) return icon .. " " .. percent .. "%" end)
+	battery = system.battery.keep_updated(battery, function(percent, icon) return icon .. " " .. percent .. "%" end)
 
 	-- Volume widget
 	local volume = system.volume.amount()
 	local volume_widget = wibox.widget.textbox("󰕾 " .. tostring(volume) .. "%")
-	volume_widget.font = "OpenSans 16"
+	volume_widget.font = preferences.theme.font_size(16)
 	awful.widget.watch("pamixer --get-volume", 1, function(widget, stdout)
 		widget:set_text("󰕾 " .. stdout:gsub("\n+$", "") .. "%")
 	end, volume_widget)
@@ -314,8 +314,8 @@ function taskbar:refresh()
 	end
 
 	local wifi = wibox.widget.textbox("")
-	wifi.font = "OpenSans 20"
-	system.wifi.keep_updated(wifi, function(_, icon) return icon end)
+	wifi.font = preferences.theme.font_size(20)
+	wifi = system.wifi.keep_updated(wifi, function(_, icon) return icon end)
 
 	-- Set up the taskbar
 	taskbar:setup({
