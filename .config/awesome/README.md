@@ -53,6 +53,14 @@ On Arch, you can install them like so:
 sudo pacman -S coreutils wireless_tools picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg ripgrep
 ```
 
+This configuration also requires Rust. If you don't have it installed, install it:
+
+```bash
+sudo pacman -S rustup
+. "$HOME/.cargo/env"
+rustup default stable
+```
+
 The default programs that the configuration will try to use are as follows, which are also required unless you plan to change them:
 
 - [WezTerm](https://wezfurlong.org/wezterm/index.html) - Terminal

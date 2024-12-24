@@ -78,7 +78,7 @@ function public.setup(launcher)
 		date_widget.align = "center"
 
 		-- Profile picture widget
-		local profile = wibox.widget.imagebox(preferences.profile_picture)
+		local profile = wibox.widget.imagebox(preferences.assets.images.profile_picture)
 		profile.forcd_width = 200
 		profile.forced_height = 200
 		profile.clip_shape = function(cr, width, height)

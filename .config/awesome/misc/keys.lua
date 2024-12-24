@@ -2,8 +2,8 @@ local awful = require("awful")
 local gears = require("gears")
 local preferences = require("preferences")
 
-local public = {}
-public.modkey = "Mod4"
+local keys = {}
+keys.modkey = "Mod4"
 
 local other_key_was_pressed = false
 
@@ -41,8 +41,8 @@ local function on_windows_key_released(widgets)
 	end
 end
 
-function public.setup(widgets)
-	local windows = public.modkey
+function keys.setup(widgets)
+	local windows = keys.modkey
 	local windows_key_code = "#133"
 
 	local global_keys = gears.table.map(function(keybinding)
@@ -63,7 +63,7 @@ function public.setup(widgets)
 		return awful.key(mods, keybinding.key, f(function() keybinding.run(widgets) end), keybinding.on_release)
 	end, preferences.keys)
 
-	public.globalkeys = gears.table.join(
+	keys.globalkeys = gears.table.join(
 		awful.key({}, windows_key_code, function() on_windows_key_press(widgets) end, function() end),
 		awful.key({ windows }, windows_key_code, function() end, function() on_windows_key_released(widgets) end),
 		awful.key({ windows }, "Tab", f(function()
@@ -74,7 +74,7 @@ function public.setup(widgets)
 	)
 
 	-- Client keys (These generally use mod + ctrl)
-	public.clientkeys = gears.table.join(
+	keys.clientkeys = gears.table.join(
 		awful.key({ windows, "Control" }, "f", f(function(c) c.fullscreen = not c.fullscreen end)),
 		awful.key({ windows, "Control" }, "q", function(c) c:kill() end),
 		awful.key({ windows, "Control" }, "m", function(c)
@@ -84,4 +84,4 @@ function public.setup(widgets)
 	)
 end
 
-return public
+return keys

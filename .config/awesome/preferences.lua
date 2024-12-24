@@ -1,19 +1,37 @@
 local actions = require("misc.actions")
 
+--- Preference and settings for this Awesome configuration.
 local preferences = {
-
-	-- Profile picture to show on start menu and sidebar
-	profile_picture = os.getenv("HOME") .. "/.config/awesome/assets/images/profile.jpeg",
 
 	-- Name to show on start menu and sidebar
 	name = os.getenv("USER"):upper(),
 
 	-- Username to show on start menu and sidebar
 	username = os.getenv("USER") .. "@" .. io.open("/etc/hostname"):read("a"):gsub("\n$", ""),
-
 }
 
--- Applications
+--- Assets used by the configuration, such as images and sounds.
+preferences.assets = {
+
+	--- Image assets.
+	images = {
+
+		-- Profile picture to show on start menu and sidebar
+		profile_picture = os.getenv("HOME") .. "/.config/awesome/assets/images/profile.jpeg",
+
+		-- Desktop wallpaper
+		wallpaper = os.getenv("HOME") .. "/.config/awesome/assets/images/wallpaper.jpg",
+	},
+
+	--- Audio assets.
+	sounds = {
+
+		--- The sound played when the volume is changed; Set to `nil` for no sound.
+		volume_change = os.getenv("HOME") .. "/.config/awesome/assets/sounds/volume_change.mp3",
+	}
+}
+
+--- Preferred applications.
 preferences.apps = {
 	file_explorer = "nemo",
 	browser = "firefox",
@@ -25,8 +43,8 @@ preferences.apps = {
 	calculator = "silico-calculator",
 }
 
--- Apps that are pinned to the taskbar, in order.
-preferences.pinned_apps = {
+--- Apps that are pinned to the taskbar, in order.
+preferences.taskbar_pinned_apps = {
 	preferences.apps.terminal,
 	preferences.apps.browser,
 	preferences.apps.chat,
@@ -89,7 +107,7 @@ preferences.keys = {
 	{ modifiers = { "windows" },          key = "Right",                     run = actions.view_next_tag() },
 }
 
--- Taskbar icon overrides
+--- Icon overrides
 preferences.icon_overrides = {
 	nemo = os.getenv("HOME") .. "/.config/awesome/assets/images/file_explorer.png"
 }

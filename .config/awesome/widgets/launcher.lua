@@ -24,6 +24,12 @@ awful.placement.top_right(launcher, {
 local apps = {}
 
 local function get_app_icon(app_name, icon_name, command)
+	local override = preferences.icon_overrides[app_name]
+	if override then
+		table.insert(apps, { name = app_name, icon = override, command = command })
+		return
+	end
+
 	-- Find the path to the app icon:
 	--
 	-- First, we run `find /usr/share/icons -name <APPNAME>.png`. This will list all icons with the given app name.
@@ -59,26 +65,47 @@ awful.spawn.easy_async_with_shell("ls /usr/share/applications -1", function(appl
 	end
 end)
 
-local function distance_between(a, b)
-	a = a:lower()
-	b = b:lower()
+--- Returns the "distance" between two strings, case insensitively, according to the
+--- [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) algorithm,
+--- with certain special exceptions.
+---
+--- The "Levenshtein distance" essentially represents how close two strings are, with a lower
+--- distance meaning closer strings. The one exception in this case is that this function
+--- prioritizes prefix matching, i.e., the words `fire` and `firefox` will be closer together
+--- than `girefoy` and `firefox`. This is because when using this to determine launcher results,
+--- we want to be able to show programs without typing in their full name. Importantly, this also
+--- makes this algorithm non-symmetric. The first argument should be considered the "prefix" while
+--- the second is the full word.
+---
+--- This is used to show program results in the launcher widget.
+---
+--- This algorithm is adapted and modified from `https://en.wikipedia.org/wiki/Levenshtein_distance#Iterative_with_two_matrix_rows`.
+---
+---@param first string The first string to get the distance from the other.
+---@param other string The other string to get the distance from the first.
+---
+---@return integer distance The distance between the two strings. This will always be nonnegative, and only 0 if the two strings are
+--- the same (case insensitive)
+local function distance_between(first, other)
+	first = first:lower()
+	other = other:lower()
 
-	if a == b then
+	if first == other then
 		return 0
 	end
 
-	if b:sub(1, #a) == a then
+	if other:sub(1, #first) == first then
 		return 1
 	end
 
 	local dummy
-	local m = #a
-	local n = #b
+	local m = #first
+	local n = #other
 
 	local v0 = {}
 	local v1 = {}
 
-	for i = 0, #b do
+	for i = 0, #other do
 		v0[i] = i
 	end
 
@@ -89,7 +116,7 @@ local function distance_between(a, b)
 			local insertion_cost = v1[j] + 1
 
 			local substitution_cost = v0[j] + 1
-			if a:sub(i + 1, i + 1) == b:sub(j + 1, j + 1) then
+			if first:sub(i + 1, i + 1) == other:sub(j + 1, j + 1) then
 				substitution_cost = v0[j]
 			end
 

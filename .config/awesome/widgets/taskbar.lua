@@ -25,7 +25,7 @@ local function get_app_icon(app_name)
 			app_count = app_count + 1
 		end
 
-		if app_count == #preferences.pinned_apps then
+		if app_count == #preferences.taskbar_pinned_apps then
 			taskbar:refresh()
 		end
 		return
@@ -51,7 +51,7 @@ local function get_app_icon(app_name)
 						app_count = app_count + 1
 					end
 
-					if app_count == #preferences.pinned_apps then
+					if app_count == #preferences.taskbar_pinned_apps then
 						taskbar:refresh()
 					end
 				end
@@ -65,7 +65,7 @@ local clients = {
 	layout = wibox.layout.flex.horizontal,
 }
 
-for _, app in ipairs(preferences.pinned_apps) do
+for _, app in ipairs(preferences.taskbar_pinned_apps) do
 	get_app_icon(app)
 end
 
@@ -95,7 +95,7 @@ function taskbar:refresh()
 	clients = { layout = wibox.layout.fixed.horizontal }
 
 	-- Pinned apps
-	for _, app in ipairs(preferences.pinned_apps) do
+	for _, app in ipairs(preferences.taskbar_pinned_apps) do
 		local widget = wibox.widget.imagebox(pinned_apps[app].icon)
 		widget:connect_signal("button::press", function()
 			for _, c in ipairs(client.get()) do
@@ -217,7 +217,7 @@ function taskbar:refresh()
 		end
 
 		if not already_done then
-			for _, app in ipairs(preferences.pinned_apps) do
+			for _, app in ipairs(preferences.taskbar_pinned_apps) do
 				if c.class and c.class:lower():match(app:match("^(%S+)")) then
 					already_done = true
 					break

@@ -39,7 +39,7 @@ function sidebar:refresh()
 	username.font = "OpenSans 20"
 
 	-- Profile picture
-	local profile = wibox.widget.imagebox(preferences.profile_picture)
+	local profile = wibox.widget.imagebox(preferences.assets.images.profile_picture)
 	profile.clip_shape = function(cr, width, height)
 		gears.shape.circle(cr, width, height, 150)
 	end
@@ -221,7 +221,9 @@ function sidebar:refresh()
 
 	-- Battery meter
 	local battery_icon = wibox.widget.textbox("")
-	system.battery.keep_updated(battery_icon, function(_, icon) return "     " .. icon end)
+	system.battery.keep_updated(battery_icon,
+		function(_, icon) return (" "):rep(system.battery.is_charging() and 4 or 5) .. icon end
+	)
 	battery_icon.font = "OpenSans 20"
 	local battery_slider = wibox.widget({
 		max_value = 100,

@@ -110,9 +110,9 @@ system.wifi = {
 			icon = "󰤨"
 		elseif strength > 0.8 then
 			icon = "󰤥"
-		elseif strength > 0.7 then
+		elseif strength > 0.65 then
 			icon = "󰤢"
-		elseif strength > 0.6 then
+		elseif strength > 0.5 then
 			icon = "󰤟"
 		elseif strength == 0 then
 			icon = "󰤭"

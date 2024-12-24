@@ -1,6 +1,6 @@
-local actions = {}
-
 local awful = require("awful")
+
+local actions = {}
 
 --- Returns a function that when called, will raise the volume by the given amount.
 --- The menu and brightness volume will be refreshed.
@@ -13,10 +13,17 @@ function actions.raise_volume(amount)
 		awful.spawn.easy_async("pamixer --increase " .. amount, function()
 			widgets.menu:refresh_numbers()
 			widgets.volume:show()
-			awful.spawn.easy_async(
-				("ffplay %s/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit"):format(os.getenv("HOME")),
-				function() end
-			)
+
+			-- NOTE: Preferences has to be imported here instead of at the top-level to avoid circular
+			-- import dependencies.
+			local preferences = require("preferences")
+
+			if preferences.assets.sounds.volume_change then
+				awful.spawn.easy_async(
+					("ffplay %s -nodisp -autoexit"):format(preferences.assets.sounds.volume_change),
+					function() end
+				)
+			end
 		end)
 	end
 end
@@ -32,10 +39,17 @@ function actions.lower_volume(amount)
 		awful.spawn.easy_async("pamixer --decrease " .. amount, function()
 			widgets.menu:refresh_numbers()
 			widgets.volume:show()
-			awful.spawn.easy_async(
-				("ffplay %s/.config/awesome/assets/sounds/volume_change.mp3 -nodisp -autoexit"):format(os.getenv("HOME")),
-				function() end
-			)
+
+			-- NOTE: Preferences has to be imported here instead of at the top-level to avoid circular
+			-- import dependencies.
+			local preferences = require("preferences")
+
+			if preferences.assets.sounds.volume_change then
+				awful.spawn.easy_async(
+					("ffplay %s -nodisp -autoexit"):format(preferences.assets.sounds.volume_change),
+					function() end
+				)
+			end
 		end)
 	end
 end
