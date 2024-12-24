@@ -1,3 +1,3 @@
 # WezTerm Configuration
 
-![wezterm demo](../../.docs/wezterm-demo.png)
+![wezterm demo](./.docs/demo.png)

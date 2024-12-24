@@ -25,14 +25,14 @@
 !.config/nvim
 !.config/nvim/**/*
 !.config/darling
-!.config/darling/*
+!.config/darling/**/*
 !.config/onedrive
 !.config/onedrive/config
 !.config/onedrive/README.md
 !.config/wezterm
-!.config/wezterm/*
+!.config/wezterm/**/*
 !.config/joshuto
-!.config/joshuto/*
+!.config/joshuto/**/*
 !.config/README.md
 
 # Shell RCs
