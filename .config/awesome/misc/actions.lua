@@ -1,4 +1,5 @@
 local awful = require("awful")
+local system = require("misc.system")
 
 local actions = {}
 
@@ -205,6 +206,12 @@ function actions.screenshot_section()
 	return function(widgets)
 		widgets.tags.visible = false
 		awful.spawn("flameshot gui")
+	end
+end
+
+function actions.toggle_wifi_hiding()
+	return function()
+		system.wifi.toggle_hidden()
 	end
 end
 

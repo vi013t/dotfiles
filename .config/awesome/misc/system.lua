@@ -143,10 +143,17 @@ system.wifi = {
 	keep_updated = function(widget_to_watch, format)
 		awful.widget.watch("iwgetid -r", 1, function(widget, stdout)
 			local network_name = stdout:gsub("\n$", "")
+			if system.wifi.__is_hidden then network_name = "Hidden" end
 			local icon = system.wifi.icon()
 			widget:set_text(format and format(network_name, icon) or network_name)
 		end, widget_to_watch)
 	end,
+
+	__is_hidden = false,
+
+	toggle_hidden = function()
+		system.wifi.__is_hidden = not system.wifi.__is_hidden
+	end
 }
 
 --- Information about the currently focused screen, such as dimensions.

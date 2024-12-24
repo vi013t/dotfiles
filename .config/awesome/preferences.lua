@@ -105,6 +105,9 @@ preferences.keys = {
 	{ modifiers = { "windows", "shift" }, key = "5",                         run = actions.move_client_to_tag(5) },
 	{ modifiers = { "windows" },          key = "Left",                      run = actions.view_previous_tag() },
 	{ modifiers = { "windows" },          key = "Right",                     run = actions.view_next_tag() },
+
+	-- Misc
+	{ modifiers = { "windows" },          key = "h",                         run = actions.toggle_wifi_hiding() },
 }
 
 --- Icon overrides
