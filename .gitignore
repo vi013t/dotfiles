@@ -1,9 +1,16 @@
 # Ignore everything
 *
+# Except:
+
+# Git
 !.gitignore
 !.git
 !.git/*
+
+# README
 !README.md
+!.docs/
+!.docs/**/*
 
 # Scripts
 !.scripts
@@ -12,30 +19,46 @@
 # Config
 !.config
 .config/*
-!.docs/
-!.docs/**/*
+!.config/README.md
+
+# AwesomeWM
+!.config/awesome/
+!.config/awesome/**/*
+
+# Cfg
+!.config/cfg/
+!.config/cfg/**/*
+
+# Darling
+!.config/darling
+!.config/darling/**/*
+
+# Joshuto
+!.config/joshuto
+!.config/joshuto/**/*
+
+# Neovim
+!.config/nvim
+!.config/nvim/**/*
+
+# Onedrive
+!.config/onedrive
+!.config/onedrive/config
+!.config/onedrive/README.md
+
+# Picom
+!.config/picom/
+!.config/picom/**/*
+
+# VSCodium
 !.config/VSCodium
 !.config/VSCodium/User
 !.config/VSCodium/User/settings.json
 !.config/VSCodium/User/README.md
-!.config/awesome/
-!.config/awesome/**/*
-!.config/cfg/
-!.config/cfg/**/*
-!.config/picom/
-!.config/picom/**/*
-!.config/nvim
-!.config/nvim/**/*
-!.config/darling
-!.config/darling/**/*
-!.config/onedrive
-!.config/onedrive/config
-!.config/onedrive/README.md
+
+# Wezterm
 !.config/wezterm
 !.config/wezterm/**/*
-!.config/joshuto
-!.config/joshuto/**/*
-!.config/README.md
 
 # Shell RCs
 !.bashrc
