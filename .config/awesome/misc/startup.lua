@@ -1,5 +1,6 @@
 local awful = require("awful")
 local naughty = require("naughty")
+local preferences = require("preferences")
 
 -- Handle runtime errors after startup
 if awesome.startup_errors then
@@ -30,8 +31,8 @@ do
 end
 
 -- Startup programs
-awful.spawn.easy_async("picom -b --backend glx --config ~/.config/picom/picom.conf")             -- Compositor
-awful.spawn.easy_async("feh --no-fehbg --bg-fill ~/.config/awesome/assets/images/wallpaper.jpg") -- Wallpaper
+awful.spawn.easy_async_with_shell("picom -b --backend glx --config ~/.config/picom/picom.conf") -- Compositor
+awful.spawn.easy_async("feh --no-fehbg --bg-fill " .. preferences.assets.images.wallpaper)      -- Wallpaper
 
 -- Enable touchpad tapping
 awful.spawn.easy_async_with_shell("xinput list --name-only | grep -i touchpad --color=none", function(touchpad)

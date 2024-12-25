@@ -20,7 +20,7 @@ preferences.assets = {
 		profile_picture = os.getenv("HOME") .. "/.config/awesome/assets/images/profile.jpeg",
 
 		-- Desktop wallpaper
-		wallpaper = os.getenv("HOME") .. "/.config/awesome/assets/images/wallpaper.jpg",
+		wallpaper = os.getenv("HOME") .. "/.config/awesome/assets/images/wallpaper_arch.jpeg",
 	},
 
 	--- Audio assets.
@@ -119,28 +119,28 @@ preferences.icon_overrides = {
 preferences.theme = {
 
 	--- The primary background color on widgets
-	primary_background = "#0E0C12",
+	primary_background = "#11111b",
 
 	--- The primary color of text and borders on widgets
-	primary_foreground = "#9280FF",
+	primary_foreground = "#b4befe",
 
 	--- The secondary foreground color for dimmed text
-	secondary_foreground = "#666688",
+	secondary_foreground = "#6c7086",
 
 	--- The secondary background color for slider backgrounds and such on widgets
-	secondary_background = "#312d3d",
+	secondary_background = "#1e1e2e",
 
 	--- The color for the maximize button on window titlebars.
-	maximize_button = "#AAFF88",
+	maximize_button = "#a6e3a1",
 
 	--- The color for the minimize button on window titlebars.
-	minimize_button = "#FFFF88",
+	minimize_button = "#f9e2af",
 
 	--- The color for the close button on window titlebars.
-	close_button = "#FF8888",
+	close_button = "#f38ba8",
 
 	--- The background color of the taskbar
-	taskbar_background = "#111122",
+	taskbar_background = "#11111b",
 
 	--- The position of the taskbar
 	taskbar_position = "bottom",
@@ -157,7 +157,7 @@ preferences.theme = {
 	border_width = 2,
 
 	--- The border color for widgets and windows.
-	border_color = "#9280FF",
+	border_color = "#b4befe",
 
 	--- Returns a font using the default font family specified by `preferences.theme.font`, using the
 	--- given number as the font size.
