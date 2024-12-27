@@ -25,6 +25,8 @@
 /var/*
 
 # AccountsService
+!/var/lib
+/var/lib/*
 !/var/lib/AccountsService/
 !/var/lib/AccountsService/**/*
 
