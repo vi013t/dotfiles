@@ -16,11 +16,14 @@ awful.placement.top_right(volume_bar, {
 
 -- Number
 local volume = system.volume.amount()
-local volume_percent = volume / 100
+local volume_percent = volume / 100.0
 
 -- Icon
-local volume_icon = wibox.widget.textbox((volume > 0 and "󰕾" or "󰝟") .. "    ")
+local volume_icon = wibox.widget.textbox("")
 volume_icon.font = preferences.theme.font_size(20)
+volume_icon = system.volume.keep_updated_with(volume_icon, function(widget, _, icon)
+	widget:set_text(icon .. "    ")
+end)
 
 -- Slider
 local volume_widget = wibox.widget.slider({
@@ -45,10 +48,10 @@ local volume_widget = wibox.widget.slider({
 	bar_shape = gears.shape.rounded_bar,
 	forced_width = 300,
 })
-volume_widget = system.volume.keep_updated_with(volume_widget, function(amount)
-	volume_widget.value = amount
-	local percent = amount / 100
-	volume_widget.bar_color = gears.color({
+volume_widget = system.volume.keep_updated_with(volume_widget, function(widget, volume_amount)
+	widget.value = volume_amount
+	local percent = volume_amount / 100
+	widget.bar_color = gears.color({
 		type = "linear",
 		from = { 0, 0 },
 		to = { 200, 0 },
@@ -61,11 +64,6 @@ volume_widget = system.volume.keep_updated_with(volume_widget, function(amount)
 	})
 end)
 
--- Text
-local volume_text = wibox.widget.textbox("    " .. tostring(volume) .. "%%")
-volume_text.font = preferences.theme.font_size(20)
-volume_text.align = "center"
-
 -- Add widgets
 volume_bar:setup({
 	{
@@ -73,10 +71,9 @@ volume_bar:setup({
 		right = 25,
 		left = 25,
 		{
+			layout = wibox.layout.fixed.horizontal,
 			volume_icon,
 			volume_widget,
-			volume_text,
-			layout = wibox.layout.fixed.horizontal,
 		},
 	},
 	layout = wibox.layout.flex.vertical,

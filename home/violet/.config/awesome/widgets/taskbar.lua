@@ -95,9 +95,9 @@ function taskbar:refresh()
 	local volume = system.volume.amount()
 	local volume_widget = wibox.widget.textbox("󰕾 " .. tostring(volume) .. "%")
 	volume_widget.font = preferences.theme.font_size(16)
-	volume_widget = awful.widget.watch("pamixer --get-volume", 1, function(widget, stdout)
-		widget:set_text("󰕾 " .. stdout:gsub("\n+$", "") .. "%")
-	end, volume_widget)
+	volume_widget = system.volume.keep_updated_with(volume_widget, function(widget, output, icon)
+		widget:set_text(icon .. " " .. tostring(output) .. "%")
+	end)
 
 	clients = { layout = wibox.layout.fixed.horizontal }
 

@@ -270,6 +270,27 @@ system.volume = {
 		return number
 	end,
 
+	--- Returns an icon for the given volume (in `[0, 100]`, or uses the current
+	--- volume if none is provided.
+	---
+	---@param volume integer | nil The volume amount to get the icon for, or `nil` to use the current volume.
+	---
+	---@return string icon An icon representing the volume.
+	icon = function(volume)
+		if volume == nil then volume = system.volume.amount() end
+
+		local icon
+		if volume >= 50 then
+			icon = "󰕾"
+		elseif volume > 0 then
+			icon = "󰖀"
+		else
+			icon = "󰝟"
+		end
+
+		return icon
+	end,
+
 	--- Returns the current volume of the system as a percent between 0 and 1.
 	---
 	---@return number percent The system's current volume as a percent.
@@ -277,8 +298,20 @@ system.volume = {
 		return system.volume.amount() / 100
 	end,
 
-	keep_updated_with = function(widget_to_watch, callback)
-		return awful.widget.watch("pamixer --get-volume", 0.1, function(_, stdout, stderr)
+	--- Keeps the given widget updated with the current volume using the given callback. Specifically,
+	--- this just calls the given `callback` every 100ms with the widget and current volume, and any
+	--- logic in the given callback will be run, including updating the widget.
+	---
+	---@param base_widget any The base widget to update
+	---@param callback fun(widget: any, volume: integer, icon: string): nil The updating function.
+	--- The arguments passed to it are:
+	--- - `widget` - The widget to update
+	--- - `volume` - The current volume.
+	--- - `icon` - An icon representing the given volume.
+	---
+	---@return any widget The updating widget.
+	keep_updated_with = function(base_widget, callback)
+		return awful.widget.watch("pamixer --get-volume", 0.1, function(widget, stdout, stderr)
 			if stderr ~= "" then
 				naughty.notify({
 					title = "Error updating volume",
@@ -289,8 +322,13 @@ system.volume = {
 			end
 
 			local success, error_message = pcall(function()
-				local output = tonumber(stdout)
-				callback(output)
+				local volume = tonumber(stdout)
+				if type(volume) ~= "number" then
+					error("pamixer returned a non-number: " .. volume)
+				end
+
+				local icon = system.volume.icon(volume)
+				callback(widget, volume, icon)
 			end)
 
 			if not success then
@@ -300,7 +338,7 @@ system.volume = {
 					preset = naughty.config.presets.critical,
 				})
 			end
-		end, widget_to_watch)
+		end, base_widget)
 	end,
 
 }
