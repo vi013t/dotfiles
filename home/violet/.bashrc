@@ -2,8 +2,7 @@
 [[ $- != *i* ]] && return
 
 # Private variables such as API keys
-if [ -f ~/.bash_private ]; then
-	. ~/.bash_private
+if [ -f ~/.bash_private ]; then . ~/.bash_private
 fi
 
 # Environment variables
@@ -22,14 +21,16 @@ alias i="sudo pacman -S" # Install a package
 alias img="wezterm imgcat" # View images with Wezterm
 alias ls='ls --color=auto' # Add colors to ls
 alias grep='grep --color=auto' # Add colors to grep
-alias neofetch="neofetch --iterm2 ~/Pictures/arch.png --size 400"
-alias code="codium . -r"
+alias neofetch="neofetch --iterm2 ~/Pictures/arch.png --size 400" # Neofetch with image
+alias code="codium . -r" # Open in VSCode
+alias weather="curl wttr.in" # Show weather
+alias open="xdg-open" # Open file
+alias battery="echo $(cat /sys/class/power_supply/BAT0/capacity)%" # Show battery
 
 # Session Information
 alias x11?="loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}' | cut -d'=' -f2"
 alias wayland?="loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}' | cut -d'=' -f2"
 alias de?="echo $DESKTOP_SESSION"
-alias battery?="cat /sys/class/power_supply/BAT0/capacity"
 
 # Wrapper around joshuto for preivews and exiting into cwd with q
 function files() {

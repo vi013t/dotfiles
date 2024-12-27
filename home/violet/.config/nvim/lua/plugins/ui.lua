@@ -25,6 +25,10 @@ return {
 	-- Tabline
 	{
 		"akinsho/bufferline.nvim",
+		dependencies = {
+			"nvim-lualine/lualine.nvim",
+		},
+
 		config = function()
 			local bufferline = require("bufferline")
 
@@ -58,7 +62,7 @@ return {
 			local _, color = require("nvim-web-devicons").get_icon_color_by_filetype(filetype)
 
 			-- Create highlight groups
-			local normal_float_bg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("NormalFloat")), "bg#")
+			local normal_float_bg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("lualine_a_normal")), "fg#")
 
 			vim.api.nvim_set_hl(0, "BufferlineNeotreeOffset", { fg = color, bold = true, bg = normal_float_bg })
 

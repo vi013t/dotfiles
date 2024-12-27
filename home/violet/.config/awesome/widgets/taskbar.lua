@@ -15,7 +15,6 @@ local taskbar = awful.wibar({
 	--ontop = true,
 })
 
-
 local function get_app_icon(app_name)
 	local override = preferences.icon_overrides[app_name]
 	if override then
@@ -31,11 +30,19 @@ local function get_app_icon(app_name)
 		return
 	end
 
-	local ripgrep = ("rg -l --color=never --follow ^Exec=.*\\\\b%s\\\\b /usr/share/applications"):format(app_name)
+	local ripgrep = ("rg -l --color=never --no-ignore-vcs --follow ^Exec=.*\\\\b%s\\\\b /usr/share/applications"):format(
+		app_name)
 	awful.spawn.easy_async(ripgrep,
 		function(path)
 			path = path:match("([^\r\n]+)[\r\n]*$")
-			local file = assert(io.open(path, "r"))
+			local file, error = io.open(path, "r")
+			if error then
+				require("naughty").notify({
+					title = "Error opening desktop file",
+					text = error
+				})
+			end
+			file = assert(file)
 			local info = file:read("*a")
 			local icon = info:match("Icon=([^\r\n]+)")
 			local command = info:match("Exec=([^\r\n]+)")
@@ -88,7 +95,7 @@ function taskbar:refresh()
 	local volume = system.volume.amount()
 	local volume_widget = wibox.widget.textbox("󰕾 " .. tostring(volume) .. "%")
 	volume_widget.font = preferences.theme.font_size(16)
-	awful.widget.watch("pamixer --get-volume", 1, function(widget, stdout)
+	volume_widget = awful.widget.watch("pamixer --get-volume", 1, function(widget, stdout)
 		widget:set_text("󰕾 " .. stdout:gsub("\n+$", "") .. "%")
 	end, volume_widget)
 
@@ -96,6 +103,10 @@ function taskbar:refresh()
 
 	-- Pinned apps
 	for _, app in ipairs(preferences.taskbar_pinned_apps) do
+		if not pinned_apps[app] then
+			goto continue
+		end
+
 		local widget = wibox.widget.imagebox(pinned_apps[app].icon)
 		widget:connect_signal("button::press", function()
 			for _, c in ipairs(client.get()) do
@@ -108,7 +119,6 @@ function taskbar:refresh()
 			end
 			awful.spawn(pinned_apps[app].command)
 		end)
-
 
 		-- Focused pinned app
 		if client.focus and client.focus.class and client.focus.class:lower():match(app:match("^(%S+)")) then
@@ -199,6 +209,8 @@ function taskbar:refresh()
 				})
 			end
 		end
+
+		::continue::
 	end
 
 	local done_clients = {}

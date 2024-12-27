@@ -415,6 +415,7 @@ function sidebar:toggle()
 	else
 		slide_out()
 		month_override = 0
+		self.visible = false
 	end
 end
 

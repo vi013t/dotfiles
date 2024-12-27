@@ -9,8 +9,10 @@ local volume_bar = wibox({ visible = false, ontop = true, type = "dock", screen 
 volume_bar.width = 300
 volume_bar.height = 50
 volume_bar.bg = preferences.theme.primary_background
-awful.placement.top_right(volume_bar,
-	{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = preferences.theme.default_margin } })
+awful.placement.top_right(volume_bar, {
+	honor_workarea = true,
+	margins = { right = preferences.theme.default_margin, top = preferences.theme.default_margin }
+})
 
 -- Number
 local volume = system.volume.amount()

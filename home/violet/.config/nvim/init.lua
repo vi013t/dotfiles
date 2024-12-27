@@ -123,11 +123,10 @@ require("lazy").setup("plugins",
 vim.keymap.set("n", "<leader>z", ":Lazy<CR>", {}) -- Open Lazy.nvim package manager
 
 -- Copy & Pasting
-vim.keymap.set("n", "<C-v>", "i<C-v><Esc>", {}) -- Paste from clipboard in normal mode
-vim.keymap.set("v", "<space>y", '"+y', {})      -- Copy to system clipboard
-vim.keymap.set("v", "<C-c>", '"+y', {})         -- Copy to system clipboard
-vim.keymap.set("n", "<space>p", '"+p', {})      -- Paste to system clipboard
-vim.keymap.set("v", "<C-v>", '"+y', {})         -- Copy to system clipboard
+vim.keymap.set("v", "<space>y", '"+y', {}) -- Copy to system clipboard
+vim.keymap.set("v", "<C-c>", '"+y', {})    -- Copy to system clipboard
+vim.keymap.set("n", "<space>p", '"+p', {}) -- Paste to system clipboard
+vim.keymap.set("v", "<C-v>", '"+y', {})    -- Copy to system clipboard
 
 -- Visual Movement
 vim.keymap.set("n", "j", "gj", {}) -- Move down by display line

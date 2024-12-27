@@ -11,14 +11,4 @@ My dotfiles, including configuration for:
 - [Picom](https://github.com/yshui/picom)
 - [VSCodium](https://vscodium.com/)
 - [Wezterm](https://wezfurlong.org/wezterm/index.html)
-
-## Installation
-
-To use ALL of these dotfiles (which I only recommend if you're future me on a new machine), clone it and move its contents into `~`:
-
-```bash
-git clone https://github.com/vi013t/dotfiles.git
-cd dotfiles
-mv * ~/
-if command -v darling ; then darling all load-installed ; fi 
 ```

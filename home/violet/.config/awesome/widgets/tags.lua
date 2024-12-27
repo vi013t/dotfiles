@@ -14,13 +14,6 @@ local tags_widget = wibox({
 	bg = "#ff000000",
 })
 
--- Position the tag widget on the top middle
-awful.placement.align(tags_widget, {
-	position = "top",
-	honor_workarea = true,
-	margins = { top = preferences.theme.default_margin }
-})
-
 --- Refreshes the tag widget.
 local tag_widgets = { layout = wibox.layout.flex.horizontal }
 
@@ -149,8 +142,6 @@ function tags_widget:show()
 	self.visible = true
 	slide_in()
 end
-
-tags_widget.visible = false
 
 return {
 	widget = tags_widget,

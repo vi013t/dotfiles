@@ -1,2 +1,4 @@
 [User]
+XSession=awesome
 Icon=/var/lib/AccountsService/icons/violet.jpg
+SystemAccount=false

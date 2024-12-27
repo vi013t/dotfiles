@@ -16,7 +16,16 @@ system.battery = {
 	--- taking the battery percent and icon as arguments. If `nil`, the widget will be updated to just
 	--- show the percent number.
 	keep_updated = function(base_widget, format)
-		return awful.widget.watch("cat /sys/class/power_supply/BAT0/capacity", 1, function(widget, stdout)
+		return awful.widget.watch("cat /sys/class/power_supply/BAT0/capacity", 1, function(widget, stdout, stderr)
+			if stderr ~= "" then
+				naughty.notify({
+					title = "Error updating battery",
+					text = stderr,
+					preset = naughty.config.presets.critical,
+				})
+				return
+			end
+
 			local success, error_message = pcall(function()
 				local percent = tonumber(stdout:match("(%d+)"))
 				local icon = system.battery.icon(percent)
@@ -120,9 +129,9 @@ system.wifi = {
 			icon = "󰤨"
 		elseif strength > 0.8 then
 			icon = "󰤥"
-		elseif strength > 0.65 then
+		elseif strength > 0.6 then
 			icon = "󰤢"
-		elseif strength > 0.5 then
+		elseif strength > 0.4 then
 			icon = "󰤟"
 		elseif strength == 0 then
 			icon = "󰤭"
@@ -151,7 +160,16 @@ system.wifi = {
 	--- taking the wifi name and icon as arguments. If `nil`, the widget will be updated to just
 	--- show the wifi name.
 	keep_updated = function(widget_to_watch, format)
-		return awful.widget.watch("iwgetid -r", 1, function(widget, stdout)
+		return awful.widget.watch("iwgetid -r", 1, function(widget, stdout, stderr)
+			if stderr ~= "" then
+				naughty.notify({
+					title = "Error updating wifi",
+					text = stderr,
+					preset = naughty.config.presets.critical,
+				})
+				return
+			end
+
 			local success, error_message = pcall(function()
 				local network_name = stdout:gsub("\n$", "")
 				if system.wifi.__is_hidden then network_name = "Hidden" end
@@ -220,7 +238,36 @@ system.volume = {
 	---
 	---@return number volume The system's current volume.
 	amount = function()
-		return assert(tonumber(io.popen("pamixer --get-volume"):read("a")))
+		local file = io.popen("pamixer --get-volume")
+		if not file then
+			naughty.notify({
+				title = "Error getting volume",
+				text = "Pamixer returned a nil file handle"
+			})
+			return 0
+		end
+
+		local value = file:read("*l")
+		file:close()
+
+		if not value then
+			naughty.notify({
+				title = "Error getting volume",
+				text = "Pamixer returned empty output"
+			})
+			return 0
+		end
+
+		local number = tonumber(value)
+		if type(number) ~= "number" then
+			naughty.notify({
+				title = "Error getting volume",
+				text = "Pamixer returned a non-numeric value"
+			})
+			return 0
+		end
+
+		return number
 	end,
 
 	--- Returns the current volume of the system as a percent between 0 and 1.
@@ -231,7 +278,16 @@ system.volume = {
 	end,
 
 	keep_updated_with = function(widget_to_watch, callback)
-		return awful.widget.watch("pamixer --get-volume", 0.1, function(_, stdout)
+		return awful.widget.watch("pamixer --get-volume", 0.1, function(_, stdout, stderr)
+			if stderr ~= "" then
+				naughty.notify({
+					title = "Error updating volume",
+					text = stderr,
+					preset = naughty.config.presets.critical,
+				})
+				return
+			end
+
 			local success, error_message = pcall(function()
 				local output = tonumber(stdout)
 				callback(output)
@@ -275,7 +331,16 @@ system.brightness = {
 	end,
 
 	keep_updated_with = function(widget_to_watch, callback)
-		return awful.widget.watch("brightnessctl get", 0.1, function(_, stdout)
+		return awful.widget.watch("brightnessctl get", 0.1, function(_, stdout, stderr)
+			if stderr ~= "" then
+				naughty.notify({
+					title = "Error updating brightness",
+					text = stderr,
+					preset = naughty.config.presets.critical,
+				})
+				return
+			end
+
 			local success, error_message = pcall(function()
 				local output = tonumber(stdout)
 				callback(output)
@@ -350,7 +415,7 @@ system.weather = {
 			timezone = "%Z"
 		}
 
-		return io.popen('curl wttr.in/?format="' .. format(codes) .. '"'):read("a")
+		return io.popen('curl --silent wttr.in/?format="' .. format(codes) .. '"'):read("a")
 	end,
 
 	--- Keeps a widget updated by modifying it the current weather, with the given format.
@@ -395,8 +460,17 @@ system.weather = {
 			timezone = "%Z"
 		}
 
-		return awful.widget.watch('curl wttr.in/?format="' .. format(codes):gsub(" ", "%%20") .. '"', 10,
-			function(widget, stdout)
+		return awful.widget.watch('curl --silent wttr.in/?format="' .. format(codes):gsub(" ", "%%20") .. '"', 10,
+			function(widget, stdout, stderr)
+				if stderr ~= "" then
+					naughty.notify({
+						title = "Error updating weather",
+						text = stderr,
+						preset = naughty.config.presets.critical,
+					})
+					return
+				end
+
 				local success, error_message = pcall(function()
 					local output = stdout:gsub("\n$", ""):gsub("%+", "")
 					setter(widget, output)
