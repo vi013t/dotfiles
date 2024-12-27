@@ -12,6 +12,12 @@
 !.docs/
 !.docs/**/*
 
+# Users
+!/home
+/home/*
+!/home/violet
+/home/violet/*
+
 # /etc
 !/etc
 /etc/*

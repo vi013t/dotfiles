@@ -1,0 +1,116 @@
+{
+	// Workbench
+	"workbench.editor.openPositioning": "right",
+	"workbench.tree.indent": 12,
+	"workbench.iconTheme": "material-icon-theme",
+	"workbench.startupEditor": "welcomePage",
+	"workbench.layoutControl.enabled": false,
+	"workbench.colorTheme": "Catppuccin Mocha",
+	"workbench.colorCustomizations": {
+		"editorOverviewRuler.addedForeground": "#00000000",
+		"editorOverviewRuler.modifiedForeground": "#00000000",
+		"editorOverviewRuler.deletedForeground": "#00000000",
+		"editorGutter.addedBackground": "#00000000",
+		"editorGutter.modifiedBackground": "#00000000",
+		"editorGutter.deletedBackground": "#00000000"
+	},
+	// Editor
+	"editor.fontLigatures": true,
+	"editor.lineNumbers": "relative",
+	"editor.formatOnSave": true,
+	"editor.tabSize": 4,
+	"editor.fontSize": 14,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.minimap.enabled": false,
+	"editor.cursorSurroundingLines": 8,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.fontFamily": "Consolas",
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "always"
+	},
+
+	// Languages
+	"html.autoClosingTags": false,
+	"html.format.wrapAttributes": "aligned-multiple",
+	"[java]": {
+		// "editor.defaultFormatter": "redhat.java"
+		"editor.formatOnSave": false
+	},
+	"[rust]": {
+		"editor.defaultFormatter": "rust-lang.rust-analyzer",
+		"editor.inlayHints.enabled": "off"
+	},
+
+	// Misc
+	"security.workspace.trust.untrustedFiles": "open",
+	"git.openRepositoryInParentFolders": "never",
+	"terminal.integrated.fontFamily": "'Consolas', 'Symbols Nerd Font'",
+	"terminal.integrated.fontSize": 12,
+	"terminal.integrated.scrollback": 99999,
+	"window.commandCenter": false,
+	"explorer.confirmDelete": false,
+	"breadcrumbs.enabled": false,
+	"explorer.confirmDragAndDrop": false,
+	"window.zoomLevel": 1,
+	"window.titleBarStyle": "custom",
+	"files.eol": "\n",
+	"files.exclude": {
+		"**/*.meta": true,
+		"**/.git": false
+	},
+
+	// Extension Configuration
+	"dotnet.codeLens.enableReferencesCodeLens": false,
+	"color-highlight.markRuler": false,
+	"license.author": "Violet Iapalucci",
+	"license.default": "MIT",
+	"material-icon-theme.folders.color": "#42a5f5",
+	"redhat.telemetry.enabled": false,
+	"rust-analyzer.inlayHints.parameterHints.enable": false,
+	"rust-analyzer.check.command": "clippy",
+	"svelte.enable-ts-plugin": true,
+
+	// Vim
+	"vim.leader": " ",
+	"vim.enableNeovim": true,
+	"vim.normalModeKeyBindingsNonRecursive": [
+		// Explorer Focus
+		{
+			"before": ["<leader>", "e", "f"],
+			"commands": ["workbench.files.action.focusFilesExplorer"]
+		},
+		// LSP Next diagnostic
+		{
+			"before": ["<leader>", "l", "n"],
+			"commands": ["editor.action.marker.nextInFiles"]
+		},
+		// LSP Previous diagnostic
+		{
+			"before": ["<leader>", "l", "N"],
+			"commands": ["editor.action.marker.prevInFiles"]
+		},
+		// LSP Hover
+		{
+			"before": ["<leader>", "l", "h"],
+			"commands": ["editor.action.showDefinitionPreviewHover"]
+		},
+		// LSP Rename
+		{
+			"before": ["<leader>", "l", "r"],
+			"commands": ["editor.action.rename"]
+		},
+		// LSP Definition
+		{
+			"before": ["<leader>", "l", "d"],
+			"commands": ["editor.action.goToDeclaration"]
+		},
+		// LSP Type definition
+		{
+			"before": ["<leader>", "l", "t"],
+			"commands": ["editor.action.goToTypeDefinition"]
+		}
+	],
+	"prettier.useTabs": true,
+	"prettier.tabWidth": 4
+}
