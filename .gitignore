@@ -1,0 +1,74 @@
+# Ignore everything
+*
+# Except:
+
+# Git
+!.gitignore
+!.git
+!.git/*
+
+# README
+!README.md
+!.docs/
+!.docs/**/*
+
+# /etc
+!/etc
+/etc/*
+!/var
+/var/*
+
+# AccountsService
+!/var/lib/AccountsService/
+!/var/lib/AccountsService/**/*
+
+# LightDM
+!/etc/lightdm
+!/etc/lightdm/**/*
+
+# Config
+!/home/violet/.config
+/home/violet/.config/*
+!/home/violet/.config/README.md
+
+# AwesomeWM
+!/home/violet/.config/awesome/
+!/home/violet/.config/awesome/**/*
+
+# Cfg
+!/home/violet/.config/cfg/
+!/home/violet/.config/cfg/**/*
+
+# Darling
+!/home/violet/.config/darling
+!/home/violet/.config/darling/**/*
+
+# Joshuto
+!/home/violet/.config/joshuto
+!/home/violet/.config/joshuto/**/*
+
+# Neovim
+!/home/violet/.config/nvim
+!/home/violet/.config/nvim/**/*
+
+# Onedrive
+!/home/violet/.config/onedrive
+!/home/violet/.config/onedrive/config
+!/home/violet/.config/onedrive/README.md
+
+# Picom
+!/home/violet/.config/picom/
+!/home/violet/.config/picom/**/*
+
+# VSCodium
+!/home/violet/.config/VSCodium
+!/home/violet/.config/VSCodium/User
+!/home/violet/.config/VSCodium/User/settings.json
+!/home/violet/.config/VSCodium/User/README.md
+
+# Wezterm
+!.config/wezterm
+!/home/violet/.config/wezterm/**/*
+
+# Shell RCs
+!/home/violet/.bashrc
