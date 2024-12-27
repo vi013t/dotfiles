@@ -80,3 +80,11 @@
 
 # Shell RCs
 !/home/violet/.bashrc
+
+# Fonts
+!/home/violet/.local
+/home/violet/.local/*
+!/home/violet/.local/share
+/home/violet/.local/share/*
+!/home/violet/.local/share/fonts
+!/home/violet/.local/share/fonts/**/*
