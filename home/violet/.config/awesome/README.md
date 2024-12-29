@@ -113,7 +113,7 @@ This config is designed to be both efficient and easy to use, with some minimal 
 
 ### Keybindings
 
-Below are some common keybindings. For a full list of keybindings, see [`preferences.lua`](https://github.com/vi013t/dotfiles/tree/main/.config/awesome/preferences.lua).
+Below are some common keybindings. For a full list of keybindings, see [`preferences.lua`](https://github.com/vi013t/dotfiles/tree/main/home/violet/.config/awesome/preferences.lua).
 
 - Widgets
     - `Windows` - Open start menu
@@ -133,4 +133,4 @@ Below are some common keybindings. For a full list of keybindings, see [`prefere
 
 All assets used by this configuration are stored in `/assets`. Replace the ones of your choosing to customize.
 
-Also see [`preferences.lua`](https://github.com/vi013t/dotfiles/tree/main/.config/awesome/preferences.lua) for changing pinned applications, preferred applications, keybindings, etc.
+Also see [`preferences.lua`](https://github.com/vi013t/dotfiles/tree/main/home/violet/.config/awesome/preferences.lua) for changing pinned applications, preferred applications, keybindings, etc.

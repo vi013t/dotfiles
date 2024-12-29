@@ -12,7 +12,6 @@ local search
 
 function public.setup(launcher)
 	local is_hiding = false
-	local is_showing = false
 
 	-- Main menu widget
 	local menu = wibox({
@@ -330,9 +329,21 @@ function public.setup(launcher)
 
 	--- Toggles visibility of the menu.
 	function menu:toggle()
-		if is_hiding or is_showing then return end
-
-		if not self.visible then
+		if self.visible then
+			launcher:hide()
+			is_hiding = true
+			animate.slide_out({
+				from = "top",
+				widget = menu,
+				thickness = 820,
+				placement = "top_right",
+				time = 1,
+				margins = { right = preferences.theme.default_margin, top = preferences.theme.default_margin },
+				on_complete = function()
+					is_hiding = false
+				end
+			})
+		else
 			animate.slide_in({
 				from = "top",
 				widget = menu,
@@ -342,16 +353,6 @@ function public.setup(launcher)
 				margins = { right = preferences.theme.default_margin, top = preferences.theme.default_margin }
 			})
 			search:run()
-		else
-			animate.slide_out({
-				from = "top",
-				widget = menu,
-				thickness = 820,
-				placement = "top_right",
-				time = 1,
-				margins = { right = preferences.theme.default_margin, top = preferences.theme.default_margin }
-			})
-			launcher:hide()
 		end
 	end
 

@@ -174,7 +174,7 @@ function actions.screenshot()
 	return function()
 		-- NOTE: Preferences has to be imported here instead of at the top-level to avoid circular
 		-- import dependencies.
-		awful.spawn.easy_async(require("preferences").actions.screenshot)
+		awful.spawn(require("preferences").actions.screenshot)
 	end
 end
 

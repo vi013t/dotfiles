@@ -11,6 +11,7 @@ local animate = {}
 ---@field thickness integer
 ---@field time number
 ---@field margins? {left?: integer, right?: integer, top?: integer?, bottom?: integer }
+---@field on_complete? fun(): nil
 
 --- Performs a "slide in" animation on the given wiget.
 ---
@@ -21,6 +22,7 @@ local animate = {}
 --- - `thickness` - The size of the widget along the sliding axis.
 --- - `time` - The amount of time, in seconds, that the animation should take.
 --- - `margins` - The margins around the widget.
+--- - `on_complete` - An optional callback to run when the animation finishes.
 ---
 ---@return nil
 function animate.slide_in(properties)
@@ -50,6 +52,9 @@ function animate.slide_in(properties)
 				margins = gears.table.crush(gears.table.clone(properties.margins),
 					{ [properties.from] = current_position })
 			})
+			if properties.on_complete then
+				properties.on_complete()
+			end
 		end
 	end
 
@@ -66,6 +71,7 @@ end
 --- - `thickness` - The size of the widget along the sliding axis.
 --- - `time` - The amount of time, in seconds, that the animation should take.
 --- - `margins` - The margins around the widget.
+--- - `on_complete` - An optional callback to run when the animation finishes.
 ---
 ---@return nil
 function animate.slide_out(properties)
@@ -89,6 +95,9 @@ function animate.slide_out(properties)
 			-- Done
 		else
 			properties.widget.visible = false
+			if properties.on_complete then
+				properties.on_complete()
+			end
 		end
 	end
 
