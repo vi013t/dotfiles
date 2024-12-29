@@ -4,6 +4,7 @@ local gears = require("gears")
 local preferences = require("preferences")
 local actions = require("misc.actions")
 local system = require("misc.system")
+local animate = require("misc.animate")
 
 local public = {}
 
@@ -12,9 +13,6 @@ local search
 function public.setup(launcher)
 	local is_hiding = false
 	local is_showing = false
-
-	local slide_speed = 70
-	local top = -820
 
 	-- Main menu widget
 	local menu = wibox({
@@ -330,58 +328,29 @@ function public.setup(launcher)
 		layout = wibox.layout.align.vertical,
 	})
 
-	--- Shows the menu with a sliding in animation.
-	local function slide_in()
-		is_showing = true
-		awful.placement.top_right(menu,
-			{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = top } })
-		top = top + slide_speed
-		if top < 10 then
-			awful.spawn.easy_async("sleep 0.001", function()
-				slide_in()
-			end)
-		else
-			is_showing = false
-			top = 10
-			awful.placement.top_right(menu,
-				{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = top } })
-		end
-	end
-
-	--- Hides the menu with a sliding out animation.
-	local function slide_out()
-		is_hiding = true
-		awful.placement.top_right(menu,
-			{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = top } }
-		)
-		top = top - slide_speed
-
-		-- Not done
-		if top > -820 then
-			awful.spawn.easy_async("sleep 0.001", function()
-				slide_out()
-			end)
-
-			-- Done
-		else
-			is_hiding = false
-			top = -820
-			awful.placement.top_right(menu,
-				{ honor_workarea = true, margins = { right = preferences.theme.default_margin, top = top } })
-			menu.visible = false
-		end
-	end
-
 	--- Toggles visibility of the menu.
 	function menu:toggle()
 		if is_hiding or is_showing then return end
 
 		if not self.visible then
-			self.visible = true
-			slide_in()
+			animate.slide_in({
+				from = "top",
+				widget = menu,
+				thickness = 820,
+				placement = "top_right",
+				time = 1,
+				margins = { right = preferences.theme.default_margin, top = preferences.theme.default_margin }
+			})
 			search:run()
 		else
-			slide_out()
+			animate.slide_out({
+				from = "top",
+				widget = menu,
+				thickness = 820,
+				placement = "top_right",
+				time = 1,
+				margins = { right = preferences.theme.default_margin, top = preferences.theme.default_margin }
+			})
 			launcher:hide()
 		end
 	end

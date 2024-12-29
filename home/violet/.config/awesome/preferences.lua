@@ -1,5 +1,12 @@
 local actions = require("misc.actions")
 
+--[[
+
+The preferences file. This file contains loads of customizable preferences that the code will reference.
+It's the only file you should really edit unless you really know what you're doing.
+
+--]]
+
 --- Preference and settings for this Awesome configuration.
 local preferences = {
 
@@ -7,7 +14,7 @@ local preferences = {
 	name = os.getenv("USER"):upper(),
 
 	-- Username to show on start menu and sidebar
-	username = os.getenv("USER") .. "@" .. io.open("/etc/hostname"):read("a"):gsub("\n$", ""),
+	username = os.getenv("USER") .. "@" .. io.open("/etc/hostname"):read("l"),
 }
 
 --- Assets used by the configuration, such as images and sounds.
@@ -33,13 +40,30 @@ preferences.assets = {
 
 --- Preferred applications.
 preferences.apps = {
+
+	--- The default file explorer app. It's pinned to the taskbar by default (see `preferences.taskbar_pinned_apps`).
 	file_explorer = "nemo",
+
+	--- The web browser app to use. It's pinned to the taskbar by default (see `preferences.taskbar_pinned_apps`).
 	browser = "firefox",
+
+	--- The calendar app to use. This is what's run when clicking the calendar icon
+	--- on the sidebar.
+	---
+	--- If you change this, you'll likely also want to change `preferences.actions.open_calendar_at`.
 	calendar = "firefox --new-tab 'https://calendar.google.com/calendar/u/0/r'",
+
+	--- The chat app to use. It's pinned to the taskbar by default (see `preferences.taskbar_pinned_apps`).
 	chat = "discord",
+
+	--- The chat app to use. It's pinned to the taskbar by default (see `preferences.taskbar_pinned_apps`)
+	--- and acts as the default terminal for things run by AwesomeWM (see `menubar.utils.terminal` from Awesome)
 	terminal = "wezterm",
-	editor = "nvim",
+
+	--- The default music app. It's pinned to the taskbar by default (see `preferences.taskbar_pinned_apps`)
 	music = "spotify-launcher",
+
+	--- The default calculator app. It's opened when clicking the calculator button on the sidebar.
 	calculator = "silico-calculator",
 }
 
@@ -112,6 +136,8 @@ preferences.keys = {
 
 --- Icon overrides
 preferences.icon_overrides = {
+
+	--- The default Nemo icon in my icon pack is ugly :(
 	nemo = os.getenv("HOME") .. "/.config/awesome/assets/images/file_explorer.png"
 }
 
@@ -153,10 +179,10 @@ preferences.theme = {
 	--- manually changing some font sizes and spacing numbers throughout the config.
 	font = "SF Pro Display",
 
-	--- The border width for widgets and windows,
+	--- The border width for widgets and windows. Set to 0 for no borders.
 	border_width = 2,
 
-	--- The border color for widgets and windows.
+	--- The border color for widgets and windows. To disable borders, set `preferences.theme.border_width = 0`.
 	border_color = "#b4befe",
 
 	--- Returns a font using the default font family specified by `preferences.theme.font`, using the
@@ -168,6 +194,38 @@ preferences.theme = {
 	font_size = function(size)
 		return preferences.theme.font .. " " .. tostring(size)
 	end,
+}
+
+--- Personalizable actions called when certain things are clicked or hotkeys are pressed.
+preferences.actions = {
+
+	--- Opens the calendar at the given date. This is called when a day is clicked on the sidebar.
+	---
+	--- If you wan't to do nothing when clicking a day (i.e. because your calendar doesn't support it)
+	--- then just return `nil`.
+	---
+	---@param year integer The date year
+	---@param month integer The date month, in `[1, 12]`
+	---@param day integer The date day, in `[1, 31]`
+	---
+	---@return string | nil command The command to run to open the calendar at the given date.
+	open_calendar_at = function(year, month, day)
+		return ("firefox --new-tab 'https://calendar.google.com/calendar/u/0/r/day/%s/%s/%s'"):format(year, month, day)
+	end,
+
+	--- Screenshots the entire screen.
+	screenshot =
+		'flameshot full --path "' ..
+		os.getenv("HOME") ..
+		'/Pictures/Screenshots/' ..
+		tostring(os.date("%x")):gsub("/", "_") ..
+		" at " ..
+		tostring(os.date("%X")):gsub(":|%s", "_") ..
+		'"',
+
+	--- Screenshots a section of the screen. This is called when `Windows + Shift + S` is pressed
+	--- (unless it's rebound).
+	screenshot_section = "flameshot gui",
 }
 
 return preferences

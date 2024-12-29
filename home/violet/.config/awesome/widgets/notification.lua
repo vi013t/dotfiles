@@ -3,7 +3,7 @@ local awful = require("awful")
 local naughty = require("naughty")
 local preferences = require("preferences")
 local gears = require("gears")
-
+local system = require("misc.system")
 
 -- Style notifications
 naughty.config.spacing = preferences.theme.default_margin
@@ -48,47 +48,42 @@ naughty.connect_signal("destroyed", function(n, reason)
 	end
 end)
 
-local status
-awful.widget.watch("cat /sys/class/power_supply/BAT0/status", 1, function(_, stdout)
-	if status ~= stdout then
-		naughty.notify({
-			title = "Battery",
-			text = "Now " .. stdout:lower():gsub("\n", ""),
-		})
-		status = stdout
-	end
+-- Notify when battery starts/stops charging
+system.battery.on_status_change(function(status)
+	naughty.notify({
+		title = "Battery",
+		text = "Now " .. status:lower(),
+	})
 end)
 
---- Whether or not the warning that 20% battery is remaining has been shown yet
+
+-- Notify when battery reaches 10% or 20%
 local gave_20_warning = false
-
---- Whether or not the warning that 10% battery is remaining has been shown yet
 local gave_10_warning = false
-
-awful.widget.watch("cat /sys/class/power_supply/BAT0/capacity", 1, function(_, stdout)
-	if not gave_20_warning and tonumber(stdout) <= 20 then
+system.battery.on_percent_change(function(percent)
+	if not gave_20_warning and percent <= 20 then
 		naughty.notify({
-			title = "Battery",
-			text = "Warning: Battery is low (" .. stdout:gsub("\n$", "") .. "%)",
+			title = "Battery Low",
+			text = "Warning: Battery is low (" .. tostring(percent) .. "%)",
 			preset = naughty.config.presets.critical,
 		})
 		gave_20_warning = true
 	end
 
-	if not gave_10_warning and tonumber(stdout) <= 10 then
+	if not gave_10_warning and percent <= 10 then
 		naughty.notify({
-			title = "Battery",
-			text = "Warning: Battery is critical (" .. stdout:gsub("\n$", "") .. "%)",
+			title = "Battery Critical",
+			text = "Warning: Battery is critical (" .. tostring(percent) .. "%)",
 			preset = naughty.config.presets.critical,
 		})
 		gave_10_warning = true
 	end
 
-	if tonumber(stdout) > 10 then
+	if percent > 10 then
 		gave_10_warning = false
 	end
 
-	if tonumber(stdout) > 20 then
+	if percent > 20 then
 		gave_20_warning = false
 	end
 end)

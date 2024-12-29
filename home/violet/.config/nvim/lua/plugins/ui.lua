@@ -181,11 +181,9 @@ return {
 						["cmp.entry.get_documentation"] = true,
 					},
 				},
-				cmdline = {
-					view = "cmdline", -- Keep Vim commands to standard bottom CMDLine instead of middle of screen
-				},
 				presets = {
 					bottom_search = true,
+					command_palette = true,
 					long_message_to_split = true,
 					inc_rename = false,
 					lsp_doc_border = true,

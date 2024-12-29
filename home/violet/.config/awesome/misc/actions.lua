@@ -172,15 +172,9 @@ end
 ---@return fun(): nil function The function to take a screenshot
 function actions.screenshot()
 	return function()
-		awful.spawn.easy_async(
-			'flameshot full --path "' ..
-			os.getenv("HOME") ..
-			'/Pictures/Screenshots/' ..
-			tostring(os.date("%x")):gsub("/", "_") ..
-			" at " ..
-			tostring(os.date("%X")):gsub(":|%s", "_") ..
-			'"'
-		)
+		-- NOTE: Preferences has to be imported here instead of at the top-level to avoid circular
+		-- import dependencies.
+		awful.spawn.easy_async(require("preferences").actions.screenshot)
 	end
 end
 
@@ -191,7 +185,9 @@ end
 function actions.screenshot_section()
 	return function(widgets)
 		widgets.tags.visible = false
-		awful.spawn("flameshot gui")
+		-- NOTE: Preferences has to be imported here instead of at the top-level to avoid circular
+		-- import dependencies.
+		awful.spawn(require("preferences").actions.screenshot_section)
 	end
 end
 

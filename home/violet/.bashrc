@@ -2,7 +2,13 @@
 [[ $- != *i* ]] && return
 
 # Private variables such as API keys
-if [ -f ~/.bash_private ]; then . ~/.bash_private
+if [ -f ~/.bash_private ]; then 
+	. ~/.bash_private
+fi
+
+# Set Wezterm info
+if [ ! -f /usr/share/terminfo/w/wezterm ] ; then
+	curl https://raw.githubusercontent.com/wez/wezterm/master/termwiz/data/wezterm.terminfo | tic -x -
 fi
 
 # Environment variables
@@ -10,7 +16,7 @@ export PS1="├─ " # Set Bash prompt
 export BUN_INSTALL="$HOME/.bun" # Set Bun install location
 export MANPAGER='nvim +Man!' # Set Neovim as the editor for man pages
 export MANWIDTH=999 # Set the max width for manpages
-export TERM="wezterm" # Set the terminal type: $ curl https://raw.githubusercontent.com/wez/wezterm/master/termwiz/data/wezterm.terminfo | tic -x -
+export TERM="wezterm" # Set the terminal type
 export EDITOR="nvim" # Editor for things like cfg
 
 # PATH variables
@@ -26,6 +32,7 @@ alias code="codium . -r" # Open in VSCode
 alias weather="curl wttr.in" # Show weather
 alias open="xdg-open" # Open file
 alias battery="echo $(cat /sys/class/power_supply/BAT0/capacity)%" # Show battery
+alias fonts="fc-list | rg ':([^,]*):style' -or '\$1' --color=never | sort | uniq" # List fonts
 
 # Session Information
 alias x11?="loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}' | cut -d'=' -f2"

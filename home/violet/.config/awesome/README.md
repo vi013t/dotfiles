@@ -40,7 +40,6 @@ This configuration requires the following programs to be installed:
 - [fontconfig](https://www.freedesktop.org/wiki/Software/fontconfig/) - For font installation
 - [wireless_tools](https://hewlettpackard.github.io/wireless-tools/Tools.html) - For fetching wifi information
 - [picom](https://github.com/yshui/picom) - For compositing
-- [flameshot](https://flameshot.org/) - For screenshotting
 - [feh](https://feh.finalrewind.org/) - For applying wallpapers
 - [xinput](https://wiki.archlinux.org/title/Xinput) - For enabling touchpad support
 - [brightnessctl](https://github.com/Hummer12007/brightnessctl) - For changing brightness
@@ -51,7 +50,7 @@ This configuration requires the following programs to be installed:
 On Arch, you can install them like so:
 
 ```bash
-sudo pacman -S coreutils fontconfig wireless_tools picom flameshot feh xorg-xinput brightnessctl pamixer ffmpeg ripgrep
+sudo pacman -S coreutils fontconfig wireless_tools picom feh xorg-xinput brightnessctl pamixer ffmpeg ripgrep
 ```
 
 This configuration also requires Rust. If you don't have it installed, install it:
@@ -71,11 +70,12 @@ The default programs that the configuration will try to use are as follows, whic
 - [Neovim](https://neovim.io/) - Editor
 - [Spotify](https://open.spotify.com/) - Music Player
 - [Silico Calculator](https://github.com/silico-apps/calculator) - Calculator
+- [flameshot](https://flameshot.org/) - For screenshotting
 
 On Arch, you can install them as well:
 
 ```bash
-sudo pacman -S wezterm firefox nemo discord neovim spotify-launcher
+sudo pacman -S wezterm firefox nemo discord neovim spotify-launcher flameshot
 cargo install silico-calculator
 ```
 

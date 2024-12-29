@@ -3,6 +3,7 @@ local awful = require("awful")
 local gears = require("gears")
 local preferences = require("preferences")
 local system = require("misc.system")
+local animate = require("misc.animate")
 
 -- Sidebar
 local sidebar = wibox({
@@ -23,6 +24,7 @@ local sidebar = wibox({
 --- Offset from this month, from pressing the arrows
 local month_override = 0
 
+--- Whether the sidebar is currently in a sliding animation.
 local is_moving = false
 
 -- Name
@@ -194,6 +196,16 @@ for week_number = 1, 6 do
 			day_widget.bg = bg
 		end)
 
+		day_widget[1][1]:connect_signal("button::press", function()
+			local calendar_command = preferences.actions.open_calendar_at(
+				assert(tonumber(today.year)),
+				assert(tonumber(today.month)),
+				day_number
+			)
+			if calendar_command then awful.spawn(calendar_command) end
+			sidebar:hide()
+		end)
+
 		table.insert(week, day_widget)
 	end
 	table.insert(month, week)
@@ -358,64 +370,36 @@ sidebar:setup({
 	layout = wibox.layout.align.vertical,
 })
 
--- Sliding animation
-
-local slide_speed = 100
-local left = -400
-
-local function slide_in()
-	is_moving = true
-	awful.placement.top_left(sidebar, {
-		honor_workarea = true,
-		margins = { left = left, top = preferences.theme.default_margin }
+function sidebar:hide()
+	animate.slide_out({
+		from = "left",
+		widget = sidebar,
+		thickness = 400,
+		placement = "top_left",
+		time = 0.5,
+		margins = { left = preferences.theme.default_margin, top = preferences.theme.default_margin }
 	})
-	left = left + slide_speed
-	if left < 10 then
-		awful.spawn.easy_async("sleep 0.001", function()
-			slide_in()
-		end)
-	else
-		is_moving = false
-		left = 10
-		awful.placement.top_left(sidebar, {
-			honor_workarea = true,
-			margins = { left = left, top = preferences.theme.default_margin }
-		})
-	end
+	month_override = 0
 end
 
-local function slide_out()
-	is_moving = true
-	awful.placement.top_left(sidebar, {
-		honor_workarea = true,
-		margins = { left = left, top = preferences.theme.default_margin }
+function sidebar:show()
+	animate.slide_in({
+		from = "left",
+		widget = sidebar,
+		thickness = 400,
+		placement = "top_left",
+		time = 0.5,
+		margins = { left = preferences.theme.default_margin, top = preferences.theme.default_margin }
 	})
-	left = left - slide_speed
-	if left > -400 then
-		awful.spawn.easy_async("sleep 0.001", function()
-			slide_out()
-		end)
-	else
-		is_moving = false
-		left = -400
-		awful.placement.top_left(sidebar, {
-			honor_workarea = true,
-			margins = { left = left, top = preferences.theme.default_margin }
-		})
-		sidebar.visible = false
-	end
 end
 
 function sidebar:toggle()
 	if is_moving then return end
 
 	if not self.visible then
-		self.visible = true
-		slide_in()
+		sidebar:show()
 	else
-		slide_out()
-		month_override = 0
-		self.visible = false
+		sidebar:hide()
 	end
 end
 

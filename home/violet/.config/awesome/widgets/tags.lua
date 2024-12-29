@@ -2,6 +2,7 @@ local wibox = require("wibox")
 local awful = require("awful")
 local gears = require("gears")
 local preferences = require("preferences")
+local animate = require("misc.animate")
 
 -- Tag widget
 local tags_widget = wibox({
@@ -77,54 +78,6 @@ function tags_widget:refresh()
 	})
 end
 
--- Sliding animation
-
-local top = -110
-local slide_speed = 20
-
-local function slide_in()
-	awful.placement.align(tags_widget, {
-		position = "top",
-		honor_workarea = true,
-		margins = { right = preferences.theme.default_margin, top = top }
-	})
-	top = top + slide_speed
-	if top < 20 then
-		awful.spawn.easy_async("sleep 0.001", function()
-			slide_in()
-		end)
-	else
-		top = 20
-		awful.placement.align(tags_widget, {
-			position = "top",
-			honor_workarea = true,
-			margins = { right = preferences.theme.default_margin, top = top }
-		})
-	end
-end
-
-local function slide_out()
-	awful.placement.align(tags_widget, {
-		position = "top",
-		honor_workarea = true,
-		margins = { right = preferences.theme.default_margin, top = top }
-	})
-	top = top - slide_speed
-	if top > -110 then
-		awful.spawn.easy_async("sleep 0.001", function()
-			slide_out()
-		end)
-	else
-		top = -110
-		awful.placement.align(tags_widget, {
-			position = "top",
-			honor_workarea = true,
-			margins = { right = preferences.theme.default_margin, top = top }
-		})
-		tags_widget.visible = false
-	end
-end
-
 function tags_widget:toggle()
 	if self.visible then
 		self:hide()
@@ -134,13 +87,26 @@ function tags_widget:toggle()
 end
 
 function tags_widget:hide()
-	slide_out()
+	animate.slide_out({
+		from = "top",
+		widget = tags_widget,
+		thickness = 100,
+		placement = "top",
+		time = 0.5,
+		margins = { top = preferences.theme.default_margin }
+	})
 end
 
 function tags_widget:show()
 	self:refresh()
-	self.visible = true
-	slide_in()
+	animate.slide_in({
+		from = "top",
+		widget = tags_widget,
+		thickness = 100,
+		placement = "top",
+		time = 0.5,
+		margins = { top = preferences.theme.default_margin }
+	})
 end
 
 return {

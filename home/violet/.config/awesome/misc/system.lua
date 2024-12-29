@@ -1,5 +1,6 @@
 local awful = require("awful")
 local naughty = require("naughty")
+local wibox = require("wibox")
 
 --- Information about the device, such as wifi information, battery information, etc.
 local system = {}
@@ -16,7 +17,7 @@ system.battery = {
 	--- taking the battery percent and icon as arguments. If `nil`, the widget will be updated to just
 	--- show the percent number.
 	keep_updated = function(base_widget, format)
-		return awful.widget.watch("cat /sys/class/power_supply/BAT0/capacity", 1, function(widget, stdout, stderr)
+		return awful.widget.watch("cat /sys/class/power_supply/BAT0/capacity", 5, function(widget, stdout, stderr)
 			if stderr ~= "" then
 				naughty.notify({
 					title = "Error updating battery",
@@ -30,6 +31,7 @@ system.battery = {
 				local percent = tonumber(stdout:match("(%d+)"))
 				local icon = system.battery.icon(percent)
 				widget:set_text(format and format(tostring(percent), icon) or tostring(percent))
+				system.battery.previous = percent
 			end)
 
 			if not success then
@@ -42,12 +44,84 @@ system.battery = {
 		end, base_widget)
 	end,
 
+	--- Calls the given callback function when the system's battery level changes.
+	---
+	--- @param callback fun(percent: integer): nil The callback function, which takes the current (new)
+	--- battery percent (in `[0, 100]`) as an argument.
+	---
+	--- @return nil
+	on_percent_change = function(callback)
+		if #system.battery.percent_callbacks == 0 then
+			awful.widget.watch("cat /sys/class/power_supply/BAT0/capacity", 1, function(_, output)
+				local success, error_message = pcall(function()
+					local percent = tonumber(output:match("(%d+)"))
+					if percent ~= system.battery.previous_percent then
+						for _, updater in ipairs(system.battery.percent_callbacks) do
+							updater(percent)
+						end
+						system.battery.previous_percent = percent
+					end
+				end)
+
+				if not success then
+					naughty.notify({
+						title = "Error updating battery percent",
+						text = "Error: " .. error_message
+					})
+				end
+
+				return ""
+			end, wibox.widget.textbox(""))
+		end
+
+		table.insert(system.battery.percent_callbacks, callback)
+	end,
+
+	--- Calls the given callback function when the system's battery status (charging, discharging, etc.)
+	--- changes.
+	---
+	--- @param callback fun(status: string): nil The callback function, which takes the current (new) status
+	--- as an argument, as specified by the contents of `/sys/class/power_supply/BAT0/status`.
+	---
+	--- @return nil
+	on_status_change = function(callback)
+		if #system.battery.status_callbacks == 0 then
+			awful.widget.watch("cat /sys/class/power_supply/BAT0/status", 1, function(_, output)
+				local success, error_message = pcall(function()
+					local status = output:gsub("\n+$", "")
+					if status ~= system.battery.previous_status then
+						for _, updater in ipairs(system.battery.status_callbacks) do
+							updater(status)
+						end
+						system.battery.previous_status = status
+					end
+				end)
+
+				if not success then
+					naughty.notify({
+						title = "Error updating battery status",
+						text = "Error: " .. error_message
+					})
+				end
+
+				return ""
+			end, wibox.widget.textbox(""))
+		end
+
+		table.insert(system.battery.status_callbacks, callback)
+	end,
+
 	--- Returns the current battery percentage as a number.
 	---
 	---@return number percent The battery percentage.
 	percent = function()
 		return assert(tonumber(io.open("/sys/class/power_supply/BAT0/capacity"):read("a")))
 	end,
+
+	previous_percent = 0,
+	previous_status = "",
+	status_callbacks = {},
+	percent_callbacks = {},
 
 	-- Returns an icon for the battery based on the current state.
 	--
@@ -105,7 +179,7 @@ system.wifi = {
 	---
 	---@return string | nil ssid The name of the current wifi network, or `nil` if the device isn't connected.
 	name = function()
-		local output = io.popen("iwgetid -r"):read("a"):gsub("\n$", "")
+		local output = io.popen("iwgetid -r"):read("l")
 		if output == "" then return nil end
 		if system.wifi.__is_hidden then return "Hidden" end
 		return output
