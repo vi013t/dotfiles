@@ -1,4 +1,5 @@
 [User]
-XSession=awesome
+Session=awesome
+XSession=plasmax11
 Icon=/var/lib/AccountsService/icons/violet.jpg
 SystemAccount=false

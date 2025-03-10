@@ -191,13 +191,12 @@ function actions.screenshot_section()
 	end
 end
 
---- Returns a function that toggle wifi hiding. This makes it so that the name returned by
---- `system.wifi.name()` is `"Hidden"` instead of the actual wifi name. This can be used
---- for taking screenshots, for example, when you don't want to expose your wifi SSID
---- publicly.
+--- Returns a function that toggles "protection mode". This hides various location-specific
+--- things, such as wifi SSID name, weather, etc., so that screenshots can be taken and shared
+--- publicly without risk of giving away location information.
 ---
 --- @return fun(): nil function The function to toggle wifi hiding.
-function actions.toggle_wifi_hiding()
+function actions.toggle_privacy_mode()
 	return function()
 		system.wifi.toggle_hidden()
 	end

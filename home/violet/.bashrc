@@ -25,7 +25,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Aliases
 alias i="sudo pacman -S" # Install a package
 alias img="wezterm imgcat" # View images with Wezterm
-alias ls='ls --color=auto' # Add colors to ls
+alias ls='ls -A1 --color=auto' # Add colors to ls
 alias grep='grep --color=auto' # Add colors to grep
 alias neofetch="neofetch --iterm2 ~/Pictures/arch.png --size 400" # Neofetch with image
 alias code="codium . -r" # Open in VSCode
@@ -72,6 +72,7 @@ function update() {
 
 # Clean old packages
 function clean() {
+	sudo pacman -Scc --noconfirm # Fully clear package cache
 	sudo paccache -ruk0 # Remove old package versions
 	sudo pacman -Qdtq | ifne sudo pacman -Rns - # Remove orphans
 }
@@ -99,6 +100,11 @@ function md() {
 	pandoc "$1" -o "$fname.pdf" -V geometry:margin=1in -f markdown-implicit_figures -V colorlinks=true -V linkcolor=blue -V urlcolor=blue -V tocolor=blue
 }
 
+# List largest packages
+function storage() {
+	pacman -Qei | grep -E '^(Name|Installed)' | cut -f2 -d':' | paste - - | column -t | sort -nrk 2 | grep MiB --color=none
+}
+
 # Set tab size
 tabs -4
 
@@ -112,3 +118,6 @@ tabs -4
 # Pls
 eval "$(pls --init)"
 cd .
+
+# Touchpad
+xinput set-prop "VEN_04F3:00 04F3:320F Touchpad" "libinput Tapping Enabled" 1

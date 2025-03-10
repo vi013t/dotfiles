@@ -131,7 +131,7 @@ preferences.keys = {
 	{ modifiers = { "windows" },          key = "Right",                     run = actions.view_next_tag() },
 
 	-- Misc
-	{ modifiers = { "windows" },          key = "h",                         run = actions.toggle_wifi_hiding() },
+	{ modifiers = { "windows" },          key = "h",                         run = actions.toggle_privacy_mode() },
 }
 
 --- Icon overrides

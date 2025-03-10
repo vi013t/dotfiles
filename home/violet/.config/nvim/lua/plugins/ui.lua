@@ -1,15 +1,48 @@
 return {
 
-	-- Helpdoc in floating windows
+	-- {
+	-- 	"nvchad/ui",
+	-- 	dependencies = {
+	-- 		"nvchad/base46",
+	-- 		"nvim-lua/plenary.nvim",
+	-- 		"nvim-tree/nvim-web-devicons",
+	-- 		"nvchad/volt", -- optional, needed for theme switcher
+	-- 	},
+	-- 	config = function()
+	-- 		require("nvchad")
+	--
+	-- 		dofile(vim.g.base46_cache .. "defaults")
+	-- 		dofile(vim.g.base46_cache .. "statusline")
+	-- 	end,
+	-- 	build = function()
+	-- 		require("base46").load_all_highlights()
+	-- 	end,
+	-- },
+
+	-- or just use Telescope themes
+
+	-- Icons & overrides
 	{
-		"Tyler-Barham/floating-help.nvim",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
+		"nvim-tree/nvim-web-devicons",
+		opts = {
+			override = {
+				rkt = {
+					icon = "λ",
+					color = "#E30000",
+					name = "Racket",
+				},
+				clangd = {
+					icon = "",
+					color = "#888899",
+					name = "ClangD",
+				},
+				kl = {
+					icon = "󰡔",
+					color = "#00FFBB",
+					name = "Klein",
+				},
+			},
 		},
-		opts = {},
-		keys = {
-			{ "<leader>h", ":FloatingHelp " },
-		}
 	},
 
 	-- Better help views
@@ -19,82 +52,14 @@ return {
 		ft = "help",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
-		}
-	},
-
-	-- Tabline
-	{
-		"akinsho/bufferline.nvim",
-		dependencies = {
-			"nvim-lualine/lualine.nvim",
 		},
-
-		config = function()
-			local bufferline = require("bufferline")
-
-			-- Get the name of the project
-			local directory = vim.fn.expand("%:h")
-			if not directory or directory == "" then directory = vim.fn.getcwd() end
-			local found_root, root = pcall(function() return vim.fn.system("splik '" .. directory .. "' --find-root") end)
-			local project_name = root
-			if not found_root then
-				_, project_name = vim.fn.getcwd()
-			end
-			project_name = assert(project_name):gsub("%s+$", ""):match("[\\/]([^\\/]+)$")
-
-			-- Get the icon from the project language
-			local success, project_language = pcall(function()
-				return vim.json.decode(vim.fn.system("splik '" .. directory .. "' --output json")).languages[1].name
-					:lower()
-			end)
-			local overrides = {
-				["C#"] = "cs"
-			}
-			local icon = nil
-			local filetype = overrides[project_language] or project_language:lower()
-			if success then
-				icon = require("nvim-web-devicons").get_icon_by_filetype(filetype)
-			end
-			if icon == nil then
-				icon = ""
-			end
-
-			local _, color = require("nvim-web-devicons").get_icon_color_by_filetype(filetype)
-
-			-- Create highlight groups
-			local normal_float_bg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("lualine_a_normal")), "fg#")
-
-			vim.api.nvim_set_hl(0, "BufferlineNeotreeOffset", { fg = color, bold = true, bg = normal_float_bg })
-
-			local fg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("@type")), "fg#")
-			vim.api.nvim_set_hl(0, "BufferlineDragonflyOffset", { bg = normal_float_bg, fg = fg })
-
-			-- Set up bufferline
-			bufferline.setup({
-				options = {
-					style_preset = bufferline.style_preset.no_italic,
-					offsets = {
-						{
-							filetype = "neo-tree",
-							text = icon .. " " .. project_name,
-							highlight = "BufferlineNeotreeOffset"
-						},
-						{
-							filetype = "dragonfly",
-							text = "󰠭 Dragonfly",
-							highlight = "BufferlineDragonflyOffset"
-						}
-					}
-				},
-			})
-		end
 	},
 
 	-- Highlight colors in the editor such as #4a08a9, rgb(0, 255, 255), and hsl(150, 100, 50)
 	{
 		"brenoprata10/nvim-highlight-colors",
 		opts = {},
-		event = "BufEnter"
+		event = "BufEnter",
 	},
 
 	-- Theme switcher
@@ -104,38 +69,39 @@ return {
 			require("themery").setup({
 				themes = {
 					{
-						name = "One Midnight ",
-						colorscheme = "one-midnight",
-					},
-					{
-						name = "Catppuccin Mocha 󰄛",
+						name = "Catppuccin Mocha",
 						colorscheme = "catppuccin-mocha",
 						after = [[
-							local fg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("@function.macro")), "fg#")
-							vim.cmd('hi CursorLineNr gui=bold')
-							vim.api.nvim_set_hl(0, "@function.builtin", { fg = fg })
-							vim.api.nvim_set_hl(0, "NeoTreeGitUntracked", { fg = "#88FF88" })
-						]]
+							vim.api.nvim_set_hl(0, "@function.builtin", { link = "Operator" })
+							vim.cmd("hi DiagnosticUnderlineError gui=undercurl term=undercurl cterm=undercurl")
+							vim.cmd("hi DiagnosticUnderlineWarn gui=undercurl term=undercurl cterm=undercurl")
+							vim.cmd("hi DiagnosticUnderlineHint gui=undercurl term=undercurl cterm=undercurl")
+							vim.cmd("hi DiagnosticUnderlineInfo gui=undercurl term=undercurl cterm=undercurl")
+						]],
 					},
 					{
-						name = "Tokyo Night 󰅆",
+						name = "Tokyo Night",
 						colorscheme = "tokyonight",
 					},
 					{
-						name = "Dusk Fox ",
-						colorscheme = "duskfox"
-					}
+						name = "Dusk Fox",
+						colorscheme = "duskfox",
+					},
+					{
+						name = "Morta",
+						colorscheme = "morta",
+					},
 				},
 			})
 			vim.keymap.set("n", "<leader>t", ":Themery<cr>", {})
-		end
+		end,
 	},
 
 	-- Colorschemes (loaded by Themery when necessary)
-	{ "catppuccin/nvim",                      lazy = true },
-	{ "one-midnight-theme/one-midnight.nvim", lazy = true },
-	{ "folke/tokyonight.nvim",                lazy = true },
-	{ "EdenEast/nightfox.nvim",               lazy = true },
+	{ "catppuccin/nvim",           lazy = true },
+	{ "folke/tokyonight.nvim",     lazy = true },
+	{ "EdenEast/nightfox.nvim",    lazy = true },
+	{ "philosofonusus/morta.nvim", lazy = true },
 
 	-- Highlight comments with  TODO: in them such as this, as well as FIXME and others, also creates a list of them
 	{
@@ -144,7 +110,7 @@ return {
 			"nvim-lua/plenary.nvim",
 		},
 		opts = {},
-		event = "BufEnter"
+		event = "BufEnter",
 	},
 
 	-- Indentation lines
@@ -170,27 +136,19 @@ return {
 		config = function()
 			---@diagnostic disable-next-line
 			require("notify").setup({
-				top_down = false, -- Send notifications to the bottom of the screen instead of the top
+				top_down = false,
 			})
 
 			require("noice").setup({
-				lsp = {
-					override = {
-						["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-						["vim.lsp.util.stylize_markdown"] = true,
-						["cmp.entry.get_documentation"] = true,
-					},
-				},
 				presets = {
 					bottom_search = true,
 					command_palette = true,
 					long_message_to_split = true,
-					inc_rename = false,
 					lsp_doc_border = true,
 				},
 			})
 
-			vim.keymap.set("n", "<leader>nc", ':NoiceDismiss<cr>', {}) -- Copy to system clipboard
+			vim.keymap.set("n", "<leader>nc", ":NoiceDismiss<cr>", {}) -- Copy to system clipboard
 		end,
 	},
 
@@ -220,18 +178,18 @@ return {
 					bottom = {
 						{
 							ft = "toggleterm",
-							size = { height = 15 }
-						}
+							size = { height = 15 },
+						},
 					},
 					left = {
 						{
 							ft = "neo-tree",
-							size = { width = 35 }
+							size = { width = 35 },
 						},
 						{
 							title = "Call Stack",
 							ft = "Calltree",
-							size = { width = 35 }
+							size = { width = 35 },
 						},
 					},
 					animate = {
@@ -241,32 +199,8 @@ return {
 			},
 		},
 		config = function()
-			require("nvim-web-devicons").setup({
-				override = {
-					-- Color overrides
-					cs = { icon = "󰌛", color = "#8800EE", name = "Cs" },
-					txt = { icon = "󰬴", color = "#999999", name = "Text" },
-
-					-- Icons for files missing them
-					ll = { icon = "", color = "#999999", name = "LLVM" },
-					rkt = { icon = "λ", color = "#FF6666", name = "Racket" },
-					asm = { icon = "", color = "#999999", name = "Assembly" },
-					unity = { icon = "󰚯", color = "#DDDDDD", name = "Unity" },
-					prefab = { icon = "󰚯", color = "#DDDDDD", name = "UnityPrefab" },
-					obj = { icon = "󰆧", color = "#88AAFF", name = "WavefrontObject" },
-					gltf = { icon = "󰆧", color = "#88AAFF", name = "GLTF" },
-					blend = { icon = "󰂫", color = "#EA7600", name = "BlenderObject" },
-					o = { icon = "󰘔", color = "#888888", name = "Object" },
-					pest = { icon = "󰱯", color = "#2800C6", name = "Pest" },
-					toggleterm = { icon = "", color = "#888888", name = "Terminal" },
-					cabin = { icon = "", color = "#775544", name = "Cabin" },
-
-					-- Icon overrides
-					tex = { icon = "𝒙", color = "#999999", name = "LaTeX" },
-				},
-			})
-
 			require("neo-tree").setup({
+				hide_root_node = true,
 				close_if_last_window = true,
 				enable_diagnostics = true,
 				filesystem = {
@@ -319,11 +253,11 @@ return {
 					end
 					if not vim.g.project_cwd then
 						local directory = vim.fn.expand("%:h")
-						if directory == nil or directory:match("^%s*$") then directory = vim.fn.getcwd() end
-						local root = vim.system({ "splik", "--find-root" }, { text = true, cwd = directory })
-							:wait()
-							.stdout
-							:gsub(" ", "\\ ")
+						if directory == nil or directory:match("^%s*$") then
+							directory = vim.fn.getcwd()
+						end
+						local root = vim.system({ "findroot" }, { text = true, cwd = directory }):wait().stdout:gsub(" ",
+							"\\ ")
 						vim.g.project_cwd = root
 					end
 					vim.cmd("Neotree dir=" .. vim.g.project_cwd)
@@ -443,7 +377,7 @@ return {
 								end
 
 								return diagnostics
-							end
+							end,
 						},
 					},
 
@@ -473,7 +407,7 @@ return {
 		config = function()
 			local bg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID("Visual")), "bg#")
 			require("visual-whitespace").setup({
-				highlight = { fg = "#777799", bg = bg }
+				highlight = { fg = "#777799", bg = bg },
 			})
 		end,
 	},
@@ -521,7 +455,7 @@ return {
 				"                                                     ",
 			}
 			alpha.setup(dashboard.opts)
-		end
+		end,
 	},
 
 	-- Image rendering
@@ -529,9 +463,12 @@ return {
 		"3rd/image.nvim",
 		opts = {
 			backend = "ueberzug",
-			processor = "magick_cli"
+			processor = "magick_cli",
 		},
 		build = false,
+		cond = function()
+			return vim.fn.has("win32") == 0
+		end,
 		ft = "markdown",
-	}
+	},
 }

@@ -4,7 +4,7 @@ return {
 	{
 		"ziontee113/icon-picker.nvim",
 		dependencies = {
-			{ "nvim-telescope/telescope.nvim", lazy = true, },
+			{ "nvim-telescope/telescope.nvim", lazy = true },
 			"stevearc/dressing.nvim",
 		},
 		opts = {},
@@ -17,8 +17,8 @@ return {
 	{
 		"lambdalisue/suda.vim",
 		keys = {
-			{ "<leader>w", "<cmd>SudaWrite<cr>" }
-		}
+			{ "<leader>w", "<cmd>SudaWrite<cr>" },
+		},
 	},
 
 	-- Color picker
@@ -38,33 +38,54 @@ return {
 		},
 	},
 
-	-- Search & Replace
+	-- Markdown Preview
 	{
-		dir = "/home/violet/Documents/Coding/Developer Tools/Neovim Plugins/dragonfly.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
+		"toppair/peek.nvim",
+		ft = { "markdown" },
+		build = "deno task --quiet build:fast",
+		config = function()
+			require("peek").setup()
+			vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
+			vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
+		end,
+	},
+
+	-- Open alternate files
+	{
+		"rgroli/other.nvim",
 		opts = {
-			on_open = function()
-				if vim.fn.exists(":NeoTreeClose") == 2 then vim.cmd("NeoTreeClose") end
-			end,
-			on_close = function()
-				if not vim.g.project_cwd then
-					local directory = vim.fn.expand("%:h")
-					if directory == nil or directory:match("^%s*$") then directory = vim.fn.getcwd() end
-					local root = vim.system({ "splik", "--find-root" }, { text = true, cwd = directory })
-						:wait()
-						.stdout
-						:gsub(" ", "\\ ")
-					vim.g.project_cwd = root
-				end
-				local has_neotree = pcall(function() require("neo-tree") end)
-				if has_neotree then vim.cmd("Neotree dir=" .. vim.g.project_cwd) end
-			end,
+			mappings = {
+				{
+					pattern = "(.*)/src/(.*).c$",
+					target = "%1/include/%2.h",
+					transformer = "lowercase",
+				},
+				{
+					pattern = "(.*)/include/(.*).h$",
+					target = "%1/src/%2.c",
+					transformer = "lowercase",
+				},
+			},
 		},
+		main = "other-nvim",
 		keys = {
-			{ "/",     "<cmd>DragonflyBuffer<cr>" },
-			{ "?",     "<cmd>DragonflyBufferReplace<cr>" },
-			{ "<C-/>", "<cmd>DragonflyProject<cr>" },
-			{ "<C-?>", "<cmd>DragonflyProjectReplace<cr>" },
-		}
+			{ "<leader>o", "<cmd>Other<cr>" },
+		},
+	},
+
+	-- Lazy
+	{
+		"jackMort/ChatGPT.nvim",
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope.nvim",
+		},
+		cmd = "ChatGPT",
+		opts = {
+			openai_params = {
+				model = "gpt-4o-mini",
+			},
+		},
 	},
 }

@@ -23,13 +23,30 @@ vim.opt.scrolloff = 8        -- Set scroll offset to 8 lines
 vim.opt.expandtab = false
 vim.opt.hlsearch = false
 
-vim.api.nvim_create_autocmd('FileType', {
-	pattern = 'racket',
+vim.g.zig_fmt_autosave = false -- Disable Zig autoformatting which for some reason converts my enums into massive one-liners
+vim.g.mapleader = " "          -- Set leader to space - must be done before mappings
+vim.g.base46_cache = vim.fn.stdpath("data") .. "/base46_cache/"
+
+-- =======================================================================================================================================================================================================
+-- Autocommands ---------- Autocommands ---------- Autocommands ---------- Autocommands ---------- Autocommands ---------- Autocommands ---------- Autocommands ---------- Autocommands ---------- Autocom
+-- =======================================================================================================================================================================================================
+
+vim.api.nvim_create_autocmd("BufEnter", {
+	callback = function()
+		vim.cmd("set shiftwidth=4")
+		vim.cmd("set tabstop=4")
+		vim.cmd("set noexpandtab")
+	end,
+})
+
+-- Racket silliness
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "racket",
 	callback = function()
 		vim.lsp.start({
-			name = 'racket-langserver',
-			cmd = { 'racket', '-l', 'racket-langserver', },
-			root_dir = vim.fn.getcwd()
+			name = "racket-langserver",
+			cmd = { "racket", "-l", "racket-langserver" },
+			root_dir = vim.fn.getcwd(),
 		})
 	end,
 })
@@ -49,10 +66,11 @@ local filetypes = {
 	["*.pest"] = "pest",
 	["*.lotus"] = "lotus",
 	["*.lang2"] = "lang2",
-	["*rc"] = "dosini",
-	["LICENSE"] = "markdown"
+	["LICENSE"] = "markdown",
+	["*.h"] = "c",
+	["*.bash*"] = "bash",
+	["*.kl"] = "klein",
 }
-
 for pattern, filetype in pairs(filetypes) do
 	vim.api.nvim_create_autocmd("BufRead", {
 		pattern = pattern,
@@ -61,17 +79,6 @@ for pattern, filetype in pairs(filetypes) do
 		end,
 	})
 end
-
-vim.api.nvim_create_autocmd("BufRead", {
-	pattern = "*.bash*",
-	callback = function()
-		vim.bo.filetype = "bash"
-	end,
-})
-
-vim.g.zig_fmt_autosave = false -- Disable Zig autoformatting which for some reason converts my enums into massive one-liners
-
-vim.g.mapleader = " "          -- Set leader to space - must be done before mappings
 
 -- =======================================================================================================================================================================================================
 -- Plugins ---------- Plugins ---------- Plugins ---------- Plugins ---------- Plugins ---------- Plugins ---------- Plugins ---------- Plugins ---------- Plugins ---------- Plugins ---------- Plugins -
@@ -92,7 +99,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Start the plugin setup
-require("lazy").setup("plugins",
+require("lazy").setup(
+	"plugins",
 
 	-- Options for lazy.nvim
 	{
@@ -111,6 +119,10 @@ require("lazy").setup("plugins",
 				require = "",
 				ft = "",
 			},
+		},
+
+		rocks = {
+			hererocks = true,
 		},
 	}
 )
@@ -137,3 +149,5 @@ vim.keymap.set("n", "<C-j>", "<C-w>j", {}) -- Move to window below
 vim.keymap.set("n", "<C-k>", "<C-w>k", {}) -- Move to window above
 vim.keymap.set("n", "<C-h>", "<C-w>h", {}) -- Move to window left
 vim.keymap.set("n", "<C-l>", "<C-w>l", {}) -- Move to window right
+
+vim.cmd("autocmd FileType help wincmd L")

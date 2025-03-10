@@ -2,9 +2,8 @@ return {
 	"folke/lazydev.nvim",
 	opts = {
 		library = {
-			{ path = "wezterm-types", mods = { "wezterm" } }
-		}
+			{ path = "wezterm-types", mods = { "wezterm" } },
+		},
 	},
-	ft = "lua"
+	ft = "lua",
 }
-
